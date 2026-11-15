@@ -95,6 +95,8 @@ header .btn{white-space:nowrap;flex-shrink:0}
 input,select,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;margin:6px 0 12px;background:#fff}
 label{font-size:13px;font-weight:600;color:var(--muted)}
 .wizard-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.wizard-nav .btn{white-space:nowrap}
+.confirm .btn{white-space:nowrap}
 .confirm{text-align:center;padding:10px}
 .confirm .tick{font-size:52px}
 .confirm .ref{font-size:20px;font-weight:700;background:#f6ead9;border:1px dashed var(--tan);border-radius:10px;padding:10px;margin:14px auto;max-width:340px}
@@ -254,8 +256,9 @@ footer a{color:#f5efe6}
     </div>
     <div class="bstep" data-bstep="2" hidden>
       <h3>Pick a time</h3>
-      <label>Available times — crossed-out times are already booked</label>
+      <label>Available times — crossed-out times are already fully booked</label>
       <div class="slots" id="slots"></div>
+      <p class="note" id="slotStatus">Times load live from the restaurant's booking calendar.</p>
     </div>
     <div class="bstep" data-bstep="3" hidden>
       <h3>How many guests?</h3>
@@ -274,7 +277,7 @@ footer a{color:#f5efe6}
     <div class="bstep" data-bstep="5" hidden>
       <div class="confirm"><div class="tick">✓</div><h3>Your table is booked!</h3>
       <p id="confirmText"></p><div class="ref" id="bookRef"></div>
-      <p class="note">A confirmation is on its way by WhatsApp / SMS. No deposit is taken — you pay at the restaurant. Need to change it? Call us — free up to 2h before.</p>
+      <p class="note">Your booking is saved with the restaurant — no deposit is taken, you pay at the restaurant. Tap WhatsApp below to send them a confirmation message, or just give your booking ref when you arrive. Need to change it? Call us — free up to 2h before.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
         <a class="btn" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
         <button class="btn ghost" onclick="downloadICS()">Add to calendar (.ics)</button>
@@ -373,22 +376,40 @@ function applyBiz(){
   const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.city+" "+BIZ.address)+"&z=14&output=embed";
 }
 applyBiz();
-/* ---- Reservation wizard ---- */
+/* ---- Live booking: real availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
 const TIMES=["12:00","12:30","13:00","13:30","14:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00"];
 const PARTIES=[1,2,3,4,5,6,7,8];
 let step=1, sel={date:"",time:"",party:2,ref:""};
-function takenSlots(dateStr){
-  const day=parseInt((dateStr||"").slice(-2),10)||0;
-  const taken=["13:00","20:30"];
-  if(day%2===0) taken.push("18:00","19:30"); else taken.push("12:30","19:00");
-  return taken;
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"restaurant";}
+/* Ask the booking service which times are still free on a date.
+   Returns {time: true/false} or null when the service can't be reached. */
+async function fetchAvailability(dateStr){
+  try{
+    const r=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=table&date="+encodeURIComponent(dateStr));
+    if(!r.ok) return null;
+    const d=await r.json();
+    const map={}; (d.slots||[]).forEach(s=>{map[s.time]=s.available;});
+    return map;
+  }catch(e){ return null; }
 }
-function renderSlots(){
-  const taken=takenSlots(sel.date);
-  document.getElementById("slots").innerHTML=TIMES.map(t=>{
-    const dis=taken.includes(t)?" disabled":"";
+async function renderSlots(){
+  const box=document.getElementById("slots"), status=document.getElementById("slotStatus");
+  box.innerHTML=""; status.textContent="Checking live availability…";
+  const map=await fetchAvailability(sel.date);
+  if(!map){
+    // Service unreachable: show every time. The confirm step still checks
+    // the booking against the live calendar before saving it.
+    box.innerHTML=TIMES.map(t=>`<button type="button" class="slot" onclick="pickTime('${t}',this)">${t}</button>`).join("");
+    status.textContent="Live availability is unreachable right now — your time will still be checked when you confirm.";
+    return;
+  }
+  const free=TIMES.filter(t=>map[t]!==false).length;
+  box.innerHTML=TIMES.map(t=>{
+    const dis=map[t]===false?" disabled":"";
     return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
   }).join("");
+  status.textContent=free===0?"Fully booked on this date — please pick another day.":free+" of "+TIMES.length+" times still free on this date.";
 }
 function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
 function renderParty(){
@@ -407,19 +428,41 @@ function showStep(n){
   if(n===4) document.getElementById("summary").innerHTML=`Table for <b>${sel.party} guest${sel.party>1?"s":""}</b><br>Date: <b>${sel.date||"—"}</b> at <b>${sel.time||"—"}</b><br>Restaurant: <b>${BIZ.name}</b>, ${BIZ.city}`;
 }
 function nextStep(){
-  if(step===1){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first.");}
+  if(step===1){const d=document.getElementById("bdate").value; if(!d) return alert("Pick a date first."); if(d!==sel.date){sel.date=d; sel.time="";}}
   if(step===2){if(!sel.time) return alert("Pick a time first.");}
   if(step===4){
-    if(!document.getElementById("cname").value.trim()) return alert("Please add your name.");
-    if(!document.getElementById("cphone").value.trim()) return alert("Please add your phone number.");
-    sel.ref="CP-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
     const nm=document.getElementById("cname").value.trim();
+    const ph=document.getElementById("cphone").value.trim();
+    if(!nm) return alert("Please add your name.");
+    if(!ph) return alert("Please add your phone number.");
+    confirmBooking(nm,ph); return;
+  }
+  showStep(step+1);
+}
+/* Save the booking with the booking service. If the slot was taken in the
+   meantime, the service answers 409 and we send the customer back to pick
+   another time — a table can never be double-booked. */
+async function confirmBooking(nm,ph){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your booking…";
+  try{
+    const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"table",date:sel.date,time:sel.time,party:sel.party,name:nm,phone:ph,details:{email:document.getElementById("cemail").value.trim(),notes:document.getElementById("cnotes").value.trim()}})});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===409||d.error==="slot_full"){
+      alert("Sorry — that time was just booked. Please pick another time.");
+      sel.time=""; showStep(2); return;
+    }
+    if(!r.ok||!d.ref) throw new Error("booking failed");
+    sel.ref=d.ref;
     document.getElementById("confirmText").textContent=`Thanks ${nm} — a table for ${sel.party} on ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
     document.getElementById("bookRef").textContent="Booking ref: "+sel.ref;
     document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked a table for ${sel.party} on ${sel.date} at ${sel.time}. My booking ref is ${sel.ref}.`);});
-    showStep(5); return;
+    showStep(5);
+  }catch(e){
+    alert("We couldn't save your booking just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm booking →";
   }
-  showStep(step+1);
 }
 function prevStep(){if(step>1) showStep(step-1);}
 function resetBooking(){sel={date:"",time:"",party:2,ref:""};document.getElementById("bdate").value="";showStep(1);}
@@ -438,7 +481,7 @@ document.getElementById("contactForm").addEventListener("submit",e=>{
   location.href="mailto:hello@thecopperpot.example?subject="+subject+"&body="+body;
   document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
 });
-(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; showStep(1);})();
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; d.max=new Date(Date.now()+30*86400000).toISOString().split("T")[0]; showStep(1);})();
 </script>
 </body>
 </html>
