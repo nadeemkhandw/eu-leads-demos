@@ -26,13 +26,14 @@ section{padding:64px 0}
 .btn.light{background:#fff;color:var(--ink)}
 /* header */
 header{position:sticky;top:0;z-index:40;background:rgba(250,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
-.logo{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:var(--ink)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding:8px 0}
+.logo{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:var(--ink);line-height:1.15}
 .logo small{display:block;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.3em;color:var(--tan);font-weight:700}
 nav.main{display:flex;gap:22px}
 nav.main a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
 nav.main a:hover{color:var(--tan-d)}
-.nav-cta{display:flex;gap:10px;align-items:center}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+header .btn{white-space:nowrap;flex-shrink:0}
 .nav-cta .btn{padding:9px 18px;font-size:14px}
 .tel-link{font-weight:600;color:var(--ink);text-decoration:none;font-size:14px}
 .burger{display:none;background:none;border:0;font-size:26px;cursor:pointer}
@@ -141,11 +142,16 @@ footer a{color:#f5efe6}
   .two,.contact-grid,.foot-grid{grid-template-columns:1fr}
   nav.main{display:none}
   .burger{display:block}
-  nav.main.open{display:flex;position:absolute;top:64px;left:0;right:0;background:var(--bg);flex-direction:column;padding:16px 20px;border-bottom:1px solid var(--line)}
+  nav.main.open{display:flex;position:absolute;top:100%;left:0;right:0;background:var(--bg);flex-direction:column;padding:16px 20px;border-bottom:1px solid var(--line)}
   .tel-link{display:none}
 }
 @media(max-width:640px){
   .stickybar{display:flex}
+  .nav{gap:10px;min-height:56px}
+  .logo{font-size:19px;letter-spacing:.06em}
+  .logo small{font-size:8px;letter-spacing:.2em}
+  header .btn{padding:8px 14px;font-size:13px}
+  .burger{font-size:22px}
   section{padding:48px 0}
   .opts{grid-template-columns:1fr}
   .svc-grid,.team,.reviews,.gal{grid-template-columns:1fr}
