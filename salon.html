@@ -276,9 +276,10 @@ footer a{color:#f5efe6}
     </div>
     <div class="bstep" data-bstep="3" hidden>
       <h3>Pick a date &amp; time</h3>
-      <label for="bdate">Date</label><input type="date" id="bdate">
-      <label>Available times</label>
+      <label for="bdate">Date</label><input type="date" id="bdate" onchange="sel.date=this.value;sel.time='';renderSlots();">
+      <label>Available times — crossed-out times are already booked</label>
       <div class="slots" id="slots"></div>
+      <p class="note" id="slotStatus">Times load live from the salon's booking calendar.</p>
     </div>
     <div class="bstep" data-bstep="4" hidden>
       <h3>Your details</h3>
@@ -292,7 +293,7 @@ footer a{color:#f5efe6}
     <div class="bstep" data-bstep="5" hidden>
       <div class="confirm"><div class="tick">✓</div><h3>You are booked in!</h3>
       <p id="confirmText"></p><div class="ref" id="bookRef"></div>
-      <p class="note">A confirmation is on its way by WhatsApp / SMS. Need to change it? Call us — free reschedule up to 24h before.</p>
+      <p class="note">Your appointment is saved with the salon. Tap WhatsApp below to send them a confirmation message, or just give your booking ref when you arrive. Need to change it? Call us — free reschedule up to 24h before.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
         <a class="btn" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
         <button class="btn ghost" onclick="downloadICS()">Add to calendar (.ics)</button>
@@ -415,8 +416,51 @@ function renderStylists(){
 }
 function pickStylist(i,el){sel.stylist=STYLISTS[i];document.querySelectorAll("#stylistOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
 function bookWith(name){const i=STYLISTS.findIndex(s=>s.n===name); if(i>=0){sel.stylist=STYLISTS[i];renderStylists();document.querySelectorAll("#stylistOpts .opt").forEach((o,j)=>o.classList.toggle("sel",j===i));} showStep(2); document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
-function renderSlots(){
-  document.getElementById("slots").innerHTML=TIMES.map(t=>`<button type="button" class="slot" onclick="pickTime('${t}',this)">${t}</button>`).join("");
+/* ---- Live booking: real per-stylist availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"salon";}
+function stylistSlug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+/* One stylist's free times on a date, or null when the service can't be reached. */
+async function fetchStylistAvailability(dateStr, stylist){
+  try{
+    const r=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=appointment&date="+encodeURIComponent(dateStr)+"&resource="+encodeURIComponent(stylistSlug(stylist)));
+    if(!r.ok) return null;
+    const d=await r.json();
+    const map={}; (d.slots||[]).forEach(s=>{map[s.time]=s.available;});
+    return map;
+  }catch(e){ return null; }
+}
+async function renderSlots(){
+  const box=document.getElementById("slots"), status=document.getElementById("slotStatus");
+  if(!sel.date){box.innerHTML=""; status.textContent="Pick a date first — times load live from the salon's booking calendar."; return;}
+  box.innerHTML=""; status.textContent="Checking live availability…";
+  const named = sel.stylist.n !== "First available";
+  let map=null, who=sel.stylist.n;
+  if(named){
+    map=await fetchStylistAvailability(sel.date, sel.stylist.n);
+  }else{
+    // First available: a time is free if ANY stylist is free at that time.
+    const names=STYLISTS.slice(1).map(s=>s.n);
+    const maps=await Promise.all(names.map(n=>fetchStylistAvailability(sel.date,n)));
+    if(maps.some(m=>m===null)){map=null;}
+    else{
+      map={}; TIMES.forEach(t=>{map[t]=maps.some(m=>m[t]!==false);});
+      who="any stylist";
+    }
+  }
+  if(!map){
+    // Service unreachable: show every time. The confirm step still checks
+    // the booking against the live calendar before saving it.
+    box.innerHTML=TIMES.map(t=>`<button type="button" class="slot" onclick="pickTime('${t}',this)">${t}</button>`).join("");
+    status.textContent="Live availability is unreachable right now — your time will still be checked when you confirm.";
+    return;
+  }
+  const free=TIMES.filter(t=>map[t]!==false).length;
+  box.innerHTML=TIMES.map(t=>{
+    const dis=map[t]===false?" disabled":"";
+    return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
+  }).join("");
+  status.textContent=free===0?"Fully booked on this date — please pick another day.":free+" of "+TIMES.length+" times still free with "+who+" on this date.";
 }
 function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
 function showStep(n){
@@ -433,16 +477,44 @@ function nextStep(){
   if(step===1&&!sel.service) return alert("Choose a service first.");
   if(step===3){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first."); if(!sel.time) return alert("Pick a time first.");}
   if(step===4){
-    if(!document.getElementById("cname").value.trim()) return alert("Please add your name.");
-    if(!document.getElementById("cphone").value.trim()) return alert("Please add your phone number.");
-    sel.ref="VV-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
     const nm=document.getElementById("cname").value.trim();
-    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
-    document.getElementById("bookRef").textContent="Booking ref: "+sel.ref;
-    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time}. My booking ref is ${sel.ref}.`);});
-    showStep(5); return;
+    const ph=document.getElementById("cphone").value.trim();
+    if(!nm) return alert("Please add your name.");
+    if(!ph) return alert("Please add your phone number.");
+    confirmBooking(nm,ph); return;
   }
   showStep(step+1);
+}
+/* Save the appointment with the booking service. A named stylist books their
+   own chair; "First available" tries each stylist in turn and takes the
+   first free one. If the time was just taken, the service answers 409 and
+   we send the customer back to pick another time — a stylist can never be
+   double-booked. */
+async function confirmBooking(nm,ph){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your booking…";
+  const tryStylists = sel.stylist.n==="First available" ? STYLISTS.slice(1).map(s=>s.n) : [sel.stylist.n];
+  try{
+    for(const stylist of tryStylists){
+      const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"appointment",date:sel.date,time:sel.time,resource:stylistSlug(stylist),party:1,name:nm,phone:ph,details:{service:sel.service.n,duration_min:sel.service.m,from_price:sel.service.p,stylist:stylist,email:document.getElementById("cemail").value.trim(),notes:document.getElementById("cnotes").value.trim()}})});
+      const d=await r.json().catch(()=>({}));
+      if(r.status===409||d.error==="slot_full") continue;
+      if(!r.ok||!d.ref) throw new Error("booking failed");
+      sel.ref=d.ref;
+      sel.stylist=STYLISTS.find(s=>s.n===stylist)||sel.stylist;
+      document.getElementById("confirmText").textContent=`Thanks ${nm} — ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
+      document.getElementById("bookRef").textContent="Booking ref: "+sel.ref;
+      document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time}. My booking ref is ${sel.ref}.`);});
+      showStep(5);
+      return;
+    }
+    alert("Sorry — that time was just booked. Please pick another time.");
+    sel.time=""; showStep(3);
+  }catch(e){
+    alert("We couldn't save your booking just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm booking →";
+  }
 }
 function prevStep(){if(step>1) showStep(step-1);}
 function resetBooking(){sel={service:SERVICES[0],stylist:STYLISTS[0],date:"",time:"",ref:""};document.getElementById("bdate").value="";renderServices();renderStylists();showStep(1);}
@@ -465,7 +537,7 @@ document.getElementById("contactForm").addEventListener("submit",e=>{
   location.href="mailto:hello@velvetandvine.example?subject="+subject+"&body="+body;
   document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
 });
-(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; renderServices(); renderStylists(); showStep(1);})();
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; d.max=new Date(Date.now()+30*86400000).toISOString().split("T")[0]; renderServices(); renderStylists(); showStep(1);})();
 </script>
 </body>
 </html>

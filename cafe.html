@@ -109,8 +109,8 @@ label{font-size:13px;font-weight:600;color:var(--muted)}
 /* loyalty / beans */
 .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
 .box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
-.punch{display:flex;gap:8px;margin:14px 0}
-.punch i{width:34px;height:34px;border-radius:50%;border:2px solid var(--tan);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px}
+.punch{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+.punch i{width:32px;height:32px;border-radius:50%;border:2px solid var(--tan);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px;flex-shrink:0}
 .punch i.done{background:var(--tan);color:#fff}
 /* contact */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px;align-items:start}
@@ -264,6 +264,7 @@ footer a{color:#f5efe6}
       <label for="bdate" style="margin-top:14px">Date</label><input type="date" id="bdate" onchange="sel.date=this.value;sel.time='';renderSlots();">
       <label>Available times — crossed-out times are fully booked</label>
       <div class="slots" id="slots"></div>
+      <p class="note" id="slotStatus">Times load live from the café's order calendar.</p>
     </div>
     <div class="bstep" data-bstep="3" hidden>
       <h3>Your details</h3>
@@ -277,7 +278,7 @@ footer a{color:#f5efe6}
       <div class="confirm"><div class="tick">✓</div><h3>Your order is in!</h3>
       <p id="confirmText"></p><div class="ref" id="bookRef"></div>
       <p class="note" id="confirmTotal"></p>
-      <p class="note">A confirmation is on its way by WhatsApp / SMS. Show your reference at the counter and pay there. Running late? Message us — we hold orders for 20 minutes.</p>
+      <p class="note">Your order is saved with the café — show your reference at the counter and pay there. Tap WhatsApp below to send them a confirmation message. Running late? Message us — we hold orders for 20 minutes.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
         <a class="btn" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
         <button class="btn ghost" onclick="resetBooking()">Order again</button>
@@ -396,18 +397,34 @@ function renderOrder(){
   document.getElementById("orderTotal").textContent=eur(orderTotal());
 }
 function changeQty(i,d){qty[i]=Math.max(0,qty[i]+d);document.getElementById("qty-"+i).textContent=qty[i];document.getElementById("orderTotal").textContent=eur(orderTotal());}
-function takenSlots(dateStr){
-  const day=parseInt((dateStr||"").slice(-2),10)||0;
-  const taken=["09:00","12:00"];
-  if(day%2===0) taken.push("08:30","11:00"); else taken.push("10:00","12:30");
-  return taken;
+/* ---- Live ordering: real pickup-slot availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"cafe";}
+async function fetchAvailability(dateStr){
+  try{
+    const r=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=order&date="+encodeURIComponent(dateStr));
+    if(!r.ok) return null;
+    const d=await r.json();
+    const map={}; (d.slots||[]).forEach(s=>{map[s.time]=s.available;});
+    return map;
+  }catch(e){ return null; }
 }
-function renderSlots(){
-  const taken=takenSlots(sel.date);
-  document.getElementById("slots").innerHTML=TIMES.map(t=>{
-    const dis=taken.includes(t)?" disabled":"";
+async function renderSlots(){
+  const box=document.getElementById("slots"), status=document.getElementById("slotStatus");
+  if(!sel.date){box.innerHTML=""; status.textContent="Pick a date first — times load live from the café's order calendar."; return;}
+  box.innerHTML=""; status.textContent="Checking live availability…";
+  const map=await fetchAvailability(sel.date);
+  if(!map){
+    box.innerHTML=TIMES.map(t=>`<button type="button" class="slot" onclick="pickTime('${t}',this)">${t}</button>`).join("");
+    status.textContent="Live availability is unreachable right now — your time will still be checked when you confirm.";
+    return;
+  }
+  const free=TIMES.filter(t=>map[t]!==false).length;
+  box.innerHTML=TIMES.map(t=>{
+    const dis=map[t]===false?" disabled":"";
     return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
   }).join("");
+  status.textContent=free===0?"Fully booked on this date — please pick another day.":free+" of "+TIMES.length+" times still free on this date.";
 }
 function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
 function renderModes(){
@@ -428,17 +445,39 @@ function nextStep(){
   if(step===1){if(orderTotal()<=0) return alert("Add at least one item to your order first.");}
   if(step===2){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first."); if(!sel.time) return alert("Pick a time first.");}
   if(step===3){
-    if(!document.getElementById("cname").value.trim()) return alert("Please add your name.");
-    if(!document.getElementById("cphone").value.trim()) return alert("Please add your phone number.");
-    sel.ref="DG-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
     const nm=document.getElementById("cname").value.trim();
+    const ph=document.getElementById("cphone").value.trim();
+    if(!nm) return alert("Please add your name.");
+    if(!ph) return alert("Please add your phone number.");
+    confirmOrder(nm,ph); return;
+  }
+  showStep(step+1);
+}
+/* Save the order with the booking service. If the pickup slot filled up in
+   the meantime, the service answers 409 and we send the customer back to
+   pick another time — a slot can never be double-booked. */
+async function confirmOrder(nm,ph){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your order…";
+  try{
+    const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"order",date:sel.date,time:sel.time,party:1,name:nm,phone:ph,details:{items:orderLines(),total:eur(orderTotal()),mode:sel.mode.n,notes:document.getElementById("cnotes").value.trim()}})});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===409||d.error==="slot_full"){
+      alert("Sorry — that time was just booked. Please pick another time.");
+      sel.time=""; showStep(2); return;
+    }
+    if(!r.ok||!d.ref) throw new Error("order failed");
+    sel.ref=d.ref;
     document.getElementById("confirmText").textContent=`Thanks ${nm} — your ${sel.mode.n.toLowerCase()} order (${orderLines().join(", ")}) is booked for ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
     document.getElementById("bookRef").textContent="Order ref: "+sel.ref;
     document.getElementById("confirmTotal").textContent="Total to pay at the counter: "+eur(orderTotal());
     document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just ordered ${orderLines().join(", ")} (${eur(orderTotal())}) for ${sel.mode.n.toLowerCase()} on ${sel.date} at ${sel.time}. My order ref is ${sel.ref}.`);});
-    showStep(4); return;
+    showStep(4);
+  }catch(e){
+    alert("We couldn't save your order just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm order →";
   }
-  showStep(step+1);
 }
 function prevStep(){if(step>1) showStep(step-1);}
 function resetBooking(){qty=ORDER.map(()=>0);sel={mode:MODES[0],date:"",time:"",ref:""};document.getElementById("bdate").value="";renderOrder();showStep(1);}
@@ -450,7 +489,7 @@ document.getElementById("contactForm").addEventListener("submit",e=>{
   location.href="mailto:hello@thedailygrind.example?subject="+subject+"&body="+body;
   document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
 });
-(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; renderOrder(); showStep(1);})();
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; d.max=new Date(Date.now()+30*86400000).toISOString().split("T")[0]; renderOrder(); showStep(1);})();
 </script>
 </body>
 </html>

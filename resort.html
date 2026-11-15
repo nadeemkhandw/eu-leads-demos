@@ -229,7 +229,7 @@ footer a{color:#fff}
     <div class="bstep" data-bstep="5" hidden>
       <div class="confirm"><div class="tick">✓</div><h3>Your stay is confirmed!</h3>
       <p id="confirmText"></p><div class="ref" id="bookRef"></div>
-      <p style="font-size:14px;color:var(--muted)">Confirmation sent by email and WhatsApp, with transfer details and a manage-booking link. Deposit: one night now, balance 3 days before arrival.</p>
+      <p style="font-size:14px;color:var(--muted)">Your booking is saved with the resort. Tap WhatsApp below to send them a confirmation message, or just give your booking ref when you arrive. No deposit is taken — you pay at the resort.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
         <a class="btn" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
         <button class="btn ghost" onclick="resetBooking()">Make another booking</button>
@@ -366,12 +366,50 @@ function nights(){const a=new Date(document.getElementById("bIn").value), b=new 
 function total(){const n=Math.max(nights(),1); let t=villa.p*n;
   EXTRAS.forEach((x,i)=>{if(extrasOn.has(i)) t+= x.per==="night"? x.p*n : x.p;});
   if(promo==="EARLYBIRD") t=Math.round(t*0.85); return Math.max(t,0);}
-function renderVillas(){document.getElementById("villaOpts").innerHTML=VILLAS.map((v,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickVilla(${i},this)"><b>${v.n} — from €${v.p}/night</b><small>${v.desc}</small></button>`).join("");}
-function pickVilla(i,el){villa=VILLAS[i];document.querySelectorAll("#villaOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");renderTotal();}
+/* ---- Live booking: real villa availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"resort";}
+function roomSlug(n){return n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+let stayAvailCache={key:"",map:{}}; // map: villa slug -> {available, remaining, capacity} | null
+async function fetchStayAvailability(){
+  const ci=document.getElementById("bIn").value, co=document.getElementById("bOut").value;
+  const key=ci+"|"+co;
+  if(stayAvailCache.key===key) return stayAvailCache.map;
+  const map={};
+  await Promise.all(VILLAS.map(async (v)=>{
+    const slug=roomSlug(v.n);
+    try{
+      const res=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=stay&room="+encodeURIComponent(slug)+"&checkin="+encodeURIComponent(ci)+"&checkout="+encodeURIComponent(co));
+      if(!res.ok){map[slug]=null;return;}
+      const d=await res.json();
+      map[slug]={available:d.available,remaining:Math.min.apply(null,d.nights.map(n=>n.remaining)),capacity:d.capacity};
+    }catch(e){map[slug]=null;}
+  }));
+  stayAvailCache={key:key,map:map};
+  return map;
+}
+async function renderVillas(){
+  const map=await fetchStayAvailability();
+  document.getElementById("villaOpts").innerHTML=VILLAS.map((v,i)=>{
+    const slug=roomSlug(v.n);
+    const a=map[slug];
+    const soldOut=a&&!a.available;
+    const note=a?(soldOut?"Sold out for these dates":a.remaining+" of "+a.capacity+" left for these dates"):"Availability loading…";
+    const dis=soldOut?" disabled":"";
+    const selCls=villa===VILLAS[i]?" sel":"";
+    return `<button type="button" class="opt${selCls}"${dis} onclick="pickVilla(${i},this)"><b>${v.n} — from €${v.p}/night</b><small>${v.desc} · ${note}</small></button>`;
+  }).join("");
+  // If the selected villa just sold out, fall back to the first available one.
+  if(map[roomSlug(villa.n)]&&!map[roomSlug(villa.n)].available){
+    const first=VILLAS.find(v=>{const a=map[roomSlug(v.n)]; return a&&a.available;});
+    if(first){villa=first;renderVillas();}
+  }
+}
+function pickVilla(i,el){villa=VILLAS[i];renderVillas();renderTotal();}
 function renderExtras(){document.getElementById("extraOpts").innerHTML=EXTRAS.map((x,i)=>`<label class="extra"><span><input type="checkbox" onchange="toggleExtra(${i},this.checked)"> <b>${x.n}</b></span><span>€${x.p} ${x.per==="night"?"/ night":""}</span></label>`).join("");renderTotal();}
 function toggleExtra(i,on){on?extrasOn.add(i):extrasOn.delete(i);renderTotal();}
 function renderTotal(){const el=document.getElementById("totalBox"); if(el) el.textContent=`Total: €${total()} for ${Math.max(nights(),1)} night${nights()===1?"":"s"} · ${villa.n}${promo?` · Promo ${promo} applied`:""}${pkg?` · Package: ${pkg}`:""}`;}
-function bookVilla(i){villa=VILLAS[i];renderVillas();document.querySelectorAll("#villaOpts .opt").forEach((o,j)=>o.classList.toggle("sel",j===i));showStep(2);document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
+function bookVilla(i){villa=VILLAS[i];renderVillas();showStep(2);document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
 function applyPackage(name){pkg=name; if(name==="Early Bird"){promo="EARLYBIRD";document.getElementById("promo").value="EARLYBIRD";}
   renderTotal(); document.getElementById("booking").scrollIntoView({behavior:"smooth"}); showStep(2);}
 function startBooking(e){e.preventDefault();
@@ -389,6 +427,7 @@ function showStep(n){
   document.getElementById("nextBtn").style.display=n===5?"none":"";
   document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
   const nn=nights(); document.getElementById("nightsNote").textContent=nn>0?`${nn} night${nn===1?"":"s"} selected.`:"";
+  if(n===2) renderVillas();
   if(n===3) renderTotal();
   if(n===4) document.getElementById("summary").innerHTML=`<b>${villa.n}</b> — €${villa.p}/night<br>${document.getElementById("bIn").value} → ${document.getElementById("bOut").value} · ${Math.max(nights(),1)} night(s) · ${document.getElementById("bGuests").value}${pkg?`<br>Package: <b>${pkg}</b>`:""}${promo?`<br>Promo: <b>${promo}</b>`:""}<br><b>Total: €${total()}</b>`;
 }
@@ -398,14 +437,39 @@ function nextStep(){
   if(step===4){
     if(!document.getElementById("gname").value.trim()) return alert("Please add your name.");
     if(!document.getElementById("gemail").value.trim()) return alert("Please add your email.");
-    ref="SB-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
-    const nm=document.getElementById("gname").value.trim();
-    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${villa.n} at ${BIZ.name}, ${BIZ.city}, ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. Total €${total()}. Deposit: one night.`;
-    document.getElementById("bookRef").textContent="Booking ref: "+ref;
-    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${villa.n} from ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. My booking ref is ${ref}.`);});
-    showStep(5); return;
+    confirmStay(); return;
   }
   showStep(step+1);
+}
+/* Save the stay with the booking service. The service assigns a real villa
+   free for every night; if the villa type just sold out for those dates it
+   answers 409 and we send the customer back to pick another villa or other
+   dates — a villa can never be double-booked. */
+async function confirmStay(){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your booking…";
+  const ci=document.getElementById("bIn").value, co=document.getElementById("bOut").value;
+  const guests=parseInt(document.getElementById("bGuests").value,10)||2;
+  const nm=document.getElementById("gname").value.trim();
+  try{
+    const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"stay",date:ci,time:"stay",party:guests,name:nm,phone:document.getElementById("gphone").value.trim(),ref_prefix:"SB",details:{checkout:co,room_type:roomSlug(villa.n),room_name:villa.n,guests:document.getElementById("bGuests").value,promo:promo,pkg:pkg,extras:[...extrasOn].map(i=>EXTRAS[i].n),total:total(),email:document.getElementById("gemail").value.trim(),notes:document.getElementById("gnotes").value.trim()}})});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===409||d.error==="slot_full"){
+      alert("Sorry — the "+villa.n+" is no longer free for those dates. Please pick another villa or change your dates.");
+      stayAvailCache={key:"",map:{}};
+      showStep(2); return;
+    }
+    if(!r.ok||!d.ref) throw new Error("booking failed");
+    ref=d.ref;
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${villa.n} at ${BIZ.name}, ${BIZ.city}, ${ci} to ${co}. Total €${total()}. No deposit is taken — you pay at the resort.`;
+    document.getElementById("bookRef").textContent="Booking ref: "+ref;
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${villa.n} from ${ci} to ${co}. My booking ref is ${ref}.`);});
+    showStep(5);
+  }catch(e){
+    alert("We couldn't save your booking just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm booking →";
+  }
 }
 function prevStep(){if(step>1) showStep(step-1);}
 function resetBooking(){villa=VILLAS[0];promo="";pkg="";extrasOn=new Set();renderVillas();renderExtras();showStep(1);}
@@ -423,7 +487,9 @@ document.getElementById("contactForm").addEventListener("submit",e=>{
 (function init(){
   const t=new Date(), tom=new Date(Date.now()+86400000), nxt=new Date(Date.now()+4*86400000);
   const iso=d=>d.toISOString().split("T")[0];
-  ["in","bIn"].forEach(id=>document.getElementById(id).min=iso(t));
+  const max=new Date(Date.now()+365*86400000);
+  ["in","bIn"].forEach(id=>{document.getElementById(id).min=iso(t); document.getElementById(id).max=iso(max);});
+  ["out","bOut"].forEach(id=>{document.getElementById(id).min=iso(t); document.getElementById(id).max=iso(max);});
   document.getElementById("in").value=iso(tom); document.getElementById("out").value=iso(nxt);
   document.getElementById("bIn").value=iso(tom); document.getElementById("bOut").value=iso(nxt);
   renderVillas(); renderExtras(); showStep(1);

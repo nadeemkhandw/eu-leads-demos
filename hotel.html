@@ -203,7 +203,7 @@ footer a{color:#fff}
       <h3 style="margin-top:18px">Rate</h3>
       <div class="opts">
         <button type="button" class="opt sel" onclick="pickRate('flex',this)"><b>Flexible — free cancellation</b><small>Cancel free up to 48h before · pay at the hotel</small></button>
-        <button type="button" class="opt" onclick="pickRate('nonref',this)"><b>Non-refundable — save 10%</b><small>Prepaid, no changes · best price</small></button>
+        <button type="button" class="opt" onclick="pickRate('nonref',this)"><b>Non-refundable — save 10%</b><small>No changes · best price · pay at the hotel</small></button>
       </div>
     </div>
     <div class="bstep" data-bstep="3" hidden>
@@ -218,12 +218,12 @@ footer a{color:#fff}
       <label for="gemail">Email</label><input id="gemail" type="email" placeholder="you@example.com" autocomplete="email">
       <label for="gphone">Phone</label><input id="gphone" type="tel" placeholder="+353 87 123 4567" autocomplete="tel">
       <label for="gnotes">Requests (optional)</label><textarea id="gnotes" rows="2" placeholder="e.g. quiet room, cot for a baby, anniversary"></textarea>
-      <p style="font-size:13px;color:var(--muted)">Check-in 15:00 · Check-out 11:00 · Deposit: nothing today on the flexible rate. We will email and WhatsApp your confirmation.</p>
+      <p style="font-size:13px;color:var(--muted)">Check-in 15:00 · Check-out 11:00 · Deposit: nothing today on the flexible rate.</p>
     </div>
     <div class="bstep" data-bstep="5" hidden>
       <div class="confirm"><div class="tick">✓</div><h3>Your stay is confirmed!</h3>
       <p id="confirmText"></p><div class="ref" id="bookRef"></div>
-      <p style="font-size:14px;color:var(--muted)">Confirmation sent by email and WhatsApp, with directions and a manage-booking link. Need to change anything? Call us — free changes on the flexible rate.</p>
+      <p style="font-size:14px;color:var(--muted)">Your booking is saved with the hotel. Tap WhatsApp below to send them a confirmation message, or just give your booking ref when you arrive. Need to change anything? Call us — free changes on the flexible rate.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
         <a class="btn gold" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
         <button class="btn ghost" onclick="resetBooking()">Make another booking</button>
@@ -337,10 +337,46 @@ function total(){
   if(promo==="DIRECT10"||promo==="WINTER20") t=Math.round(t*0.9); if(promo==="STAY3"&&n>=3) t-=room.p;
   return Math.max(t,0);
 }
-function renderRooms(){
-  document.getElementById("roomOpts").innerHTML=ROOMS.map((r,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickRoom(${i},this)"><b>${r.n} — from €${r.p}/night</b><small>${r.desc}</small></button>`).join("");
+/* ---- Live booking: real room availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"hotel";}
+function roomSlug(n){return n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+let stayAvailCache={key:"",map:{}}; // map: room slug -> {available, remaining, capacity} | null
+async function fetchStayAvailability(){
+  const ci=document.getElementById("bIn").value, co=document.getElementById("bOut").value;
+  const key=ci+"|"+co;
+  if(stayAvailCache.key===key) return stayAvailCache.map;
+  const map={};
+  await Promise.all(ROOMS.map(async (r)=>{
+    const slug=roomSlug(r.n);
+    try{
+      const res=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=stay&room="+encodeURIComponent(slug)+"&checkin="+encodeURIComponent(ci)+"&checkout="+encodeURIComponent(co));
+      if(!res.ok){map[slug]=null;return;}
+      const d=await res.json();
+      map[slug]={available:d.available,remaining:Math.min.apply(null,d.nights.map(n=>n.remaining)),capacity:d.capacity};
+    }catch(e){map[slug]=null;}
+  }));
+  stayAvailCache={key:key,map:map};
+  return map;
 }
-function pickRoom(i,el){room=ROOMS[i];document.querySelectorAll("#roomOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");renderTotal();}
+async function renderRooms(){
+  const map=await fetchStayAvailability();
+  document.getElementById("roomOpts").innerHTML=ROOMS.map((r,i)=>{
+    const slug=roomSlug(r.n);
+    const a=map[slug];
+    const soldOut=a&&!a.available;
+    const note=a?(soldOut?"Sold out for these dates":a.remaining+" of "+a.capacity+" left for these dates"):"Availability loading…";
+    const dis=soldOut?" disabled":"";
+    const selCls=room===ROOMS[i]?" sel":"";
+    return `<button type="button" class="opt${selCls}"${dis} onclick="pickRoom(${i},this)"><b>${r.n} — from €${r.p}/night</b><small>${r.desc} · ${note}</small></button>`;
+  }).join("");
+  // If the selected room just sold out, fall back to the first available one.
+  if(map[roomSlug(room.n)]&&!map[roomSlug(room.n)].available){
+    const first=ROOMS.find(r=>{const a=map[roomSlug(r.n)]; return a&&a.available;});
+    if(first){room=first;renderRooms();}
+  }
+}
+function pickRoom(i,el){room=ROOMS[i];renderRooms();renderTotal();}
 function pickRate(r,el){rate=r;document.querySelectorAll('[data-bstep="2"] .opts')[1].querySelectorAll(".opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");renderTotal();}
 function renderExtras(){
   document.getElementById("extraOpts").innerHTML=EXTRAS.map((x,i)=>`<label class="extra"><span><input type="checkbox" onchange="toggleExtra(${i},this.checked)"> <b>${x.n}</b></span><span>€${x.p} ${x.per==="night"?"/ night":""}</span></label>`).join("");
@@ -348,7 +384,7 @@ function renderExtras(){
 }
 function toggleExtra(i,on){on?extrasOn.add(i):extrasOn.delete(i);renderTotal();}
 function renderTotal(){const el=document.getElementById("totalBox"); if(el) el.textContent=`Total: €${total()} for ${Math.max(nights(),1)} night${nights()===1?"":"s"} · ${room.n} · ${rate==="flex"?"Flexible rate":"Non-refundable (−10%)"}${promo?` · Promo ${promo} applied`:""}`;}
-function bookRoom(i){room=ROOMS[i];renderRooms();document.querySelectorAll("#roomOpts .opt").forEach((o,j)=>o.classList.toggle("sel",j===i));showStep(2);document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
+function bookRoom(i){room=ROOMS[i];renderRooms();showStep(2);document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
 function applyPromo(code){promo=code;document.getElementById("promo").value=code;renderTotal();document.getElementById("booking").scrollIntoView({behavior:"smooth"});showStep(2);}
 function startBooking(e){e.preventDefault();
   const a=document.getElementById("in").value,b=document.getElementById("out").value;
@@ -365,6 +401,7 @@ function showStep(n){
   document.getElementById("nextBtn").style.display=n===5?"none":"";
   document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
   const nn=nights(); document.getElementById("nightsNote").textContent=nn>0?`${nn} night${nn===1?"":"s"} selected.`:"";
+  if(n===2) renderRooms();
   if(n===3) renderTotal();
   if(n===4) document.getElementById("summary").innerHTML=`<b>${room.n}</b> — €${room.p}/night<br>${document.getElementById("bIn").value} → ${document.getElementById("bOut").value} · ${Math.max(nights(),1)} night(s) · ${document.getElementById("bGuests").value}<br>Rate: <b>${rate==="flex"?"Flexible (free cancellation)":"Non-refundable (−10%)"}</b>${promo?`<br>Promo: <b>${promo}</b>`:""}<br><b>Total: €${total()}</b>`;
 }
@@ -374,14 +411,39 @@ function nextStep(){
   if(step===4){
     if(!document.getElementById("gname").value.trim()) return alert("Please add your name.");
     if(!document.getElementById("gemail").value.trim()) return alert("Please add your email.");
-    ref="AH-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
-    const nm=document.getElementById("gname").value.trim();
-    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${room.n} at ${BIZ.name}, ${BIZ.city}, ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. Total €${total()}. Check-in 15:00.`;
-    document.getElementById("bookRef").textContent="Booking ref: "+ref;
-    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${room.n} from ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. My booking ref is ${ref}.`);});
-    showStep(5); return;
+    confirmStay(); return;
   }
   showStep(step+1);
+}
+/* Save the stay with the booking service. The service assigns a real room
+   number free for every night; if the room type just sold out for those
+   dates it answers 409 and we send the customer back to pick another room
+   or other dates — a room can never be double-booked. */
+async function confirmStay(){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your booking…";
+  const ci=document.getElementById("bIn").value, co=document.getElementById("bOut").value;
+  const guests=parseInt(document.getElementById("bGuests").value,10)||2;
+  const nm=document.getElementById("gname").value.trim();
+  try{
+    const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"stay",date:ci,time:"stay",party:guests,name:nm,phone:document.getElementById("gphone").value.trim(),ref_prefix:"AH",details:{checkout:co,room_type:roomSlug(room.n),room_name:room.n,guests:document.getElementById("bGuests").value,rate:rate,promo:promo,extras:[...extrasOn].map(i=>EXTRAS[i].n),total:total(),email:document.getElementById("gemail").value.trim(),notes:document.getElementById("gnotes").value.trim()}})});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===409||d.error==="slot_full"){
+      alert("Sorry — the "+room.n+" is no longer free for those dates. Please pick another room or change your dates.");
+      stayAvailCache={key:"",map:{}};
+      showStep(2); return;
+    }
+    if(!r.ok||!d.ref) throw new Error("booking failed");
+    ref=d.ref;
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${room.n} at ${BIZ.name}, ${BIZ.city}, ${ci} to ${co}. Total €${total()}. Check-in 15:00.`;
+    document.getElementById("bookRef").textContent="Booking ref: "+ref;
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${room.n} from ${ci} to ${co}. My booking ref is ${ref}.`);});
+    showStep(5);
+  }catch(e){
+    alert("We couldn't save your booking just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm booking →";
+  }
 }
 function prevStep(){if(step>1) showStep(step-1);}
 function resetBooking(){room=ROOMS[0];rate="flex";promo="";extrasOn=new Set();renderRooms();renderExtras();showStep(1);}
@@ -394,7 +456,9 @@ document.getElementById("contactForm").addEventListener("submit",e=>{
 (function init(){
   const t=new Date(), tom=new Date(Date.now()+86400000), nxt=new Date(Date.now()+2*86400000);
   const iso=d=>d.toISOString().split("T")[0];
-  ["in","bIn"].forEach(id=>document.getElementById(id).min=iso(t));
+  const max=new Date(Date.now()+365*86400000);
+  ["in","bIn"].forEach(id=>{document.getElementById(id).min=iso(t); document.getElementById(id).max=iso(max);});
+  ["out","bOut"].forEach(id=>{document.getElementById(id).min=iso(t); document.getElementById(id).max=iso(max);});
   document.getElementById("in").value=iso(tom); document.getElementById("out").value=iso(nxt);
   document.getElementById("bIn").value=iso(tom); document.getElementById("bOut").value=iso(nxt);
   renderRooms(); renderExtras(); showStep(1);

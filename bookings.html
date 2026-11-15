@@ -77,12 +77,43 @@ async function load(){
     if(!r.ok) throw new Error("bad response");
     const d=await r.json();
     const rows=d.bookings||[];
-    sum.innerHTML="<b>"+rows.length+"</b> booking"+(rows.length===1?"":"s")+" on <b>"+esc(date)+"</b>";
-    if(!rows.length){list.innerHTML='<div class="empty">No bookings on this date yet.</div>'; return;}
-    list.innerHTML=rows.map(b=>{
+    // Stays store one row per night — group them back into one card per stay.
+    const stays={}; const singles=[];
+    for(const b of rows){
+      if(b.type==="stay"){ (stays[b.ref]=stays[b.ref]||[]).push(b); }
+      else singles.push(b);
+    }
+    const cards=singles.map(b=>({kind:"slot",b}));
+    for(const ref in stays){
+      const group=stays[ref].slice().sort((a,c)=>a.date<c.date?-1:1);
+      const first=group[0];
+      const checkin=first.date;
+      const checkout=(first.details&&first.details.checkout)||first.date;
+      // Nights come from the date range, not the rows loaded for this one day.
+      const nights=Math.max(1,Math.round((new Date(checkout)-new Date(checkin))/86400000));
+      cards.push({kind:"stay",b:first,checkin,checkout,nights});
+    }
+    cards.sort((a,c)=>{
+      const da=a.kind==="stay"?a.checkin:a.b.time, db=c.kind==="stay"?c.checkin:c.b.time;
+      return da<db?-1:da>db?1:0;
+    });
+    sum.innerHTML="<b>"+cards.length+"</b> booking"+(cards.length===1?"":"s")+" on <b>"+esc(date)+"</b>";
+    if(!cards.length){list.innerHTML='<div class="empty">No bookings on this date yet.</div>'; return;}
+    list.innerHTML=cards.map(c=>{
+      const b=c.b;
       const notes=(b.details&&b.details.notes)||"";
       const email=(b.details&&b.details.email)||"";
-      return '<div class="card"><div class="time">'+esc(b.time)+'<small>Table '+esc(b.table_no)+'</small></div>'
+      if(c.kind==="stay"){
+        const roomName=(b.details&&b.details.room_name)||b.resource||"Room";
+        return '<div class="card"><div class="time">'+esc(c.checkin.slice(5))+'<small>'+esc(c.nights)+' night'+(c.nights>1?"s":"")+'</small></div>'
+          +'<div class="body"><b>'+esc(b.customer_name)+'</b> · '+esc(roomName)+' · '+esc(b.party)+' guest'+(b.party>1?"s":"")
+          +'<p>'+esc(c.checkin)+' → '+esc(c.checkout)+'<br><a href="tel:'+esc(b.customer_phone)+'">'+esc(b.customer_phone)+'</a>'
+          +(email?' · <a href="mailto:'+esc(email)+'">'+esc(email)+'</a>':"")
+          +(notes?'<br>Notes: '+esc(notes):"")+'</p>'
+          +'<span class="ref">Ref: '+esc(b.ref)+'</span></div></div>';
+      }
+      const label=b.type==="appointment"?("Stylist "+(b.resource||"")):b.type==="order"?("Order"):("Table "+esc(b.table_no));
+      return '<div class="card"><div class="time">'+esc(b.time)+'<small>'+esc(label)+'</small></div>'
         +'<div class="body"><b>'+esc(b.customer_name)+'</b> · '+esc(b.party)+' guest'+(b.party>1?"s":"")
         +'<p><a href="tel:'+esc(b.customer_phone)+'">'+esc(b.customer_phone)+'</a>'
         +(email?' · <a href="mailto:'+esc(email)+'">'+esc(email)+'</a>':"")
