@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Websites — Salon · Hotel · Resort</title>
+<meta name="description" content="Three excellent demo websites: a hair salon, a boutique hotel and a beach resort. Each one is personalised for a client with a link.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#faf7f1;color:#221d17;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:48px 20px 80px}
+h1{font-family:Georgia,serif;font-size:clamp(32px,5vw,48px);line-height:1.15}
+p.lead{color:#6f655a;max-width:640px;margin:12px 0 28px;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid #e8dfd2;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(34,29,23,.08)}
+.card img{width:100%;height:190px;object-fit:cover}
+.card div{padding:20px}
+.card h2{font-family:Georgia,serif;font-size:24px}
+.card p{font-size:14px;color:#6f655a;margin:8px 0 14px}
+.btn{display:inline-block;background:#1e3d2f;color:#fff;font-weight:600;border-radius:999px;padding:11px 22px;text-decoration:none;font-size:14px}
+.btn:hover{opacity:.9}
+code{background:#f0e9dc;padding:2px 6px;border-radius:6px;font-size:13px}
+.how{background:#fff;border:1px solid #e8dfd2;border-radius:16px;padding:22px;margin-top:28px}
+.how li{margin:6px 0 6px 18px;font-size:14px}
+.note{font-size:13px;color:#6f655a;margin-top:22px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p style="letter-spacing:.22em;text-transform:uppercase;font-size:11px;font-weight:700;color:#b07a45">Demo websites</p>
+  <h1>One excellent website<br>for every kind of client.</h1>
+  <p class="lead">Three templates, built from the best salon, hotel and resort sites of 2025–26. Each one is fully responsive, has online booking, contact and a map — and each link below is personalised for one real client.</p>
+  <div class="grid">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=70" alt="Hair salon">
+      <div><h2>💇 Hair Salon</h2><p>Light, airy salon — priced service menu, per-stylist booking, gallery, reviews, gift cards &amp; loyalty. For hair salons, barbers &amp; nail studios.</p>
+      <a class="btn" href="salon.html">View salon demo →</a>
+      <p style="margin-top:12px">Example for a real lead:<br><a href="salon.html?name=Heb%20je%20Haar%20weer&amp;phone=%2B31614585841&amp;address=Admiralengracht%2056HS%2C%201057%20GA%20Amsterdam&amp;city=Amsterdam">Heb je Haar weer, Amsterdam →</a></p></div>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=70" alt="Boutique hotel">
+      <div><h2>🏨 Hotel</h2><p>Elegant boutique hotel — booking bar in the hero, room cards with from-prices, dining, offers, FAQ and a 5-step booking flow.</p>
+      <a class="btn" href="hotel.html">View hotel demo →</a>
+      <p style="margin-top:12px">Example:<br><a href="hotel.html?name=The%20Ashford%20House&amp;phone=%2B35312345678&amp;address=14%20Merrion%20Square%2C%20Dublin%202%2C%20Ireland&amp;city=Dublin">The Ashford House, Dublin →</a></p></div>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=70" alt="Beach resort">
+      <div><h2>🌴 Resort</h2><p>Destination resort — villas, spa &amp; wellness, activities, dining, weddings enquiry, packages and a villa booking flow.</p>
+      <a class="btn" href="resort.html">View resort demo →</a>
+      <p style="margin-top:12px">Example:<br><a href="resort.html?name=Solmar%20Bay&amp;phone=%2B351289123456&amp;address=Praia%20da%20Marinha%2C%208400%20Lagoa%2C%20Algarve%2C%20Portugal&amp;city=Algarve">Solmar Bay, Algarve →</a></p></div>
+    </div>
+  </div>
+  <div class="how">
+    <h2 style="font-size:22px">How personalisation works</h2>
+    <p style="font-size:14px;color:#6f655a">Add these to any template link — the name, phone, address and city change everywhere on the page, including tel: and WhatsApp links:</p>
+    <ul>
+      <li><code>?name=Heb%20je%20Haar%20weer</code> — business name</li>
+      <li><code>&amp;phone=%2B31614585841</code> — phone (use %2B for the + sign)</li>
+      <li><code>&amp;address=Admiralengracht%2056HS%2C%201057%20GA%20Amsterdam</code> — street address</li>
+      <li><code>&amp;city=Amsterdam</code> — city</li>
+    </ul>
+    <p style="font-size:14px;color:#6f655a;margin-top:10px">Example: <code>salon.html?name=Studio%20Hair&amp;phone=%2B31653810243&amp;address=Gaaspstraat%2032%2C%201079%20VE%20Amsterdam&amp;city=Amsterdam</code></p>
+  </div>
+  <p class="note">Demo templates only — names, prices, reviews and photos are placeholders to swap for the real business. Booking is a client-side demo (no payments, no backend). References: Westfolk Salon, Gleneagles, The Hoxton, The Brando, Tiamo, Soneva.</p>
+</div>
+</body>
+</html>
