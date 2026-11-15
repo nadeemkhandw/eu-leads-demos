@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Copper Pot — Restaurant in Dublin</title>
+<meta name="description" content="The Copper Pot — a warm, modern bistro in Dublin. Seasonal menus, honest prices, table booking online in under a minute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        paper: '#faf7f1',
+        card: '#f5efe6',
+        ink: '#221d17',
+        muted: '#6b6a5c',
+        line: '#e6ddcb',
+        deep: '#1e2b25',
+        deep2: '#2c3d33',
+        brass: '#a97c2f',
+        brassdark: '#8a6424',
+        gold: '#d99a2b',
+        sand: '#f3d9b0',
+        wa: '#25d366'
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+/* ---- Shared conventions from DESIGN.md: header hard rule, sticky bar, wizard ---- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{line-height:1.6}
+img{display:block;max-width:100%}
+section[id]{scroll-margin-top:88px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:11px;font-weight:700;color:#a97c2f}
+/* header — min-height, never a fixed height; Book button nowrap + flex-shrink:0 */
+header{position:sticky;top:0;z-index:40;background:rgba(250,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid #e6ddcb}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding-top:8px;padding-bottom:8px}
+.logo{font-family:"Cormorant Garamond",Georgia,serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:#221d17;line-height:1.15}
+.logo small{display:block;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.3em;color:#a97c2f;font-weight:700}
+nav.main{display:flex;gap:22px}
+nav.main a{color:#221d17;text-decoration:none;font-size:14px;font-weight:500}
+nav.main a:hover{color:#8a6424}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+header .btn{white-space:nowrap;flex-shrink:0}
+.tel-link{font-weight:600;color:#221d17;text-decoration:none;font-size:14px}
+.burger{display:none;background:none;border:0;font-size:26px;cursor:pointer;color:#221d17}
+/* hero */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;padding:0;background-image:url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=70");background-size:cover;background-position:center}
+.hero .veil{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.hero-in{position:relative;z-index:2;padding:72px 20px 88px;max-width:1120px;margin:0 auto;width:100%}
+/* wizard interactive states */
+.step{flex:1;min-width:110px;text-align:center;font-size:13px;padding:10px;border-radius:999px;background:#2c3d33;color:#cfc4b4}
+.step.on{background:#a97c2f;color:#fff;font-weight:600}
+.opt{border:1.5px solid #e6ddcb;border-radius:12px;padding:14px;cursor:pointer;background:#fff;text-align:left;width:100%;font:inherit;color:#221d17}
+.opt:hover{border-color:#a97c2f}
+.opt.sel{border-color:#a97c2f;background:#fdf3e3;outline:2px solid #a97c2f}
+.opt b{display:block}
+.opt small{color:#6b6a5c}
+.slot{border:1.5px solid #e6ddcb;border-radius:999px;padding:9px 16px;background:#fff;cursor:pointer;font:inherit;color:#221d17}
+.slot.sel{background:#a97c2f;color:#fff;border-color:#a97c2f}
+.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid #e6ddcb;border-radius:10px;font:inherit;margin:6px 0 12px;background:#fff;color:#221d17}
+label{font-size:13px;font-weight:600;color:#6b6a5c}
+details{border:1px solid #e6ddcb;border-radius:12px;padding:14px 16px;margin:8px 0;background:#fff}
+summary{cursor:pointer;font-weight:600}
+/* sticky mobile bar */
+.stickybar{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;display:none;gap:8px}
+.stickybar a{flex:1;text-align:center;padding:13px 8px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.stickybar .b-book{background:#a97c2f;color:#fff}
+.stickybar .b-call{background:#fff;color:#221d17}
+.stickybar .b-wa{background:#25d366;color:#fff}
+.float-wa{position:fixed;right:16px;bottom:84px;z-index:50;background:#25d366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+@media(max-width:900px){
+  nav.main{display:none}
+  .burger{display:block}
+  nav.main.open{display:flex;position:absolute;top:100%;left:0;right:0;background:#faf7f1;flex-direction:column;padding:16px 20px;border-bottom:1px solid #e6ddcb}
+  .tel-link{display:none}
+}
+@media(max-width:640px){
+  .stickybar{display:flex}
+  .wrap{padding:0 14px}
+  .nav{gap:8px;min-height:56px}
+  .logo{font-size:18px;letter-spacing:.04em}
+  .logo small{font-size:8px;letter-spacing:.2em}
+  .burger{font-size:22px;flex-shrink:0;width:36px}
+}
+</style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- Announcement bar (HyperUI pattern) -->
+<div class="bg-deep text-[#f5efe6] text-center text-sm px-4 py-2">
+  Now booking Christmas parties — set menus from €38 per person ·
+  <a href="#private" class="font-semibold underline underline-offset-2 text-sand">Enquire about private dining →</a>
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span data-biz="name">The Copper Pot</span><small>RESTAURANT &nbsp;·&nbsp; <span data-biz="city">DUBLIN</span></small></a>
+    <nav class="main" id="mainnav">
+      <a href="#menu">Menu</a><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#private">Private dining</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="tel-link" data-tel href="tel:+35315550142" data-biz="phone">+353 1 555 0142</a>
+      <a class="bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-5 py-2.5 text-sm no-underline btn" href="#booking">Book a table</a>
+      <button class="burger" aria-label="Menu" onclick="document.getElementById('mainnav').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero (HyperUI pattern: bold headline, supporting copy, two CTAs, info chips) -->
+<section class="hero" id="top" role="img" aria-label="Candle-lit dining room">
+  <div class="veil"></div>
+  <div class="hero-in">
+    <p class="eyebrow" style="color:#f3d9b0">Modern bistro — <span data-biz="city">Dublin</span></p>
+    <h1 class="font-serif font-semibold leading-[1.05] text-[clamp(44px,7vw,76px)] text-white">Seasonal food,<br>cooked with care.</h1>
+    <p class="max-w-xl text-lg opacity-95 mt-4 mb-6">Irish ingredients, a short menu that changes with the seasons, and a dining room that feels like a good evening out — at <span data-biz="name">The Copper Pot</span>.</p>
+    <div class="flex gap-3 flex-wrap">
+      <a href="#booking" class="bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-7 py-3.5 no-underline text-[15px]">Book a table</a>
+      <a href="#menu" class="bg-white text-ink font-semibold rounded-full px-7 py-3.5 no-underline text-[15px]">See the menu</a>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-7 text-sm">
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">★ 4.8 · 900+ Google reviews</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full" data-biz="address">14 Wicklow Street, Dublin 2</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">Open 7 days · Lunch &amp; dinner</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">Walk-ins welcome</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">Free cancellation up to 2h before</span>
+    </div>
+  </div>
+</section>
+
+<!-- Stats (HyperUI pattern) -->
+<section class="py-12">
+  <div class="wrap">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">Est. 2016</p><p class="text-sm text-muted mt-1">serving <span data-biz="city">Dublin</span></p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">4.8 ★</p><p class="text-sm text-muted mt-1">900+ Google reviews</p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">60 seats</p><p class="text-sm text-muted mt-1">plus a private room for 14</p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">€9</p><p class="text-sm text-muted mt-1">starters from — prices shown upfront</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature grid (HyperUI pattern) -->
+<section class="py-8">
+  <div class="wrap">
+    <p class="eyebrow">Why book with us</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">A good evening out, without the fuss</h2>
+    <p class="text-muted max-w-2xl">Everything is arranged before you arrive — the table, the menu, the bill. You just turn up hungry.</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+      <div class="bg-card border border-line rounded-2xl p-6">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-deep text-sand mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4-3.5-8-6.5-8-11a8 8 0 1 1 16 0c0 4.5-4 7.5-8 11z"/><path stroke-linecap="round" d="M12 21V11"/></svg></span>
+        <h3 class="font-serif text-2xl font-semibold mb-1">Seasonal menu</h3>
+        <p class="text-sm text-muted">A short menu that changes with the morning market — never frozen, never tired.</p>
+      </div>
+      <div class="bg-card border border-line rounded-2xl p-6">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-deep text-sand mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 2"/></svg></span>
+        <h3 class="font-serif text-2xl font-semibold mb-1">Booked in a minute</h3>
+        <p class="text-sm text-muted">Date, time, party size — done. No deposit, no card, no phone call needed.</p>
+      </div>
+      <div class="bg-card border border-line rounded-2xl p-6">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-deep text-sand mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+        <h3 class="font-serif text-2xl font-semibold mb-1">Free cancellation</h3>
+        <p class="text-sm text-muted">Plans change — cancel free up to 2 hours before your table, no questions asked.</p>
+      </div>
+      <div class="bg-card border border-line rounded-2xl p-6">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-deep text-sand mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path stroke-linecap="round" d="M22 21v-2a4 4 0 0 0-3-3.87M15.5 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3 class="font-serif text-2xl font-semibold mb-1">Private room</h3>
+        <p class="text-sm text-muted">The Copper Room seats 14 — birthdays, work dinners and family gatherings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Menu (HyperUI pattern: category cards with text menus and prices) -->
+<section id="menu" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Menu</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Short, seasonal, honest prices</h2>
+    <p class="text-muted max-w-2xl">The menu changes with the seasons and the morning market. Everything below is from the current menu — tell us about allergies when you book and we will look after you.</p>
+    <div class="grid md:grid-cols-2 gap-4 mt-8">
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <h3 class="font-serif text-2xl font-semibold">Starters</h3>
+        <p class="text-[13px] text-muted mb-2">To share, or to start.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Soup of the Day</b><small class="block text-muted text-[13px]">With sourdough &amp; butter</small></div><div class="font-bold whitespace-nowrap">€7</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Burrata &amp; Tomato</b><small class="block text-muted text-[13px]">Heirloom tomato, basil, olive oil</small></div><div class="font-bold whitespace-nowrap">€11</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Crispy Calamari</b><small class="block text-muted text-[13px]">Lemon aioli, chilli salt</small></div><div class="font-bold whitespace-nowrap">€12</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Garlic Mushrooms</b><small class="block text-muted text-[13px]">On toasted sourdough, tarragon</small></div><div class="font-bold whitespace-nowrap">€9</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Charcuterie Board</b><small class="block text-muted text-[13px]">Irish cured meats, pickles, bread</small></div><div class="font-bold whitespace-nowrap">€16</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Prawn Pil Pil</b><small class="block text-muted text-[13px]">Garlic, chilli, crusty bread</small></div><div class="font-bold whitespace-nowrap">€13</div></div>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <h3 class="font-serif text-2xl font-semibold">Mains</h3>
+        <p class="text-[13px] text-muted mb-2">From the grill and the stove.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Ribeye Steak</b><small class="block text-muted text-[13px]">28-day aged, chips &amp; pepper sauce</small></div><div class="font-bold whitespace-nowrap">€32</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Pan-Fried Sea Bass</b><small class="block text-muted text-[13px]">Butter sauce, new potatoes, greens</small></div><div class="font-bold whitespace-nowrap">€27</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Roast Chicken</b><small class="block text-muted text-[13px]">Half chicken, roast veg, gravy</small></div><div class="font-bold whitespace-nowrap">€22</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Wild Mushroom Risotto</b><small class="block text-muted text-[13px]">Parmesan, truffle oil (v)</small></div><div class="font-bold whitespace-nowrap">€19</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Fish &amp; Chips</b><small class="block text-muted text-[13px]">Beer batter, tartar, mushy peas</small></div><div class="font-bold whitespace-nowrap">€18</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Lamb Shank</b><small class="block text-muted text-[13px]">Slow-braised, mash, red wine jus</small></div><div class="font-bold whitespace-nowrap">€26</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">The Copper Burger</b><small class="block text-muted text-[13px]">Beef, cheddar, bacon, brioche, chips</small></div><div class="font-bold whitespace-nowrap">€17</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Butternut Tagliatelle</b><small class="block text-muted text-[13px]">Sage butter, toasted hazelnuts (v)</small></div><div class="font-bold whitespace-nowrap">€18</div></div>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <h3 class="font-serif text-2xl font-semibold">Desserts</h3>
+        <p class="text-[13px] text-muted mb-2">Save room — or take one home.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Chocolate Fondant</b><small class="block text-muted text-[13px]">Vanilla ice cream, salted caramel</small></div><div class="font-bold whitespace-nowrap">€9</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Crème Brûlée</b><small class="block text-muted text-[13px]">Vanilla bean, shortbread</small></div><div class="font-bold whitespace-nowrap">€8</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Baked Cheesecake</b><small class="block text-muted text-[13px]">Berry compote</small></div><div class="font-bold whitespace-nowrap">€8</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Irish Cheese Board</b><small class="block text-muted text-[13px]">Three cheeses, crackers, chutney</small></div><div class="font-bold whitespace-nowrap">€12</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Affogato</b><small class="block text-muted text-[13px]">Espresso over vanilla ice cream</small></div><div class="font-bold whitespace-nowrap">€6</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Ice Cream Selection</b><small class="block text-muted text-[13px]">Three scoops, ask for flavours</small></div><div class="font-bold whitespace-nowrap">€6</div></div>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <h3 class="font-serif text-2xl font-semibold">Drinks</h3>
+        <p class="text-[13px] text-muted mb-2">Wine, beer and soft drinks.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">House Red / White</b><small class="block text-muted text-[13px]">Glass — ask for today's pick</small></div><div class="font-bold whitespace-nowrap">€8</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Craft Beer</b><small class="block text-muted text-[13px]">Local brewery, rotating taps</small></div><div class="font-bold whitespace-nowrap">€6.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Cocktail of the Day</b><small class="block text-muted text-[13px]">Ask your server</small></div><div class="font-bold whitespace-nowrap">€11</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Sparkling Water</b><small class="block text-muted text-[13px]">Still or sparkling, 750 ml</small></div><div class="font-bold whitespace-nowrap">€3</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Soft Drinks</b><small class="block text-muted text-[13px]">Selection of bottled soft drinks</small></div><div class="font-bold whitespace-nowrap">€3.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Espresso / Coffee</b><small class="block text-muted text-[13px]">Single-origin, roasted in Dublin</small></div><div class="font-bold whitespace-nowrap">€3</div></div>
+      </div>
+    </div>
+    <p class="text-[13px] text-muted mt-4">Two-course lunch €24 · Three-course dinner €38 · Sunday roast €22. Vegetarian and vegan dishes marked (v) — ask us about gluten-free options.</p>
+  </div>
+</section>
+
+<!-- Set menus (HyperUI pricing pattern) -->
+<section class="py-8">
+  <div class="wrap">
+    <p class="eyebrow">Set menus</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Let the kitchen decide</h2>
+    <p class="text-muted max-w-2xl">Three set menus, one easy choice. Available every day unless marked — the chef picks the best of the morning market.</p>
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm flex flex-col">
+        <h3 class="font-serif text-2xl font-semibold">Two-course lunch</h3>
+        <p class="font-serif text-4xl font-semibold mt-3">€24<span class="text-base text-muted font-sans font-normal"> / person</span></p>
+        <ul class="text-sm text-muted space-y-2 mt-4 mb-6">
+          <li>— Starter + main, or main + dessert</li>
+          <li>— Weekdays 12:00–15:00</li>
+          <li>— Vegetarian option always available</li>
+        </ul>
+        <a href="#booking" class="mt-auto inline-block text-center border-[1.5px] border-ink text-ink font-semibold rounded-full px-6 py-3 no-underline text-[15px]">Book lunch</a>
+      </div>
+      <div class="bg-deep text-[#f5efe6] rounded-2xl p-6 shadow-sm flex flex-col relative">
+        <span class="absolute top-4 right-4 bg-gold text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</span>
+        <h3 class="font-serif text-2xl font-semibold text-white">Three-course dinner</h3>
+        <p class="font-serif text-4xl font-semibold mt-3 text-white">€38<span class="text-base text-[#cfc4b4] font-sans font-normal"> / person</span></p>
+        <ul class="text-sm text-[#cfc4b4] space-y-2 mt-4 mb-6">
+          <li>— Starter, main and dessert</li>
+          <li>— Chef's pick of the day, every evening</li>
+          <li>— Wine pairing +€25 per person</li>
+        </ul>
+        <a href="#booking" class="mt-auto inline-block text-center bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-6 py-3 no-underline text-[15px]">Book dinner</a>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm flex flex-col">
+        <h3 class="font-serif text-2xl font-semibold">Sunday roast</h3>
+        <p class="font-serif text-4xl font-semibold mt-3">€22<span class="text-base text-muted font-sans font-normal"> / person</span></p>
+        <ul class="text-sm text-muted space-y-2 mt-4 mb-6">
+          <li>— Roast of the day, all the trimmings</li>
+          <li>— Sundays 12:00–18:00</li>
+          <li>— Children's roast €12</li>
+        </ul>
+        <a href="#booking" class="mt-auto inline-block text-center border-[1.5px] border-ink text-ink font-semibold rounded-full px-6 py-3 no-underline text-[15px]">Book Sunday</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Gallery</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">The room, the food, the evenings</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-7">
+      <img loading="lazy" class="w-full h-60 lg:h-[492px] lg:row-span-2 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=70" alt="Dining room">
+      <img loading="lazy" class="w-full h-60 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=70" alt="Tables set for dinner">
+      <img loading="lazy" class="w-full h-60 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=70" alt="Steak from the grill">
+      <img loading="lazy" class="w-full h-60 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=70" alt="Seafood dish">
+      <img loading="lazy" class="w-full h-60 object-cover rounded-2xl" src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=70" alt="Dessert">
+    </div>
+  </div>
+</section>
+
+<!-- Booking wizard -->
+<section id="booking" class="bg-deep text-[#f5efe6] py-16">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#f3d9b0">Book a table</p>
+    <h2 class="font-serif font-semibold text-white text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Reserve in under a minute</h2>
+    <p class="text-[#cfc4b4] max-w-2xl">Date → time → party size → your details. No deposit, no card — free cancellation up to 2 hours before your table.</p>
+    <div class="flex gap-2 flex-wrap my-6" id="steps">
+      <div class="step on" data-step="1">1 · Date</div><div class="step" data-step="2">2 · Time</div><div class="step" data-step="3">3 · Party size</div><div class="step" data-step="4">4 · Your details</div>
+    </div>
+    <div class="bg-white text-ink rounded-2xl p-6 md:p-7" id="bookpanel">
+      <div class="bstep" data-bstep="1">
+        <h3 class="font-serif text-[26px] font-semibold mb-4">Pick a date</h3>
+        <label for="bdate">Date</label><input type="date" id="bdate">
+        <p class="text-[13px] text-muted">Lunch 12:00–15:00 · Dinner 17:30–22:00. We hold your table for 15 minutes past the booking time.</p>
+      </div>
+      <div class="bstep" data-bstep="2" hidden>
+        <h3 class="font-serif text-[26px] font-semibold mb-4">Pick a time</h3>
+        <label>Available times — crossed-out times are already booked</label>
+        <div class="flex gap-2 flex-wrap mt-2" id="slots"></div>
+      </div>
+      <div class="bstep" data-bstep="3" hidden>
+        <h3 class="font-serif text-[26px] font-semibold mb-4">How many guests?</h3>
+        <div class="grid sm:grid-cols-2 gap-2.5" id="partyOpts"></div>
+        <p class="text-[13px] text-muted mt-4">More than 8 guests? Book the private room below, or call us — large parties are always welcome with a day's notice.</p>
+      </div>
+      <div class="bstep" data-bstep="4" hidden>
+        <h3 class="font-serif text-[26px] font-semibold mb-4">Your details</h3>
+        <div id="summary" class="bg-[#faf7f1] rounded-[10px] p-3.5 mb-3.5 text-sm"></div>
+        <label for="cname">Full name</label><input id="cname" placeholder="e.g. Aoife Byrne" autocomplete="name">
+        <label for="cphone">Phone</label><input id="cphone" type="tel" placeholder="+353 87 123 4567" autocomplete="tel">
+        <label for="cemail">Email</label><input id="cemail" type="email" placeholder="you@example.com" autocomplete="email">
+        <label for="cnotes">Notes (optional)</label><textarea id="cnotes" rows="2" placeholder="e.g. birthday, high chair, nut allergy, window seat"></textarea>
+        <p class="text-[13px] text-muted">By confirming you agree to our cancellation policy: free up to 2h before, after that please call us. We will confirm by WhatsApp / SMS.</p>
+      </div>
+      <div class="bstep" data-bstep="5" hidden>
+        <div class="text-center py-2.5">
+          <div class="text-[52px] leading-none">✓</div>
+          <h3 class="font-serif text-[26px] font-semibold mt-2">Your table is booked!</h3>
+          <p id="confirmText" class="mt-2"></p>
+          <div class="text-xl font-bold bg-[#f6ead9] border border-dashed border-brass rounded-[10px] p-2.5 my-3.5 mx-auto max-w-[340px]" id="bookRef"></div>
+          <p class="text-[13px] text-muted">A confirmation is on its way by WhatsApp / SMS. No deposit is taken — you pay at the restaurant. Need to change it? Call us — free up to 2h before.</p>
+          <div class="flex gap-2.5 justify-center flex-wrap mt-4">
+            <a class="bg-brass text-white font-semibold rounded-full px-6 py-3 no-underline text-[15px]" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
+            <button class="bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer" onclick="downloadICS()">Add to calendar (.ics)</button>
+            <button class="bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer" onclick="resetBooking()">Book another table</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between gap-2.5 mt-4">
+        <button class="bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer" id="backBtn" onclick="prevStep()" disabled>← Back</button>
+        <button class="bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer border-0" id="nextBtn" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews (HyperUI testimonial pattern) -->
+<section id="reviews" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Reviews</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Loved by <span data-biz="city">Dublin</span></h2>
+    <p class="text-muted max-w-2xl">4.8 out of 5 from 900+ Google reviews — here is what guests say after dinner.</p>
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+      <figure class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <div class="text-gold tracking-[2px]">★★★★★</div>
+        <blockquote class="font-serif text-xl mt-2.5 mb-2.5">“The ribeye was the best I have had in Dublin, and the room feels special without being stuffy. Booked online in a minute.”</blockquote>
+        <figcaption class="text-sm text-muted">— Ciara M. · Google review</figcaption>
+      </figure>
+      <figure class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <div class="text-gold tracking-[2px]">★★★★★</div>
+        <blockquote class="font-serif text-xl mt-2.5 mb-2.5">“Our anniversary dinner — they remembered the occasion, the sea bass was perfect, and nobody rushed us out.”</blockquote>
+        <figcaption class="text-sm text-muted">— James &amp; Aoife · Google review</figcaption>
+      </figure>
+      <figure class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <div class="text-gold tracking-[2px]">★★★★★</div>
+        <blockquote class="font-serif text-xl mt-2.5 mb-2.5">“Short menu, everything on it excellent. The chocolate fondant alone is worth the walk. Already booked again.”</blockquote>
+        <figcaption class="text-sm text-muted">— Sofia L. · TripAdvisor review</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- Private dining -->
+<section id="private" class="py-8">
+  <div class="wrap">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <p class="eyebrow">Private dining</p>
+        <h3 class="font-serif text-[28px] font-semibold mt-1">The Copper Room — seats 14</h3>
+        <p class="text-sm text-muted mt-2">Birthdays, work dinners, family gatherings. Set menus from €38 per person, your own server, and a toast on arrival.</p>
+        <p class="text-sm mt-2.5"><b>Set menus:</b> 2 courses €38 · 3 courses €48 · wine pairing +€25 per person.</p>
+        <a class="inline-block bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-6 py-3 no-underline text-[15px] mt-4" id="privateBtn" data-wa href="#" target="_blank" rel="noopener">Enquire about private dining</a>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <p class="eyebrow">Events &amp; hire</p>
+        <h3 class="font-serif text-[28px] font-semibold mt-1">The whole room, for your night</h3>
+        <p class="text-sm text-muted mt-2">Full-restaurant hire for up to 60 guests — weddings, launches, Christmas parties. Canapés, bowl food or a sit-down menu, your call.</p>
+        <p class="text-sm mt-2.5"><b>From €1,500</b> minimum spend, Sunday–Thursday. Friday and Saturday on request.</p>
+        <a class="inline-block bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 no-underline text-[15px] mt-4" data-wa href="#" target="_blank" rel="noopener">Ask about full hire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact & hours -->
+<section id="contact" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Find us</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Contact &amp; hours</h2>
+    <div class="grid lg:grid-cols-2 gap-6 mt-7 items-start">
+      <div>
+        <p><strong data-biz="name">The Copper Pot</strong><br><span data-biz="address">14 Wicklow Street, Dublin 2</span><br>
+        <a data-tel href="tel:+35315550142" data-biz="phone">+353 1 555 0142</a> · <a href="mailto:hello@thecopperpot.example">hello@thecopperpot.example</a></p>
+        <table class="w-full mt-2.5 text-sm"><tr><td class="py-2 border-b border-line">Monday – Thursday</td><td class="py-2 border-b border-line text-right">12:00 – 22:00</td></tr><tr><td class="py-2 border-b border-line">Friday – Saturday</td><td class="py-2 border-b border-line text-right">12:00 – 23:00</td></tr><tr><td class="py-2 border-b border-line">Sunday</td><td class="py-2 border-b border-line text-right">12:00 – 21:00</td></tr></table>
+        <p class="text-[13px] text-muted mt-3.5">Luas Green Line to St Stephen's Green · Bus 15 / 46A · Step-free entrance · High chairs available.</p>
+        <h3 class="font-serif text-[22px] font-semibold mt-6">Send us a message</h3>
+        <form id="contactForm" class="mt-2">
+          <label for="fname">Name</label><input id="fname" required placeholder="Your name">
+          <label for="femail">Email</label><input id="femail" type="email" required placeholder="you@example.com">
+          <label for="fmsg">Message</label><textarea id="fmsg" rows="3" required placeholder="Hi, I'd like to ask about…"></textarea>
+          <button class="bg-brass hover:bg-brassdark text-white font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer border-0 w-full" type="submit">Send via email</button>
+          <p class="text-[13px] text-muted mt-2" id="contactDone"></p>
+          <a class="inline-block bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 no-underline text-[15px] w-full text-center mt-2" data-wa href="#" target="_blank" rel="noopener">Or message us on WhatsApp</a>
+        </form>
+      </div>
+      <div>
+        <iframe class="map border-0 w-full h-80 rounded-2xl" title="Map" loading="lazy" src="https://maps.google.com/maps?q=Dublin&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <h3 class="font-serif text-[22px] font-semibold mt-6">Questions</h3>
+        <details><summary>Do I need to book, or can I walk in?</summary><p class="mt-2 text-sm">Walk-ins are welcome when a table is free, but Friday and Saturday evenings fill fast — booking online guarantees your table.</p></details>
+        <details><summary>What is your cancellation policy?</summary><p class="mt-2 text-sm">Free up to 2 hours before your booking. After that, please call us — we will always try to rebook you.</p></details>
+        <details><summary>Do you cater for allergies and dietary needs?</summary><p class="mt-2 text-sm">Yes — tell us in the booking notes. We have vegetarian, vegan and gluten-free dishes, and the kitchen is happy to adapt most mains.</p></details>
+        <details><summary>Is there a children's menu?</summary><p class="mt-2 text-sm">Yes — a two-course children's menu for €12, and high chairs are available. Children are welcome until 20:00.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-deep text-[#cfc4b4] pt-11 pb-[110px]">
+  <div class="wrap">
+    <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-6">
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5" data-biz="name">The Copper Pot</h4>
+        <p class="text-sm">A warm, modern bistro in <span data-biz="city">Dublin</span>. Seasonal menus, honest prices and table booking in under a minute.</p>
+        <p class="text-[13px] mt-2.5">Demo template — names, prices and photos are placeholders to swap for the real business.</p>
+      </div>
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5">Visit</h4>
+        <p class="text-sm"><span data-biz="address">14 Wicklow Street, Dublin 2</span><br><a data-tel href="tel:+35315550142" data-biz="phone" class="text-[#f5efe6]">+353 1 555 0142</a><br>Mon–Thu 12:00–22:00 · Fri–Sat 12:00–23:00 · Sun 12:00–21:00</p>
+      </div>
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5">Follow</h4>
+        <p class="text-sm"><a href="#top" class="text-[#f5efe6]">Instagram</a><br><a href="#top" class="text-[#f5efe6]">Facebook</a><br><a href="#booking" class="text-[#f5efe6]">Book a table</a><br><a href="#contact" class="text-[#f5efe6]">Contact</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="stickybar">
+  <a class="b-book" href="#booking">Book a table</a>
+  <a class="b-call" data-tel href="tel:+35315550142">Call</a>
+  <a class="b-wa" data-wa href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<a class="float-wa" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">✆</a>
+
+<script>
+/* ---- Personalisation: ?name= &phone= &address= &city= ---- */
+const DEFAULTS={name:"The Copper Pot",phone:"+353 1 555 0142",address:"14 Wicklow Street, Dublin 2",city:"Dublin"};
+const q=new URLSearchParams(location.search);
+const BIZ={
+  name:q.get("name")||DEFAULTS.name,
+  phone:q.get("phone")||DEFAULTS.phone,
+  address:q.get("address")||DEFAULTS.address,
+  city:q.get("city")||DEFAULTS.city
+};
+function digits(p){return (p||"").replace(/\D/g,"")}
+function waLink(msg){return "https://wa.me/"+digits(BIZ.phone)+"?text="+encodeURIComponent(msg)}
+function applyBiz(){
+  document.title=BIZ.name+" — Restaurant in "+BIZ.city;
+  document.querySelectorAll('[data-biz="name"]').forEach(e=>e.textContent=BIZ.name);
+  document.querySelectorAll('[data-biz="city"]').forEach(e=>e.textContent=BIZ.city);
+  document.querySelectorAll('[data-biz="address"]').forEach(e=>e.textContent=BIZ.address);
+  document.querySelectorAll('[data-biz="phone"]').forEach(e=>{e.textContent=BIZ.phone; if(e.hasAttribute("data-tel")) e.href="tel:+"+digits(BIZ.phone);});
+  document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink("Hi "+BIZ.name+"! I'd like to book a table.");});
+  const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.city+" "+BIZ.address)+"&z=14&output=embed";
+}
+applyBiz();
+/* ---- Reservation wizard ---- */
+const TIMES=["12:00","12:30","13:00","13:30","14:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00"];
+const PARTIES=[1,2,3,4,5,6,7,8];
+let step=1, sel={date:"",time:"",party:2,ref:""};
+function takenSlots(dateStr){
+  const day=parseInt((dateStr||"").slice(-2),10)||0;
+  const taken=["13:00","20:30"];
+  if(day%2===0) taken.push("18:00","19:30"); else taken.push("12:30","19:00");
+  return taken;
+}
+function renderSlots(){
+  const taken=takenSlots(sel.date);
+  document.getElementById("slots").innerHTML=TIMES.map(t=>{
+    const dis=taken.includes(t)?" disabled":"";
+    return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
+  }).join("");
+}
+function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function renderParty(){
+  document.getElementById("partyOpts").innerHTML=PARTIES.map(n=>`<button type="button" class="opt${n===2?" sel":""}" onclick="pickParty(${n},this)"><b>${n} guest${n>1?"s":""}</b><small>${n<=4?"Standard table":n<=6?"Large table":"Long table — please call to confirm"}</small></button>`).join("");
+}
+function pickParty(n,el){sel.party=n;document.querySelectorAll("#partyOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function showStep(n){
+  step=n;
+  document.querySelectorAll(".bstep").forEach(p=>p.hidden=+p.dataset.bstep!==n);
+  document.querySelectorAll("#steps .step").forEach(s=>s.classList.toggle("on",+s.dataset.step<=n&&n<5));
+  document.getElementById("backBtn").disabled=n===1||n===5;
+  document.getElementById("nextBtn").style.display=n===5?"none":"";
+  document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
+  if(n===2) renderSlots();
+  if(n===3) renderParty();
+  if(n===4) document.getElementById("summary").innerHTML=`Table for <b>${sel.party} guest${sel.party>1?"s":""}</b><br>Date: <b>${sel.date||"—"}</b> at <b>${sel.time||"—"}</b><br>Restaurant: <b>${BIZ.name}</b>, ${BIZ.city}`;
+}
+function nextStep(){
+  if(step===1){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first.");}
+  if(step===2){if(!sel.time) return alert("Pick a time first.");}
+  if(step===4){
+    if(!document.getElementById("cname").value.trim()) return alert("Please add your name.");
+    if(!document.getElementById("cphone").value.trim()) return alert("Please add your phone number.");
+    sel.ref="CP-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+    const nm=document.getElementById("cname").value.trim();
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — a table for ${sel.party} on ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
+    document.getElementById("bookRef").textContent="Booking ref: "+sel.ref;
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked a table for ${sel.party} on ${sel.date} at ${sel.time}. My booking ref is ${sel.ref}.`);});
+    showStep(5); return;
+  }
+  showStep(step+1);
+}
+function prevStep(){if(step>1) showStep(step-1);}
+function resetBooking(){sel={date:"",time:"",party:2,ref:""};document.getElementById("bdate").value="";showStep(1);}
+function downloadICS(){
+  if(!sel.date||!sel.time) return;
+  const dt=sel.date.replace(/-/g,"")+"T"+sel.time.replace(":","")+"00";
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","BEGIN:VEVENT","UID:"+sel.ref+"@"+location.host,"DTSTART:"+dt,"SUMMARY:Table for "+sel.party+" at "+BIZ.name,"LOCATION:"+BIZ.address+", "+BIZ.city,"END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"})); a.download="reservation.ics"; a.click();
+}
+document.getElementById("privateBtn").href=waLink(`Hi ${BIZ.name}! I'd like to enquire about private dining in the Copper Room.`);
+document.getElementById("contactForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("fname").value, msg=document.getElementById("fmsg").value;
+  const subject=encodeURIComponent("Enquiry — "+BIZ.name);
+  const body=encodeURIComponent(`Hi ${BIZ.name},\n\n${msg}\n\n— ${name}`);
+  location.href="mailto:hello@thecopperpot.example?subject="+subject+"&body="+body;
+  document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
+});
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; showStep(1);})();
+</script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solmar Bay — Beach Resort in the Algarve</title>
+<meta name="description" content="Solmar Bay — a beach resort in the Algarve. Private villas, spa, dining and activities on a private beach. Book direct.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'] },
+      borderRadius: { lg: '0.5rem', md: '0.375rem' },
+      boxShadow: { sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)', card: '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06)' }
+    }
+  }
+}
+</script>
+<style>
+  /* shadcn-style tokens: white background, zinc foreground, hairline borders */
+  :root{ --wa:#25d366; }
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+  img{display:block;max-width:100%}
+  /* Header hard rule (DESIGN.md): .nav uses min-height, never a fixed height.
+     Book button: white-space:nowrap + flex-shrink:0. */
+  .nav{min-height:64px}
+  header .btn-book{white-space:nowrap;flex-shrink:0}
+  /* shadcn-style focus ring */
+  input,select,textarea,button{outline:none}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{
+    outline:2px solid rgb(9 9 11 / .25); outline-offset:1px;
+  }
+  .field{width:100%;height:2.5rem;padding:0 .75rem;border:1px solid #e4e4e7;border-radius:.375rem;background:#fff;font:inherit;font-size:.875rem;color:#09090b}
+  .field:focus{border-color:#09090b;box-shadow:0 0 0 2px rgb(9 9 11 / .08)}
+  textarea.field{height:auto;padding:.625rem .75rem;resize:vertical}
+  /* Dialog animation */
+  @keyframes dlgIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .dlg-panel{animation:dlgIn .18s ease-out}
+  .dlg-overlay{animation:fadeIn .18s ease-out}
+  /* Accordion */
+  .acc-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .acc.open .acc-body{max-height:200px}
+  .acc.open .acc-chev{transform:rotate(180deg)}
+  .acc-chev{transition:transform .2s ease}
+  /* Tabs */
+  .tab-btn[aria-selected="true"]{background:#fff;color:#09090b;box-shadow:0 1px 2px 0 rgb(0 0 0 / .06)}
+  /* Sticky mobile bar hidden on desktop */
+  .stickybar{display:none}
+  @media (max-width:640px){
+    .stickybar{display:flex}
+    .nav{min-height:56px}
+  }
+</style>
+</head>
+<body class="bg-white text-zinc-900 antialiased">
+
+<!-- ============ HEADER ============ -->
+<header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-2 nav lg:px-8">
+    <a href="#top" class="shrink-0 leading-none">
+      <span class="block text-lg font-bold tracking-tight text-zinc-950" data-biz="name">Solmar Bay</span>
+      <span class="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">Beach Resort · <span data-biz="city">Algarve</span></span>
+    </a>
+    <nav class="hidden items-center gap-6 text-sm font-medium text-zinc-600 md:flex" id="mainnav">
+      <a href="#villas" class="hover:text-zinc-950">Villas</a>
+      <a href="#experiences" class="hover:text-zinc-950">Experiences</a>
+      <a href="#dining" class="hover:text-zinc-950">Dining</a>
+      <a href="#weddings" class="hover:text-zinc-950">Weddings</a>
+      <a href="#contact" class="hover:text-zinc-950">Contact</a>
+    </nav>
+    <div class="flex shrink-0 items-center gap-3">
+      <a class="hidden text-sm font-semibold text-zinc-900 hover:underline lg:inline" data-tel href="tel:+351289123456" data-biz="phone">+351 289 123 456</a>
+      <button type="button" onclick="openDialog(1)" class="btn-book inline-flex h-9 items-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800">Book</button>
+      <button type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-zinc-200 text-xl leading-none md:hidden" aria-label="Menu" onclick="document.getElementById('mainnav').classList.toggle('open');document.getElementById('mainnav').classList.toggle('hidden');document.getElementById('mainnav').classList.toggle('flex');document.getElementById('mainnav').classList.toggle('flex-col');document.getElementById('mainnav').classList.toggle('absolute');document.getElementById('mainnav').classList.toggle('inset-x-0');document.getElementById('mainnav').classList.toggle('top-full');document.getElementById('mainnav').classList.toggle('bg-white');document.getElementById('mainnav').classList.toggle('border-b');document.getElementById('mainnav').classList.toggle('border-zinc-200');document.getElementById('mainnav').classList.toggle('p-4');document.getElementById('mainnav').classList.toggle('gap-4')">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="relative flex min-h-[88vh] flex-col justify-end overflow-hidden" id="top">
+  <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=70" alt="Private beach at Solmar Bay" fetchpriority="high">
+  <div class="absolute inset-0 bg-black/45"></div>
+  <div class="relative z-10 mx-auto w-full max-w-6xl px-5 pb-8 pt-24 text-center text-white lg:px-8">
+    <span class="inline-flex items-center rounded-full border border-white/40 bg-white/10 px-3 py-1 text-xs font-medium">Private beach · <span data-biz="city" class="ml-1">Algarve</span>, Portugal</span>
+    <h1 class="mx-auto mt-4 max-w-3xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">Arrive. Breathe.<br>Stay a while.</h1>
+    <p class="mx-auto mt-4 max-w-xl text-base text-zinc-100 sm:text-lg">35 private villas on a quiet stretch of Algarve sand — spa, dining under the stars, and days that move at your pace.</p>
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-medium">
+      <span class="rounded-full border border-white/40 bg-white/10 px-3 py-1.5">35 villas · max 90 guests</span>
+      <span class="rounded-full border border-white/40 bg-white/10 px-3 py-1.5">Private beach</span>
+      <span class="rounded-full border border-white/40 bg-white/10 px-3 py-1.5">Spa &amp; wellness</span>
+      <span class="rounded-full border border-white/40 bg-white/10 px-3 py-1.5">20 min from Faro Airport</span>
+    </div>
+  </div>
+  <form class="relative z-10 mx-auto mb-10 grid w-[calc(100%-2.5rem)] max-w-6xl grid-cols-1 gap-3 rounded-lg border border-zinc-200 bg-white p-4 text-left shadow-card sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]" id="heroBar" onsubmit="return startBooking(event)">
+    <div>
+      <label for="in" class="mb-1 block text-xs font-medium text-zinc-500">Check-in</label>
+      <input type="date" id="in" class="field" required>
+    </div>
+    <div>
+      <label for="out" class="mb-1 block text-xs font-medium text-zinc-500">Check-out</label>
+      <input type="date" id="out" class="field" required>
+    </div>
+    <div>
+      <label for="guests" class="mb-1 block text-xs font-medium text-zinc-500">Guests</label>
+      <select id="guests" class="field"><option>1 guest</option><option selected>2 guests</option><option>3 guests</option><option>4 guests</option><option>5+ guests</option></select>
+    </div>
+    <div>
+      <label for="promo" class="mb-1 block text-xs font-medium text-zinc-500">Promo code</label>
+      <input id="promo" class="field" placeholder="e.g. EARLYBIRD">
+    </div>
+    <button class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800 sm:col-span-2 lg:col-span-1 lg:self-end" type="submit">Check availability →</button>
+  </form>
+</section>
+
+<!-- ============ INTENT TILES ============ -->
+<div class="mx-auto max-w-6xl px-5 py-12 lg:px-8">
+  <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <a href="#villas" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Stay</span><span class="text-xs text-zinc-500">Villas &amp; suites</span></a>
+    <a href="#dining" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Eat &amp; Drink</span><span class="text-xs text-zinc-500">4 restaurants &amp; bars</span></a>
+    <a href="#experiences" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Spa &amp; Wellness</span><span class="text-xs text-zinc-500">Treatments &amp; yoga</span></a>
+    <a href="#experiences" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" x2="12" y1="22" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Activities</span><span class="text-xs text-zinc-500">Sea, sand &amp; trails</span></a>
+    <a href="#weddings" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Weddings</span><span class="text-xs text-zinc-500">Beach ceremonies</span></a>
+    <a href="#packages" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Packages</span><span class="text-xs text-zinc-500">Romance &amp; family</span></a>
+    <a href="#booking" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Book</span><span class="text-xs text-zinc-500">Best rate direct</span></a>
+    <a href="#contact" class="rounded-lg border border-zinc-200 bg-white p-5 text-center shadow-sm transition hover:border-zinc-400">
+      <svg class="mx-auto h-6 w-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+      <span class="mt-2 block text-sm font-semibold">Getting here</span><span class="text-xs text-zinc-500">Transfers &amp; flights</span></a>
+  </div>
+</div>
+
+<!-- ============ VILLAS ============ -->
+<section id="villas" class="border-t border-zinc-100 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Rooms &amp; villas</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Your own corner of the bay</h2>
+    <p class="mt-2 max-w-2xl text-sm text-zinc-500 sm:text-base">Every villa has a private pool, direct beach access and a terrace for slow mornings. Prices include taxes and breakfast.</p>
+    <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <img loading="lazy" class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=70" alt="Beach Villa pool">
+        <div class="p-5">
+          <div class="flex items-center justify-between gap-2"><h3 class="text-lg font-semibold">Beach Villa</h3><span class="inline-flex items-center rounded-full border border-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-600">Most popular</span></div>
+          <p class="mt-1 text-sm text-zinc-500">65 m² · Sleeps 2 · Private pool &amp; beach access</p>
+          <div class="mt-4 flex items-end justify-between gap-3">
+            <p class="text-xl font-bold">from €420<span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p>
+            <button type="button" onclick="bookVilla(0)" class="inline-flex h-9 shrink-0 items-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800">Book this villa</button>
+          </div>
+        </div>
+      </article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <img loading="lazy" class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=70" alt="Family Villa pool at dusk">
+        <div class="p-5">
+          <div class="flex items-center justify-between gap-2"><h3 class="text-lg font-semibold">Family Villa</h3><span class="inline-flex items-center rounded-full border border-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-600">Kids stay free</span></div>
+          <p class="mt-1 text-sm text-zinc-500">120 m² · Sleeps 4 · Pool, garden &amp; kids' room</p>
+          <div class="mt-4 flex items-end justify-between gap-3">
+            <p class="text-xl font-bold">from €690<span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p>
+            <button type="button" onclick="bookVilla(1)" class="inline-flex h-9 shrink-0 items-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800">Book this villa</button>
+          </div>
+        </div>
+      </article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <img loading="lazy" class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=1200&q=70" alt="Ocean Residence aerial view">
+        <div class="p-5">
+          <div class="flex items-center justify-between gap-2"><h3 class="text-lg font-semibold">Ocean Residence</h3><span class="inline-flex items-center rounded-full bg-zinc-900 px-2 py-0.5 text-xs font-medium text-white">Signature</span></div>
+          <p class="mt-1 text-sm text-zinc-500">240 m² · Sleeps 6 · 3 bedrooms, chef on request</p>
+          <div class="mt-4 flex items-end justify-between gap-3">
+            <p class="text-xl font-bold">from €1,450<span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p>
+            <button type="button" onclick="bookVilla(2)" class="inline-flex h-9 shrink-0 items-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800">Book this villa</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOK YOUR STAY (opens the dialog) ============ -->
+<section id="booking" class="border-t border-zinc-100 bg-zinc-50 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <div class="grid items-center gap-8 lg:grid-cols-2">
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Book direct</span>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Book your stay</h2>
+        <p class="mt-2 max-w-lg text-sm text-zinc-500 sm:text-base">Dates → villa → extras &amp; packages → your details → confirmation. One-night deposit, balance due 3 days before arrival. Free cancellation up to 14 days before.</p>
+        <ul class="mt-6 space-y-2 text-sm text-zinc-600">
+          <li class="flex items-center gap-2"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-bold text-white">✓</span> Best rate guaranteed when you book direct</li>
+          <li class="flex items-center gap-2"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-bold text-white">✓</span> Breakfast included in every villa</li>
+          <li class="flex items-center gap-2"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-bold text-white">✓</span> Free cancellation up to 14 days before arrival</li>
+        </ul>
+      </div>
+      <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <h3 class="text-lg font-semibold">Start your booking</h3>
+        <p class="mt-1 text-sm text-zinc-500">Pick your dates and villa in the booking dialog — it takes about a minute, and you get your reference straight away.</p>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <div><label for="bInMini" class="mb-1 block text-xs font-medium text-zinc-500">Check-in</label><input type="date" id="bInMini" class="field"></div>
+          <div><label for="bOutMini" class="mb-1 block text-xs font-medium text-zinc-500">Check-out</label><input type="date" id="bOutMini" class="field"></div>
+        </div>
+        <button type="button" onclick="openDialogFromMini()" class="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800">Book your stay →</button>
+        <a data-wa href="#" target="_blank" rel="noopener" class="mt-2 inline-flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-5 text-sm font-medium text-zinc-900 hover:bg-zinc-50">Ask on WhatsApp instead</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING DIALOG (shadcn Dialog style) ============ -->
+<div id="bookDialog" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="dlg-overlay absolute inset-0 bg-black/50" onclick="closeDialog()"></div>
+  <div class="dlg-panel relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-zinc-200 bg-white shadow-xl">
+    <div class="flex items-start justify-between gap-4 border-b border-zinc-200 px-6 py-4">
+      <div>
+        <h3 id="dlgTitle" class="text-lg font-semibold leading-6">Book your stay</h3>
+        <p class="mt-0.5 text-sm text-zinc-500" id="dlgSub">Dates → villa → extras → details → confirmation</p>
+      </div>
+      <button type="button" onclick="closeDialog()" aria-label="Close" class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900">✕</button>
+    </div>
+    <div class="px-6 pt-5">
+      <ol class="flex items-center gap-2" id="dlgSteps">
+        <li class="flex flex-1 items-center gap-2" data-step="1"><span class="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-semibold text-white">1</span><span class="hidden text-xs font-medium sm:block">Dates</span></li>
+        <li class="flex flex-1 items-center gap-2" data-step="2"><span class="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-600">2</span><span class="hidden text-xs font-medium sm:block">Villa</span></li>
+        <li class="flex flex-1 items-center gap-2" data-step="3"><span class="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-600">3</span><span class="hidden text-xs font-medium sm:block">Extras</span></li>
+        <li class="flex flex-1 items-center gap-2" data-step="4"><span class="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-600">4</span><span class="hidden text-xs font-medium sm:block">Details</span></li>
+        <li class="flex items-center gap-2" data-step="5"><span class="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-600">5</span><span class="hidden text-xs font-medium sm:block">Done</span></li>
+      </ol>
+    </div>
+    <div class="px-6 py-5">
+      <div class="bstep" data-bstep="1">
+        <h4 class="text-base font-semibold">When are you coming?</h4>
+        <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div><label for="bIn" class="mb-1 block text-xs font-medium text-zinc-500">Check-in</label><input type="date" id="bIn" class="field"></div>
+          <div><label for="bOut" class="mb-1 block text-xs font-medium text-zinc-500">Check-out</label><input type="date" id="bOut" class="field"></div>
+        </div>
+        <div class="mt-3"><label for="bGuests" class="mb-1 block text-xs font-medium text-zinc-500">Guests</label>
+        <select id="bGuests" class="field"><option>1 guest</option><option selected>2 guests</option><option>3 guests</option><option>4 guests</option><option>5+ guests</option></select></div>
+        <p class="mt-3 text-sm text-zinc-500" id="nightsNote"></p>
+      </div>
+      <div class="bstep" data-bstep="2" hidden>
+        <h4 class="text-base font-semibold">Choose your villa</h4>
+        <div class="mt-4 grid gap-2" id="villaOpts"></div>
+      </div>
+      <div class="bstep" data-bstep="3" hidden>
+        <h4 class="text-base font-semibold">Add extras &amp; packages</h4>
+        <div class="mt-4 grid gap-2 sm:grid-cols-2" id="extraOpts"></div>
+        <div class="mt-4 rounded-md border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm font-semibold" id="totalBox"></div>
+      </div>
+      <div class="bstep" data-bstep="4" hidden>
+        <h4 class="text-base font-semibold">Your details</h4>
+        <div id="summary" class="mt-4 rounded-md border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600"></div>
+        <div class="mt-4 space-y-3">
+          <div><label for="gname" class="mb-1 block text-xs font-medium text-zinc-500">Full name</label><input id="gname" class="field" placeholder="e.g. Anna de Vries" autocomplete="name"></div>
+          <div><label for="gemail" class="mb-1 block text-xs font-medium text-zinc-500">Email</label><input id="gemail" type="email" class="field" placeholder="you@example.com" autocomplete="email"></div>
+          <div><label for="gphone" class="mb-1 block text-xs font-medium text-zinc-500">Phone</label><input id="gphone" type="tel" class="field" placeholder="+351 91 123 4567" autocomplete="tel"></div>
+          <div><label for="gnotes" class="mb-1 block text-xs font-medium text-zinc-500">Requests (optional)</label><textarea id="gnotes" rows="2" class="field" placeholder="e.g. airport transfer, anniversary, dietary needs"></textarea></div>
+        </div>
+        <p class="mt-3 text-xs text-zinc-500">Check-in 15:00 · Check-out 11:00 · We arrange transfers from Faro Airport (20 min) — add it as an extra above.</p>
+      </div>
+      <div class="bstep" data-bstep="5" hidden>
+        <div class="py-2 text-center">
+          <span class="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 text-xl font-bold text-white">✓</span>
+          <h4 class="mt-3 text-lg font-semibold">Your stay is confirmed!</h4>
+          <p class="mx-auto mt-1 max-w-md text-sm text-zinc-500" id="confirmText"></p>
+          <div class="mx-auto mt-4 max-w-xs rounded-md border border-dashed border-zinc-400 bg-zinc-50 px-4 py-3 text-base font-bold" id="bookRef"></div>
+          <p class="mx-auto mt-3 max-w-md text-xs text-zinc-500">Confirmation sent by email and WhatsApp, with transfer details and a manage-booking link. Deposit: one night now, balance 3 days before arrival.</p>
+          <div class="mt-5 flex flex-wrap justify-center gap-2">
+            <a data-wa href="#" target="_blank" rel="noopener" class="inline-flex h-10 items-center rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800">Confirm on WhatsApp</a>
+            <button type="button" onclick="resetBooking()" class="inline-flex h-10 items-center rounded-md border border-zinc-200 bg-white px-5 text-sm font-medium hover:bg-zinc-50">Make another booking</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between gap-3 border-t border-zinc-200 px-6 py-4">
+      <button type="button" id="backBtn" onclick="prevStep()" class="inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-md border border-zinc-200 bg-white px-4 text-sm font-medium hover:bg-zinc-50 disabled:opacity-50" disabled>← Back</button>
+      <button type="button" id="nextBtn" onclick="nextStep()" class="inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EXPERIENCES (shadcn Tabs) ============ -->
+<section id="experiences" class="border-t border-zinc-100 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Experiences</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Days, your way</h2>
+    <div class="mt-6 inline-flex rounded-md bg-zinc-100 p-1" role="tablist" aria-label="Experiences">
+      <button type="button" role="tab" aria-selected="true" class="tab-btn rounded-md px-4 py-2 text-sm font-medium text-zinc-500" data-tab="wellness" onclick="showTab('wellness',this)">Wellness</button>
+      <button type="button" role="tab" aria-selected="false" class="tab-btn rounded-md px-4 py-2 text-sm font-medium text-zinc-500" data-tab="sea" onclick="showTab('sea',this)">Sea &amp; boat</button>
+      <button type="button" role="tab" aria-selected="false" class="tab-btn rounded-md px-4 py-2 text-sm font-medium text-zinc-500" data-tab="land" onclick="showTab('land',this)">Land</button>
+    </div>
+    <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-tabpanel="wellness">
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1000&q=70" alt="Spa treatment"><div class="p-5"><h3 class="text-lg font-semibold">Spa &amp; Wellness</h3><p class="mt-1 text-sm text-zinc-500">Massage, sauna, steam and sunrise yoga on the beach. Treatments 9:00–19:00.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1000&q=70" alt="Quiet beach at sunrise"><div class="p-5"><h3 class="text-lg font-semibold">Sunrise Yoga</h3><p class="mt-1 text-sm text-zinc-500">Daily 07:30 sessions on the sand, mats and herbal tea included. From €20 per person.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1000&q=70" alt="Calm turquoise water"><div class="p-5"><h3 class="text-lg font-semibold">Thermal Circuit</h3><p class="mt-1 text-sm text-zinc-500">Sauna, steam room and plunge pool, with a relaxation deck over the bay. From €35 per person.</p></div></article>
+    </div>
+    <div class="mt-6 hidden grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-tabpanel="sea">
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=70" alt="Snorkelling in clear water"><div class="p-5"><h3 class="text-lg font-semibold">Sea &amp; Snorkelling</h3><p class="mt-1 text-sm text-zinc-500">Guided snorkelling, dolphin cruises and private boat trips. From €45 per person.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=70" alt="Private beach"><div class="p-5"><h3 class="text-lg font-semibold">Dolphin Cruise</h3><p class="mt-1 text-sm text-zinc-500">Two-hour morning cruise along the cliffs, with a marine biologist on board. From €55 per person.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=70" alt="Surfing a wave"><div class="p-5"><h3 class="text-lg font-semibold">Private Boat Trip</h3><p class="mt-1 text-sm text-zinc-500">Half-day charter with skipper, swim stops and a picnic hamper. From €180 per boat.</p></div></article>
+    </div>
+    <div class="mt-6 hidden grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-tabpanel="land">
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=70" alt="Surfing a wave"><div class="p-5"><h3 class="text-lg font-semibold">Surf &amp; Trails</h3><p class="mt-1 text-sm text-zinc-500">Surf lessons, coastal walks and bike hire. All levels, all equipment included.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1000&q=70" alt="Quiet beach at sunrise"><div class="p-5"><h3 class="text-lg font-semibold">Cliff Walks</h3><p class="mt-1 text-sm text-zinc-500">Guided sunrise walks along the Seven Hanging Valleys trail, 2–4 hours. From €25 per person.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1000&q=70" alt="Calm turquoise water"><div class="p-5"><h3 class="text-lg font-semibold">Bike Hire</h3><p class="mt-1 text-sm text-zinc-500">E-bikes and standard bikes for the coastal path, helmets and locks included. From €15 per day.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DINING ============ -->
+<section id="dining" class="border-t border-zinc-100 bg-zinc-50 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Eat &amp; drink</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Dinner, with the sea in view</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=70" alt="Fine dining restaurant"><div class="p-5"><h3 class="text-lg font-semibold">Maré Restaurant</h3><p class="mt-1 text-sm text-zinc-500">Algarve seafood and seasonal menus, on the sand. Dinner 18:00–22:30.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=1000&q=70" alt="Beach bar cocktails"><div class="p-5"><h3 class="text-lg font-semibold">Beach Bar</h3><p class="mt-1 text-sm text-zinc-500">Cocktails, light lunches and sunset sessions. Open 11:00–23:00.</p></div></article>
+      <article class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=70" alt="Private beach dinner"><div class="p-5"><h3 class="text-lg font-semibold">Private Dining</h3><p class="mt-1 text-sm text-zinc-500">Sandbank dinners and chef's tables on your terrace — book 48h ahead.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PACKAGES ============ -->
+<section id="packages" class="border-t border-zinc-100 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Packages &amp; offers</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Stay longer, feel more</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <article class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <span class="inline-flex items-center rounded-full border border-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-600">Honeymoons &amp; anniversaries</span>
+        <h3 class="mt-3 text-lg font-semibold">Romance Away</h3>
+        <p class="mt-1 text-sm text-zinc-500">4 nights min · Candlelit dinner, 60-min couples' massage, floating breakfast, sunset cruise.</p>
+        <button type="button" onclick="applyPackage('Romance Away')" class="mt-5 inline-flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-4 text-sm font-medium hover:bg-zinc-50">Enquire about this package</button>
+      </article>
+      <article class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <span class="inline-flex items-center rounded-full border border-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-600">7 nights</span>
+        <h3 class="mt-3 text-lg font-semibold">Family Together</h3>
+        <p class="mt-1 text-sm text-zinc-500">Kids stay free, family villa, kids' club and a private boat trip included.</p>
+        <button type="button" onclick="applyPackage('Family Together')" class="mt-5 inline-flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-4 text-sm font-medium hover:bg-zinc-50">Enquire about this package</button>
+      </article>
+      <article class="rounded-lg border border-zinc-900 bg-zinc-900 p-6 text-white shadow-sm">
+        <span class="inline-flex items-center rounded-full bg-white px-2 py-0.5 text-xs font-medium text-zinc-900">Save 15%</span>
+        <h3 class="mt-3 text-lg font-semibold">Early Bird — 15% off</h3>
+        <p class="mt-1 text-sm text-zinc-300">Book 60 days ahead and save 15% on villas, with a free airport transfer.</p>
+        <button type="button" onclick="applyPackage('Early Bird')" class="mt-5 inline-flex h-10 w-full items-center justify-center rounded-md bg-white px-4 text-sm font-medium text-zinc-900 hover:bg-zinc-100">Use code EARLYBIRD</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEDDINGS ============ -->
+<section id="weddings" class="border-t border-zinc-100 bg-zinc-50 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <div class="max-w-2xl">
+      <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Weddings &amp; events</span>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Marry where the land meets the sea</h2>
+      <p class="mt-2 text-sm text-zinc-500 sm:text-base">Beach ceremonies for up to 50 guests, multi-day itineraries and full island buyouts. Tell us your date and we will send a proposal within 48 hours.</p>
+    </div>
+    <form id="wedForm" class="mt-8 max-w-2xl rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div><label for="wdate" class="mb-1 block text-xs font-medium text-zinc-500">Preferred date</label><input type="date" id="wdate" class="field"></div>
+        <div><label for="wguests" class="mb-1 block text-xs font-medium text-zinc-500">Guests</label><select id="wguests" class="field"><option>Under 20</option><option selected>20–50</option><option>50–90</option><option>Full buyout</option></select></div>
+      </div>
+      <div class="mt-3"><label for="wtype" class="mb-1 block text-xs font-medium text-zinc-500">Event type</label>
+      <select id="wtype" class="field"><option>Wedding</option><option>Vow renewal</option><option>Honeymoon</option><option>Private celebration</option><option>Corporate retreat</option></select></div>
+      <div class="mt-3"><label for="wname" class="mb-1 block text-xs font-medium text-zinc-500">Your name</label><input id="wname" class="field" required placeholder="Your name"></div>
+      <div class="mt-3"><label for="wemail" class="mb-1 block text-xs font-medium text-zinc-500">Email</label><input id="wemail" type="email" class="field" required placeholder="you@example.com"></div>
+      <button class="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800" type="submit">Request a proposal</button>
+      <p class="mt-3 text-sm text-zinc-500" id="wedDone"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery" class="border-t border-zinc-100 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Gallery</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Postcards from the bay</h2>
+    <div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=70" alt="Private beach">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=70" alt="Villa pool">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1000&q=70" alt="Spa treatment">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=70" alt="Restaurant table">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=70" alt="Snorkelling">
+      <img loading="lazy" class="h-52 w-full rounded-lg border border-zinc-200 object-cover sm:h-64" src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1000&q=70" alt="Beach at sunrise">
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section id="reviews" class="border-t border-zinc-100 bg-zinc-50 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Guest reviews</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">What guests say</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <figure class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <div class="text-sm tracking-widest text-zinc-900">★★★★★</div>
+        <blockquote class="mt-3 text-base leading-relaxed text-zinc-700">“We arrived stressed and left like different people. The villa, the beach, the staff — everything felt effortless.”</blockquote>
+        <figcaption class="mt-4 text-sm text-zinc-500">— Charlotte &amp; Tom · Tripadvisor</figcaption>
+      </figure>
+      <figure class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <div class="text-sm tracking-widest text-zinc-900">★★★★★</div>
+        <blockquote class="mt-3 text-base leading-relaxed text-zinc-700">“Our wedding on the beach was perfect. The team handled every detail and the proposal arrived in a day.”</blockquote>
+        <figcaption class="mt-4 text-sm text-zinc-500">— Sofia &amp; Miguel · Google review</figcaption>
+      </figure>
+      <figure class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <div class="text-sm tracking-widest text-zinc-900">★★★★★</div>
+        <blockquote class="mt-3 text-base leading-relaxed text-zinc-700">“The kids lived in the pool, we lived in the spa. Best family holiday we have had — already booked next year.”</blockquote>
+        <figcaption class="mt-4 text-sm text-zinc-500">— The Janssens · Booking.com</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="border-t border-zinc-100 py-16">
+  <div class="mx-auto max-w-6xl px-5 lg:px-8">
+    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Find us</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Contact &amp; getting here</h2>
+    <div class="mt-8 grid items-start gap-8 lg:grid-cols-2">
+      <div>
+        <p class="text-sm leading-relaxed text-zinc-600"><strong class="text-zinc-900" data-biz="name">Solmar Bay</strong><br><span data-biz="address">Praia da Marinha, 8400 Lagoa, Algarve, Portugal</span><br>
+        <a data-tel href="tel:+351289123456" data-biz="phone" class="font-medium text-zinc-900 hover:underline">+351 289 123 456</a> · <a href="mailto:hello@solmarbay.example" class="font-medium text-zinc-900 hover:underline">hello@solmarbay.example</a></p>
+        <p class="mt-3 text-sm text-zinc-500">Getting here: 20 min by car from Faro Airport (FAO). We arrange transfers — add one as a booking extra, or message us. Check-in 15:00 · Check-out 11:00.</p>
+        <h3 class="mt-8 text-lg font-semibold">Send us a message</h3>
+        <form id="contactForm" class="mt-3 space-y-3">
+          <div><label for="fname" class="mb-1 block text-xs font-medium text-zinc-500">Name</label><input id="fname" class="field" required placeholder="Your name"></div>
+          <div><label for="femail" class="mb-1 block text-xs font-medium text-zinc-500">Email</label><input id="femail" type="email" class="field" required placeholder="you@example.com"></div>
+          <div><label for="fmsg" class="mb-1 block text-xs font-medium text-zinc-500">Message</label><textarea id="fmsg" rows="3" class="field" required placeholder="Hi, I'd like to ask about…"></textarea></div>
+          <button class="inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800" type="submit">Send via email</button>
+          <p class="text-sm text-zinc-500" id="contactDone"></p>
+          <a data-wa href="#" target="_blank" rel="noopener" class="inline-flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-5 text-sm font-medium hover:bg-zinc-50">Or message us on WhatsApp</a>
+        </form>
+      </div>
+      <div>
+        <iframe class="map h-80 w-full rounded-lg border border-zinc-200" title="Map" loading="lazy" src="https://maps.google.com/maps?q=Praia+da+Marinha+Algarve&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <h3 class="mt-8 text-lg font-semibold">Good to know</h3>
+        <div class="mt-3 divide-y divide-zinc-200 rounded-lg border border-zinc-200 bg-white">
+          <div class="acc">
+            <button type="button" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium" onclick="toggleAcc(this)">How do I get from the airport?<span class="acc-chev text-zinc-400">⌄</span></button>
+            <div class="acc-body px-4"><p class="pb-3 text-sm text-zinc-500">Faro Airport is 20 minutes away. Add a transfer (€45) when you book, or take a taxi — we will meet you at the gate.</p></div>
+          </div>
+          <div class="acc">
+            <button type="button" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium" onclick="toggleAcc(this)">What is the deposit?<span class="acc-chev text-zinc-400">⌄</span></button>
+            <div class="acc-body px-4"><p class="pb-3 text-sm text-zinc-500">One night's deposit at booking, balance due 3 days before arrival. Free cancellation up to 14 days before.</p></div>
+          </div>
+          <div class="acc">
+            <button type="button" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium" onclick="toggleAcc(this)">Is the resort suitable for children?<span class="acc-chev text-zinc-400">⌄</span></button>
+            <div class="acc-body px-4"><p class="pb-3 text-sm text-zinc-500">Yes — family villas, kids' club in season, and a shallow beach. Under-12s stay free in a family villa.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-zinc-950 pb-32 text-zinc-400 md:pb-12">
+  <div class="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+    <div class="lg:col-span-2">
+      <h4 class="text-lg font-bold text-white" data-biz="name">Solmar Bay</h4>
+      <p class="mt-2 max-w-sm text-sm">A beach resort in the <span data-biz="city">Algarve</span>. Villas, spa, dining and a private beach — book direct for the best rate.</p>
+      <p class="mt-3 text-xs text-zinc-500">Demo template — names, prices and photos are placeholders to swap for the real business.</p>
+    </div>
+    <div>
+      <h4 class="text-sm font-semibold text-white">Visit</h4>
+      <p class="mt-2 text-sm"><span data-biz="address">Praia da Marinha, 8400 Lagoa, Algarve, Portugal</span><br><a data-tel href="tel:+351289123456" data-biz="phone" class="text-white hover:underline">+351 289 123 456</a><br>Check-in 15:00 · Check-out 11:00</p>
+    </div>
+    <div>
+      <h4 class="text-sm font-semibold text-white">Explore</h4>
+      <p class="mt-2 text-sm leading-7"><a href="#villas" class="hover:text-white">Villas</a><br><a href="#experiences" class="hover:text-white">Experiences</a><br><a href="#weddings" class="hover:text-white">Weddings</a><br><a href="#booking" class="hover:text-white">Book now</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ STICKY MOBILE BAR + FLOATING WHATSAPP ============ -->
+<div class="stickybar fixed inset-x-3 bottom-3 z-50 gap-2">
+  <button type="button" onclick="openDialog(1)" class="h-12 flex-1 rounded-md bg-zinc-900 text-sm font-semibold text-white shadow-lg">Book now</button>
+  <a class="flex h-12 flex-1 items-center justify-center rounded-md border border-zinc-200 bg-white text-sm font-semibold text-zinc-900 shadow-lg" data-tel href="tel:+351289123456">Call</a>
+  <a class="flex h-12 flex-1 items-center justify-center rounded-md text-sm font-semibold text-white shadow-lg" style="background:#25d366" data-wa href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<a class="fixed bottom-24 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg" style="background:#25d366" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+</a>
+
+<script>
+/* ---- Personalisation: ?name= &phone= &address= &city= ---- */
+const DEFAULTS={name:"Solmar Bay",phone:"+351 289 123 456",address:"Praia da Marinha, 8400 Lagoa, Algarve, Portugal",city:"Algarve"};
+const q=new URLSearchParams(location.search);
+const BIZ={name:q.get("name")||DEFAULTS.name,phone:q.get("phone")||DEFAULTS.phone,address:q.get("address")||DEFAULTS.address,city:q.get("city")||DEFAULTS.city};
+function digits(p){return (p||"").replace(/\D/g,"")}
+function waLink(msg){return "https://wa.me/"+digits(BIZ.phone)+"?text="+encodeURIComponent(msg)}
+function applyBiz(){
+  document.title=BIZ.name+" — Beach Resort in "+BIZ.city;
+  document.querySelectorAll('[data-biz="name"]').forEach(e=>e.textContent=BIZ.name);
+  document.querySelectorAll('[data-biz="city"]').forEach(e=>e.textContent=BIZ.city);
+  document.querySelectorAll('[data-biz="address"]').forEach(e=>e.textContent=BIZ.address);
+  document.querySelectorAll('[data-biz="phone"]').forEach(e=>{e.textContent=BIZ.phone; if(e.hasAttribute("data-tel")) e.href="tel:+"+digits(BIZ.phone);});
+  document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink("Hi "+BIZ.name+"! I'd like to check availability.");});
+  const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.address)+"&z=13&output=embed";
+}
+applyBiz();
+
+/* ---- Booking data ---- */
+const VILLAS=[
+ {n:"Beach Villa",p:420,desc:"65 m² · Sleeps 2 · Private pool & beach access"},
+ {n:"Family Villa",p:690,desc:"120 m² · Sleeps 4 · Pool, garden & kids' room"},
+ {n:"Ocean Residence",p:1450,desc:"240 m² · Sleeps 6 · 3 bedrooms, chef on request"}];
+const EXTRAS=[
+ {n:"Airport transfer (return)",p:90,per:"stay"},{n:"Couples' spa — 60 min",p:120,per:"stay"},
+ {n:"Private boat trip",p:180,per:"stay"},{n:"Breakfast in villa",p:25,per:"night"},
+ {n:"Extra bed",p:30,per:"night"},{n:"Late check-out (14:00)",p:40,per:"stay"}];
+let step=1, villa=VILLAS[0], promo="", pkg="", extrasOn=new Set(), ref="";
+
+/* ---- Dialog ---- */
+const dlg=document.getElementById("bookDialog");
+function openDialog(n){
+  dlg.classList.remove("hidden"); dlg.classList.add("flex");
+  document.body.style.overflow="hidden";
+  showStep(n||1);
+}
+function closeDialog(){
+  dlg.classList.add("hidden"); dlg.classList.remove("flex");
+  document.body.style.overflow="";
+  if(step===5) resetBooking();
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !dlg.classList.contains("hidden")) closeDialog(); });
+
+/* ---- Booking maths ---- */
+function nights(){const a=new Date(document.getElementById("bIn").value), b=new Date(document.getElementById("bOut").value);
+  if(!a||!b||isNaN(a)||isNaN(b)) return 0; return Math.round((b-a)/86400000);}
+function total(){const n=Math.max(nights(),1); let t=villa.p*n;
+  EXTRAS.forEach((x,i)=>{if(extrasOn.has(i)) t+= x.per==="night"? x.p*n : x.p;});
+  if(promo==="EARLYBIRD") t=Math.round(t*0.85); return Math.max(t,0);}
+function renderVillas(){
+  document.getElementById("villaOpts").innerHTML=VILLAS.map((v,i)=>
+    `<button type="button" class="opt w-full rounded-md border px-4 py-3 text-left ${villa===v?"border-zinc-900 bg-zinc-50 ring-1 ring-zinc-900":"border-zinc-200 bg-white hover:border-zinc-400"}" onclick="pickVilla(${i})"><span class="block text-sm font-semibold">${v.n} — from €${v.p}/night</span><span class="text-xs text-zinc-500">${v.desc}</span></button>`).join("");
+}
+function pickVilla(i){villa=VILLAS[i];renderVillas();renderTotal();}
+function renderExtras(){
+  document.getElementById("extraOpts").innerHTML=EXTRAS.map((x,i)=>
+    `<label class="flex cursor-pointer items-center justify-between gap-3 rounded-md border px-4 py-3 ${extrasOn.has(i)?"border-zinc-900 bg-zinc-50 ring-1 ring-zinc-900":"border-zinc-200 bg-white hover:border-zinc-400"}"><span class="flex items-center gap-2 text-sm"><input type="checkbox" class="h-4 w-4 accent-zinc-900" ${extrasOn.has(i)?"checked":""} onchange="toggleExtra(${i},this.checked)"> <b>${x.n}</b></span><span class="shrink-0 text-sm font-medium">€${x.p}${x.per==="night"?" / night":""}</span></label>`).join("");
+  renderTotal();
+}
+function toggleExtra(i,on){on?extrasOn.add(i):extrasOn.delete(i);renderExtras();}
+function renderTotal(){const el=document.getElementById("totalBox"); if(el) el.textContent=`Total: €${total()} for ${Math.max(nights(),1)} night${nights()===1?"":"s"} · ${villa.n}${promo?` · Promo ${promo} applied`:""}${pkg?` · Package: ${pkg}`:""}`;}
+function bookVilla(i){villa=VILLAS[i];renderVillas();openDialog(2);}
+function applyPackage(name){
+  pkg=name;
+  if(name==="Early Bird"){promo="EARLYBIRD";const p=document.getElementById("promo"); if(p) p.value="EARLYBIRD";}
+  renderTotal(); openDialog(2);
+}
+function openDialogFromMini(){
+  const a=document.getElementById("bInMini").value, b=document.getElementById("bOutMini").value;
+  if(a) document.getElementById("bIn").value=a;
+  if(b) document.getElementById("bOut").value=b;
+  openDialog(1);
+}
+function startBooking(e){
+  e.preventDefault();
+  const a=document.getElementById("in").value,b=document.getElementById("out").value;
+  if(!a||!b) return alert("Choose your check-in and check-out dates first."),false;
+  if(new Date(b)<=new Date(a)) return alert("Check-out must be after check-in."),false;
+  document.getElementById("bIn").value=a; document.getElementById("bOut").value=b;
+  promo=document.getElementById("promo").value.trim().toUpperCase();
+  openDialog(2); return false;
+}
+function showStep(n){
+  step=n;
+  document.querySelectorAll(".bstep").forEach(p=>p.hidden=+p.dataset.bstep!==n);
+  document.querySelectorAll("#dlgSteps li").forEach(li=>{
+    const s=+li.dataset.step, dot=li.querySelector(".stepdot");
+    const done=s<n, cur=s===n;
+    dot.className="stepdot inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold "+(done||cur?"bg-zinc-900 text-white":"bg-zinc-200 text-zinc-600");
+    dot.textContent=done?"✓":s;
+  });
+  document.getElementById("backBtn").disabled=n===1||n===5;
+  document.getElementById("nextBtn").style.display=n===5?"none":"";
+  document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
+  const nn=nights();
+  document.getElementById("nightsNote").textContent=nn>0?`${nn} night${nn===1?"":"s"} selected.`:"";
+  if(n===3) renderTotal();
+  if(n===4) document.getElementById("summary").innerHTML=`<b>${villa.n}</b> — €${villa.p}/night<br>${document.getElementById("bIn").value} → ${document.getElementById("bOut").value} · ${Math.max(nights(),1)} night(s) · ${document.getElementById("bGuests").value}${pkg?`<br>Package: <b>${pkg}</b>`:""}${promo?`<br>Promo: <b>${promo}</b>`:""}<br><b>Total: €${total()}</b>`;
+}
+function nextStep(){
+  if(step===1){const a=document.getElementById("bIn").value,b=document.getElementById("bOut").value;
+    if(!a||!b) return alert("Choose your dates first."); if(new Date(b)<=new Date(a)) return alert("Check-out must be after check-in.");}
+  if(step===4){
+    if(!document.getElementById("gname").value.trim()) return alert("Please add your name.");
+    if(!document.getElementById("gemail").value.trim()) return alert("Please add your email.");
+    ref="SB-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+    const nm=document.getElementById("gname").value.trim();
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${villa.n} at ${BIZ.name}, ${BIZ.city}, ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. Total €${total()}. Deposit: one night.`;
+    document.getElementById("bookRef").textContent="Booking ref: "+ref;
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${villa.n} from ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. My booking ref is ${ref}.`);});
+    showStep(5); return;
+  }
+  showStep(step+1);
+}
+function prevStep(){if(step>1) showStep(step-1);}
+function resetBooking(){villa=VILLAS[0];promo="";pkg="";extrasOn=new Set();renderVillas();renderExtras();showStep(1);}
+
+/* ---- Tabs (Experiences) ---- */
+function showTab(name,btn){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.setAttribute("aria-selected",b===btn?"true":"false"));
+  document.querySelectorAll("[data-tabpanel]").forEach(p=>{
+    const show=p.dataset.tabpanel===name;
+    p.classList.toggle("hidden",!show);
+    p.classList.toggle("grid",show);
+  });
+}
+
+/* ---- Accordion (FAQ) ---- */
+function toggleAcc(btn){
+  const item=btn.closest(".acc");
+  const wasOpen=item.classList.contains("open");
+  document.querySelectorAll(".acc.open").forEach(a=>a.classList.remove("open"));
+  if(!wasOpen) item.classList.add("open");
+}
+
+/* ---- Forms ---- */
+document.getElementById("wedForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const ref2="SB-WED-"+Math.floor(1000+Math.random()*9000);
+  document.getElementById("wedDone").textContent=`Thanks — your ${document.getElementById("wtype").value} enquiry (${document.getElementById("wguests").value}, ${document.getElementById("wdate").value||"date to confirm"}) is in. Ref ${ref2}. We will send a proposal within 48 hours.`;
+});
+document.getElementById("contactForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("fname").value, msg=document.getElementById("fmsg").value;
+  location.href="mailto:hello@solmarbay.example?subject="+encodeURIComponent("Enquiry — "+BIZ.name)+"&body="+encodeURIComponent(`Hi ${BIZ.name},\n\n${msg}\n\n— ${name}`);
+  document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
+});
+
+/* ---- Init ---- */
+(function init(){
+  const t=new Date(), tom=new Date(Date.now()+86400000), nxt=new Date(Date.now()+4*86400000);
+  const iso=d=>d.toISOString().split("T")[0];
+  ["in","bIn","bInMini"].forEach(id=>{const el=document.getElementById(id); if(el) el.min=iso(t);});
+  document.getElementById("in").value=iso(tom); document.getElementById("out").value=iso(nxt);
+  document.getElementById("bIn").value=iso(tom); document.getElementById("bOut").value=iso(nxt);
+  document.getElementById("bInMini").value=iso(tom); document.getElementById("bOutMini").value=iso(nxt);
+  renderVillas(); renderExtras(); showStep(1);
+})();
+</script>
+</body>
+</html>

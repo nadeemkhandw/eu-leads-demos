@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Daily Grind — Café in Dublin</title>
+<meta name="description" content="The Daily Grind — a warm neighbourhood café in Dublin. Single-origin coffee, fresh baking, order ahead for pickup in under a minute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        paper: '#fbf6ef',
+        card: '#f5efe6',
+        ink: '#2b211a',
+        muted: '#7a6a5c',
+        line: '#ead9c8',
+        coffee: '#3a2c22',
+        coffee2: '#4a382a',
+        terra: '#b4552d',
+        terradark: '#96431f',
+        gold: '#d9a05b',
+        sand: '#f3d9b0',
+        wa: '#25d366'
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet">
+<style>
+/* ---- Shared conventions from DESIGN.md: header hard rule, sticky bar, order flow ---- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{line-height:1.6}
+img{display:block;max-width:100%}
+section[id]{scroll-margin-top:88px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:11px;font-weight:700;color:#b4552d}
+/* header — min-height, never a fixed height; Book button nowrap + flex-shrink:0 */
+header{position:sticky;top:0;z-index:40;background:rgba(251,246,239,.94);backdrop-filter:blur(8px);border-bottom:1px solid #ead9c8}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding-top:8px;padding-bottom:8px}
+.logo{font-family:"Cormorant Garamond",Georgia,serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:#2b211a;line-height:1.15}
+.logo small{display:block;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.3em;color:#b4552d;font-weight:700}
+nav.main{display:flex;gap:22px}
+nav.main a{color:#2b211a;text-decoration:none;font-size:14px;font-weight:500}
+nav.main a:hover{color:#96431f}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+header .btn{white-space:nowrap;flex-shrink:0}
+.tel-link{font-weight:600;color:#2b211a;text-decoration:none;font-size:14px}
+.burger{display:none;background:none;border:0;font-size:26px;cursor:pointer;color:#2b211a}
+/* hero */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;padding:0;background-image:url("https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1800&q=70");background-size:cover;background-position:center}
+.hero .veil{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.hero-in{position:relative;z-index:2;padding:72px 20px 88px;max-width:1120px;margin:0 auto;width:100%}
+/* order wizard interactive states */
+.step{flex:1;min-width:110px;text-align:center;font-size:13px;padding:10px;border-radius:999px;background:#4a382a;color:#cfc4b4}
+.step.on{background:#b4552d;color:#fff;font-weight:600}
+.opt{border:1.5px solid #ead9c8;border-radius:12px;padding:14px;cursor:pointer;background:#fff;text-align:left;width:100%;font:inherit;color:#2b211a}
+.opt:hover{border-color:#b4552d}
+.opt.sel{border-color:#b4552d;background:#fdf3e3;outline:2px solid #b4552d}
+.opt b{display:block}
+.opt small{color:#7a6a5c}
+.slot{border:1.5px solid #ead9c8;border-radius:999px;padding:9px 16px;background:#fff;cursor:pointer;font:inherit;color:#2b211a}
+.slot.sel{background:#b4552d;color:#fff;border-color:#b4552d}
+.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.ord-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid #ead9c8}
+.ord-row b{font-size:15px}
+.ord-row small{display:block;color:#7a6a5c;font-size:13px}
+.qty{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.qty button{width:32px;height:32px;border-radius:50%;border:1.5px solid #ead9c8;background:#fff;cursor:pointer;font-size:16px;font-weight:700;color:#2b211a}
+.qty button:hover{border-color:#b4552d}
+.qty span{min-width:20px;text-align:center;font-weight:700}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid #ead9c8;border-radius:10px;font:inherit;margin:6px 0 12px;background:#fff;color:#2b211a}
+label{font-size:13px;font-weight:600;color:#7a6a5c}
+/* loyalty punch card */
+.punch{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.punch i{width:34px;height:34px;border-radius:50%;border:2px solid #b4552d;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px}
+.punch i.done{background:#b4552d;color:#fff}
+/* sticky mobile bar */
+.stickybar{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;display:none;gap:8px}
+.stickybar a{flex:1;text-align:center;padding:13px 8px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.stickybar .b-book{background:#b4552d;color:#fff}
+.stickybar .b-call{background:#fff;color:#2b211a}
+.stickybar .b-wa{background:#25d366;color:#fff}
+.float-wa{position:fixed;right:16px;bottom:84px;z-index:50;background:#25d366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+@media(max-width:900px){
+  nav.main{display:none}
+  .burger{display:block}
+  nav.main.open{display:flex;position:absolute;top:100%;left:0;right:0;background:#fbf6ef;flex-direction:column;padding:16px 20px;border-bottom:1px solid #ead9c8}
+  .tel-link{display:none}
+}
+@media(max-width:640px){
+  .stickybar{display:flex}
+  .wrap{padding:0 14px}
+  .nav{gap:8px;min-height:56px}
+  .logo{font-size:18px;letter-spacing:.04em}
+  .logo small{font-size:8px;letter-spacing:.2em}
+  .burger{font-size:22px;flex-shrink:0;width:36px}
+}
+</style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- Announcement bar -->
+<div class="bg-coffee text-[#f5efe6] text-center text-sm px-4 py-2">
+  Fresh baking every morning — order ahead and skip the queue ·
+  <a href="#booking" class="font-semibold underline underline-offset-2 text-sand">Order ahead →</a>
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span data-biz="name">The Daily Grind</span><small>CAFÉ &nbsp;·&nbsp; COFFEE &nbsp;·&nbsp; <span data-biz="city">DUBLIN</span></small></a>
+    <nav class="main" id="mainnav">
+      <a href="#menu">Menu</a><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#loyalty">Loyalty</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="tel-link" data-tel href="tel:+35315550187" data-biz="phone">+353 1 555 0187</a>
+      <a class="bg-terra hover:bg-terradark text-white font-semibold rounded-full px-5 py-2.5 text-sm no-underline btn" href="#booking">Order ahead</a>
+      <button class="burger" aria-label="Menu" onclick="document.getElementById('mainnav').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top" role="img" aria-label="Inside the café">
+  <div class="veil"></div>
+  <div class="hero-in">
+    <p class="eyebrow" style="color:#f3d9b0">Neighbourhood café — <span data-biz="city">Dublin</span></p>
+    <h1 class="font-serif font-semibold leading-[1.05] text-[clamp(44px,7vw,76px)] text-white">Good coffee,<br>made properly.</h1>
+    <p class="max-w-xl text-lg opacity-95 mt-4 mb-6">Single-origin beans, fresh baking every morning, and a table waiting for you — at <span data-biz="name">The Daily Grind</span>.</p>
+    <div class="flex gap-3 flex-wrap">
+      <a href="#booking" class="bg-terra hover:bg-terradark text-white font-semibold rounded-full px-7 py-3.5 no-underline text-[15px]">Order ahead for pickup</a>
+      <a href="#menu" class="bg-white text-ink font-semibold rounded-full px-7 py-3.5 no-underline text-[15px]">See the menu</a>
+    </div>
+    <!-- Flowbite badges -->
+    <div class="flex gap-2 flex-wrap mt-6">
+      <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full">Single-origin beans</span>
+      <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full">Baked in-house daily</span>
+      <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full">Oat milk +€0.50</span>
+      <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full">Free Wi-Fi</span>
+      <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full">★ 4.9 · 600+ reviews</span>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4 text-sm">
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full" data-biz="address">8 South Great George's Street, Dublin 2</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">Open 7 days · from 7:30</span>
+      <span class="bg-white/15 border border-white/35 px-3 py-1.5 rounded-full">Free Wi-Fi · Laptop-friendly</span>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="py-12">
+  <div class="wrap">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">Est. 2019</p><p class="text-sm text-muted mt-1">serving <span data-biz="city">Dublin</span></p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">4.9 ★</p><p class="text-sm text-muted mt-1">600+ Google reviews</p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">Single-origin</p><p class="text-sm text-muted mt-1">beans, roasted in Dublin</p></div>
+      <div class="bg-white border border-line rounded-2xl p-6 text-center shadow-sm"><p class="font-serif text-3xl font-semibold">Fresh daily</p><p class="text-sm text-muted mt-1">baked in-house every morning</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Menu with Flowbite tabs -->
+<section id="menu" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Menu</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Simple, fresh, priced upfront</h2>
+    <p class="text-muted max-w-2xl">Coffee first, then food worth coming back for. Oat, almond and soy milk +€0.50 · decaf free · extra shot +€0.80. Everything is made to order.</p>
+
+    <div class="mt-8">
+      <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="menuTabs" data-tabs-toggle="#menuTabContent" role="tablist">
+        <li class="mr-2" role="presentation">
+          <button class="inline-block p-4 border-b-2 rounded-t-lg" id="coffee-tab" data-tabs-target="#coffee" type="button" role="tab" aria-controls="coffee" aria-selected="true">Coffee</button>
+        </li>
+        <li class="mr-2" role="presentation">
+          <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-terra hover:border-terra" id="food-tab" data-tabs-target="#food" type="button" role="tab" aria-controls="food" aria-selected="false">Food &amp; brunch</button>
+        </li>
+        <li role="presentation">
+          <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-terra hover:border-terra" id="pastries-tab" data-tabs-target="#pastries" type="button" role="tab" aria-controls="pastries" aria-selected="false">Pastries &amp; cakes</button>
+        </li>
+      </ul>
+    </div>
+
+    <div id="menuTabContent" class="bg-white border border-line rounded-2xl rounded-tl-none p-6 shadow-sm">
+      <div id="coffee" role="tabpanel" aria-labelledby="coffee-tab">
+        <h3 class="font-serif text-2xl font-semibold">Coffee</h3>
+        <p class="text-[13px] text-muted mb-2">Single-origin, pulled properly.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Espresso</b><small class="block text-muted text-[13px]">Double shot, single-origin</small></div><div class="font-bold whitespace-nowrap">€2.80</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Americano</b><small class="block text-muted text-[13px]">Long black, hot water</small></div><div class="font-bold whitespace-nowrap">€3.20</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Flat White <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full ml-1">Bestseller</span></b><small class="block text-muted text-[13px]">Velvety microfoam, our signature</small></div><div class="font-bold whitespace-nowrap">€3.80</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Cappuccino</b><small class="block text-muted text-[13px]">Classic thirds, cocoa dust</small></div><div class="font-bold whitespace-nowrap">€3.60</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Latte</b><small class="block text-muted text-[13px]">Smooth, milky, gentle</small></div><div class="font-bold whitespace-nowrap">€4.00</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Mocha</b><small class="block text-muted text-[13px]">Espresso, chocolate, steamed milk</small></div><div class="font-bold whitespace-nowrap">€4.20</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Filter Coffee</b><small class="block text-muted text-[13px]">Batch brew, bottomless before 10:00</small></div><div class="font-bold whitespace-nowrap">€2.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Hot Chocolate</b><small class="block text-muted text-[13px]">Dark chocolate, marshmallow</small></div><div class="font-bold whitespace-nowrap">€4.00</div></div>
+      </div>
+      <div id="food" class="hidden" role="tabpanel" aria-labelledby="food-tab">
+        <h3 class="font-serif text-2xl font-semibold">Food &amp; brunch</h3>
+        <p class="text-[13px] text-muted mb-2">Kitchen open all day.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Croissant</b><small class="block text-muted text-[13px]">Butter, baked in-house</small></div><div class="font-bold whitespace-nowrap">€3.20</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Pain au Chocolat</b><small class="block text-muted text-[13px]">Dark chocolate, flaky pastry</small></div><div class="font-bold whitespace-nowrap">€3.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Avocado Toast <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full ml-1">Vegan</span></b><small class="block text-muted text-[13px]">Sourdough, chilli, lime, seeds</small></div><div class="font-bold whitespace-nowrap">€8.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Granola Bowl <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full ml-1">Veg</span></b><small class="block text-muted text-[13px]">Yoghurt, berries, honey</small></div><div class="font-bold whitespace-nowrap">€7.00</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Eggs Any Way</b><small class="block text-muted text-[13px]">On sourdough, with butter</small></div><div class="font-bold whitespace-nowrap">€9.00</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Shakshuka <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full ml-1">Bestseller</span></b><small class="block text-muted text-[13px]">Baked eggs, tomato, feta, bread</small></div><div class="font-bold whitespace-nowrap">€10.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Soup &amp; Sourdough</b><small class="block text-muted text-[13px]">Changes daily — ask the counter</small></div><div class="font-bold whitespace-nowrap">€8.00</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Toasted Sandwich</b><small class="block text-muted text-[13px]">Ham &amp; cheese, or tomato &amp; mozzarella</small></div><div class="font-bold whitespace-nowrap">€7.50</div></div>
+      </div>
+      <div id="pastries" class="hidden" role="tabpanel" aria-labelledby="pastries-tab">
+        <h3 class="font-serif text-2xl font-semibold">Pastries &amp; cakes</h3>
+        <p class="text-[13px] text-muted mb-2">Baked in-house every morning.</p>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Cinnamon Bun <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full ml-1">Bestseller</span></b><small class="block text-muted text-[13px]">Warm, with cream-cheese icing</small></div><div class="font-bold whitespace-nowrap">€3.80</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Banana Bread</b><small class="block text-muted text-[13px]">Toasted, with butter</small></div><div class="font-bold whitespace-nowrap">€3.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Lemon Drizzle Cake</b><small class="block text-muted text-[13px]">Sharp, sticky, generous slice</small></div><div class="font-bold whitespace-nowrap">€4.00</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Carrot Cake</b><small class="block text-muted text-[13px]">Cream-cheese frosting, walnuts</small></div><div class="font-bold whitespace-nowrap">€4.50</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Brownie</b><small class="block text-muted text-[13px]">Dark chocolate, sea salt</small></div><div class="font-bold whitespace-nowrap">€3.80</div></div>
+        <div class="flex justify-between gap-3 py-3 border-t border-line"><div><b class="text-[15px]">Cookie</b><small class="block text-muted text-[13px]">Chocolate chip, baked hourly</small></div><div class="font-bold whitespace-nowrap">€3.00</div></div>
+      </div>
+    </div>
+    <p class="text-[13px] text-muted mt-4">Ask about today's specials at the counter — the pastry case changes with the morning bake. Gluten-free and vegan options every day.</p>
+  </div>
+</section>
+
+<!-- Gallery: Flowbite carousel -->
+<section id="gallery" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Gallery</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">The room, the coffee, the mornings</h2>
+    <div id="gallery-carousel" class="relative w-full mt-7" data-carousel="slide">
+      <div class="relative h-72 md:h-96 overflow-hidden rounded-2xl">
+        <div class="duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=70" class="absolute block w-full h-full object-cover" alt="Café interior">
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=70" class="absolute block w-full h-full object-cover" alt="Cup of coffee">
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=800&q=70" class="absolute block w-full h-full object-cover" alt="Coffee at the counter">
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=70" class="absolute block w-full h-full object-cover" alt="Pouring coffee">
+        </div>
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=70" class="absolute block w-full h-full object-cover" alt="Café seating">
+        </div>
+      </div>
+      <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
+      </div>
+      <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 group-hover:bg-white group-focus:ring-4 group-focus:ring-white">
+          <svg class="w-4 h-4 text-ink" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 group-hover:bg-white group-focus:ring-4 group-focus:ring-white">
+          <svg class="w-4 h-4 text-ink" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Order-ahead wizard -->
+<section id="booking" class="bg-coffee text-[#f5efe6] py-16">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#f3d9b0">Order ahead</p>
+    <h2 class="font-serif font-semibold text-white text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Skip the queue — order ahead</h2>
+    <p class="text-[#cfc4b4] max-w-2xl">Pick your items → choose pickup or a table time → your details. Ready in about 10 minutes. Pay at the counter when you collect.</p>
+    <div class="flex gap-2 flex-wrap my-6" id="steps">
+      <div class="step on" data-step="1">1 · Your order</div><div class="step" data-step="2">2 · Pickup / table</div><div class="step" data-step="3">3 · Your details</div>
+    </div>
+    <div class="bg-white text-ink rounded-2xl p-6 md:p-7" id="bookpanel">
+      <div class="bstep" data-bstep="1">
+        <h3 class="font-serif text-[26px] font-semibold mb-2">What would you like?</h3>
+        <div id="orderItems"></div>
+        <div class="flex justify-between items-center bg-[#faf7f1] rounded-[10px] p-3.5 mt-3.5 text-lg font-bold"><span>Total</span><span id="orderTotal">€0.00</span></div>
+        <p class="text-[13px] text-muted mt-3.5">Oat, almond or soy milk +€0.50 per drink — tell us in the notes on the next step.</p>
+      </div>
+      <div class="bstep" data-bstep="2" hidden>
+        <h3 class="font-serif text-[26px] font-semibold mb-2">Pickup or a table?</h3>
+        <div class="grid sm:grid-cols-2 gap-2.5" id="modeOpts"></div>
+        <label for="bdate" class="block mt-4">Date</label><input type="date" id="bdate" onchange="sel.date=this.value;sel.time='';renderSlots();">
+        <label>Available times — crossed-out times are fully booked</label>
+        <div class="flex gap-2 flex-wrap mt-2" id="slots"></div>
+      </div>
+      <div class="bstep" data-bstep="3" hidden>
+        <h3 class="font-serif text-[26px] font-semibold mb-2">Your details</h3>
+        <div id="summary" class="bg-[#faf7f1] rounded-[10px] p-3.5 mb-3.5 text-sm"></div>
+        <label for="cname">Full name</label><input id="cname" placeholder="e.g. Aoife Byrne" autocomplete="name">
+        <label for="cphone">Phone</label><input id="cphone" type="tel" placeholder="+353 87 123 4567" autocomplete="tel">
+        <label for="cnotes">Notes (optional)</label><textarea id="cnotes" rows="2" placeholder="e.g. oat milk, extra shot, no nuts, name for the cup"></textarea>
+        <p class="text-[13px] text-muted">Pay at the counter when you collect. We will confirm by WhatsApp / SMS. Orders are held for 20 minutes past your time.</p>
+      </div>
+      <div class="bstep" data-bstep="4" hidden>
+        <div class="text-center py-2.5">
+          <div class="text-[52px] leading-none">✓</div>
+          <h3 class="font-serif text-[26px] font-semibold mt-2">Your order is in!</h3>
+          <p id="confirmText" class="mt-2"></p>
+          <div class="text-xl font-bold bg-[#f6ead9] border border-dashed border-terra rounded-[10px] p-2.5 my-3.5 mx-auto max-w-[340px]" id="bookRef"></div>
+          <p class="text-[13px] text-muted" id="confirmTotal"></p>
+          <p class="text-[13px] text-muted mt-1">A confirmation is on its way by WhatsApp / SMS. Show your reference at the counter and pay there. Running late? Message us — we hold orders for 20 minutes.</p>
+          <div class="flex gap-2.5 justify-center flex-wrap mt-4">
+            <a class="bg-terra text-white font-semibold rounded-full px-6 py-3 no-underline text-[15px]" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
+            <button class="bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer" onclick="resetBooking()">Order again</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between gap-2.5 mt-4">
+        <button class="bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer" id="backBtn" onclick="prevStep()" disabled>← Back</button>
+        <button class="bg-terra hover:bg-terradark text-white font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer border-0" id="nextBtn" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews (Flowbite card pattern) -->
+<section id="reviews" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Reviews</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Loved by <span data-biz="city">Dublin</span></h2>
+    <p class="text-muted max-w-2xl">4.9 out of 5 from 600+ Google reviews — here is what regulars say.</p>
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+      <div class="max-w-sm p-6 bg-white border border-line rounded-2xl shadow-sm">
+        <div class="flex items-center mb-2">
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <p class="ms-2 text-sm font-medium text-ink">5.0 out of 5</p>
+        </div>
+        <blockquote class="font-serif text-xl">“The flat white here is the best in the city centre, and the cinnamon buns are still warm at 9am. My morning stop, every day.”</blockquote>
+        <p class="text-sm text-muted mt-3">— Emma R. · Google review</p>
+      </div>
+      <div class="max-w-sm p-6 bg-white border border-line rounded-2xl shadow-sm">
+        <div class="flex items-center mb-2">
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <p class="ms-2 text-sm font-medium text-ink">5.0 out of 5</p>
+        </div>
+        <blockquote class="font-serif text-xl">“Ordered ahead on my way to work and it was waiting on the counter. Ten minutes saved, every single morning.”</blockquote>
+        <p class="text-sm text-muted mt-3">— Daan K. · Google review</p>
+      </div>
+      <div class="max-w-sm p-6 bg-white border border-line rounded-2xl shadow-sm">
+        <div class="flex items-center mb-2">
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <svg class="w-4 h-4 text-gold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"><path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/></svg>
+          <p class="ms-2 text-sm font-medium text-ink">5.0 out of 5</p>
+        </div>
+        <blockquote class="font-serif text-xl">“Cosy, calm, great wifi and nobody hurries you along. The shakshuka is worth the walk alone.”</blockquote>
+        <p class="text-sm text-muted mt-3">— Priya S. · Google review</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Loyalty + beans/catering -->
+<section id="loyalty" class="py-8">
+  <div class="wrap">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <p class="eyebrow">Loyalty</p>
+        <h3 class="font-serif text-[28px] font-semibold mt-1">Every 8th coffee is free</h3>
+        <p class="text-sm text-muted mt-2">A digital stamp card — no app, no paper. Show it at the till and we stamp it.</p>
+        <div class="punch"><i class="done">✓</i><i class="done">✓</i><i class="done">✓</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8 ★</i></div>
+        <p class="text-sm">You are 3 coffees in — 5 more and your next one is on us. Members also get 10% off beans to take home.</p>
+      </div>
+      <div class="bg-white border border-line rounded-2xl p-6 shadow-sm">
+        <p class="eyebrow">Beans, catering &amp; gift cards</p>
+        <h3 class="font-serif text-[28px] font-semibold mt-1">Take the coffee home</h3>
+        <p class="text-sm text-muted mt-2">250g bags of this week's roast, €12 in store — or a subscription from €24 a month, delivered to your door. Brew gear on the shelf too.</p>
+        <p class="text-sm mt-2.5"><b>Catering:</b> sandwich &amp; pastry platters from €8 per person for offices and meetings. <b>Gift cards:</b> any amount, in store or by WhatsApp.</p>
+        <button type="button" data-modal-target="catering-modal" data-modal-toggle="catering-modal" class="bg-terra hover:bg-terradark text-white font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer border-0 mt-4">Ask about catering</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact & hours -->
+<section id="contact" class="py-12">
+  <div class="wrap">
+    <p class="eyebrow">Find us</p>
+    <h2 class="font-serif font-semibold text-[clamp(28px,4vw,40px)] leading-tight mt-1.5 mb-3">Contact &amp; hours</h2>
+    <div class="grid lg:grid-cols-2 gap-6 mt-7 items-start">
+      <div>
+        <p><strong data-biz="name">The Daily Grind</strong><br><span data-biz="address">8 South Great George's Street, Dublin 2</span><br>
+        <a data-tel href="tel:+35315550187" data-biz="phone">+353 1 555 0187</a> · <a href="mailto:hello@thedailygrind.example">hello@thedailygrind.example</a></p>
+        <table class="w-full mt-2.5 text-sm"><tr><td class="py-2 border-b border-line">Monday – Friday</td><td class="py-2 border-b border-line text-right">7:30 – 16:00</td></tr><tr><td class="py-2 border-b border-line">Saturday</td><td class="py-2 border-b border-line text-right">8:00 – 17:00</td></tr><tr><td class="py-2 border-b border-line">Sunday</td><td class="py-2 border-b border-line text-right">9:00 – 15:00</td></tr></table>
+        <p class="text-[13px] text-muted mt-3.5">Luas Green Line to St Stephen's Green · Bus 15 / 46A · Free Wi-Fi · Laptop-friendly until 12:00 on weekdays · Dog-friendly.</p>
+        <h3 class="font-serif text-[22px] font-semibold mt-6">Send us a message</h3>
+        <form id="contactForm" class="mt-2">
+          <label for="fname">Name</label><input id="fname" required placeholder="Your name">
+          <label for="femail">Email</label><input id="femail" type="email" required placeholder="you@example.com">
+          <label for="fmsg">Message</label><textarea id="fmsg" rows="3" required placeholder="Hi, I'd like to ask about…"></textarea>
+          <button class="bg-terra hover:bg-terradark text-white font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer border-0 w-full" type="submit">Send via email</button>
+          <p class="text-[13px] text-muted mt-2" id="contactDone"></p>
+          <a class="inline-block bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 no-underline text-[15px] w-full text-center mt-2" data-wa href="#" target="_blank" rel="noopener">Or message us on WhatsApp</a>
+        </form>
+      </div>
+      <div>
+        <iframe class="map border-0 w-full h-80 rounded-2xl" title="Map" loading="lazy" src="https://maps.google.com/maps?q=Dublin&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <h3 class="font-serif text-[22px] font-semibold mt-6">Questions</h3>
+        <!-- Flowbite accordion -->
+        <div id="faq-accordion" data-accordion="collapse" class="mt-2">
+          <h2 id="faq-heading-1">
+            <button type="button" class="flex items-center justify-between w-full p-4 font-medium text-left text-ink border border-line rounded-t-2xl bg-white hover:bg-card" data-accordion-target="#faq-body-1" aria-expanded="true" aria-controls="faq-body-1">
+              <span>Do you have oat milk?</span>
+              <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
+            </button>
+          </h2>
+          <div id="faq-body-1" aria-labelledby="faq-heading-1">
+            <div class="p-4 border border-t-0 border-line bg-white text-sm text-muted">Yes — oat, almond and soy, +€0.50 per drink. Decaf is free, and an extra shot is +€0.80.</div>
+          </div>
+          <h2 id="faq-heading-2">
+            <button type="button" class="flex items-center justify-between w-full p-4 font-medium text-left text-ink border border-line border-t-0 bg-white hover:bg-card" data-accordion-target="#faq-body-2" aria-expanded="false" aria-controls="faq-body-2">
+              <span>Can I work from the café?</span>
+              <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
+            </button>
+          </h2>
+          <div id="faq-body-2" class="hidden" aria-labelledby="faq-heading-2">
+            <div class="p-4 border border-t-0 border-line bg-white text-sm text-muted">Yes — free Wi-Fi and plugs at the window seats. Laptops are welcome until 12:00 on weekdays; after that we keep tables for lunch guests.</div>
+          </div>
+          <h2 id="faq-heading-3">
+            <button type="button" class="flex items-center justify-between w-full p-4 font-medium text-left text-ink border border-line border-t-0 bg-white hover:bg-card" data-accordion-target="#faq-body-3" aria-expanded="false" aria-controls="faq-body-3">
+              <span>How does order ahead work?</span>
+              <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
+            </button>
+          </h2>
+          <div id="faq-body-3" class="hidden" aria-labelledby="faq-heading-3">
+            <div class="p-4 border border-t-0 border-line bg-white text-sm text-muted">Pick your items, choose a pickup time, and pay at the counter when you collect. Your order is ready in about 10 minutes and held for 20.</div>
+          </div>
+          <h2 id="faq-heading-4">
+            <button type="button" class="flex items-center justify-between w-full p-4 font-medium text-left text-ink border border-line border-t-0 rounded-b-2xl bg-white hover:bg-card" data-accordion-target="#faq-body-4" aria-expanded="false" aria-controls="faq-body-4">
+              <span>Do you cater for offices?</span>
+              <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
+            </button>
+          </h2>
+          <div id="faq-body-4" class="hidden" aria-labelledby="faq-heading-4">
+            <div class="p-4 border border-t-0 border-line rounded-b-2xl bg-white text-sm text-muted">Yes — sandwich and pastry platters from €8 per person, ordered the day before. Message us on WhatsApp or email for a quote.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-coffee text-[#cfc4b4] pt-11 pb-[110px]">
+  <div class="wrap">
+    <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-6">
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5" data-biz="name">The Daily Grind</h4>
+        <p class="text-sm">A warm neighbourhood café in <span data-biz="city">Dublin</span>. Single-origin coffee, fresh baking and order-ahead pickup in under a minute.</p>
+        <p class="text-[13px] mt-2.5">Demo template — names, prices and photos are placeholders to swap for the real business.</p>
+      </div>
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5">Visit</h4>
+        <p class="text-sm"><span data-biz="address">8 South Great George's Street, Dublin 2</span><br><a data-tel href="tel:+35315550187" data-biz="phone" class="text-[#f5efe6]">+353 1 555 0187</a><br>Mon–Fri 7:30–16:00 · Sat 8:00–17:00 · Sun 9:00–15:00</p>
+      </div>
+      <div>
+        <h4 class="text-white font-serif text-xl mb-2.5">Follow</h4>
+        <p class="text-sm"><a href="#top" class="text-[#f5efe6]">Instagram</a><br><a href="#top" class="text-[#f5efe6]">Facebook</a><br><a href="#booking" class="text-[#f5efe6]">Order ahead</a><br><a href="#contact" class="text-[#f5efe6]">Contact</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Catering enquiry modal (Flowbite) -->
+<div id="catering-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[60] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative p-4 w-full max-w-md max-h-full">
+    <div class="relative bg-white rounded-2xl shadow">
+      <div class="flex items-center justify-between p-4 md:p-5 border-b border-line rounded-t-2xl">
+        <h3 class="font-serif text-2xl font-semibold">Catering &amp; office platters</h3>
+        <button type="button" class="text-muted bg-transparent hover:bg-card hover:text-ink rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center" data-modal-hide="catering-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <div class="p-4 md:p-5">
+        <p class="text-sm text-muted">Sandwich and pastry platters from €8 per person, ordered the day before. Tell us the date, the headcount and any dietary needs — we will send a quote the same day.</p>
+        <p class="text-sm mt-3"><b>Platters from €8</b> per person · <b>Gift cards</b> any amount · <b>Beans</b> 250g bags €12 in store</p>
+        <a class="inline-block bg-wa text-white font-semibold rounded-full px-6 py-3 no-underline text-[15px] mt-4" data-wa href="#" target="_blank" rel="noopener">Message us on WhatsApp</a>
+        <button type="button" data-modal-hide="catering-modal" class="inline-block bg-transparent text-ink border-[1.5px] border-ink font-semibold rounded-full px-6 py-3 text-[15px] cursor-pointer ml-2">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stickybar">
+  <a class="b-book" href="#booking">Order ahead</a>
+  <a class="b-call" data-tel href="tel:+35315550187">Call</a>
+  <a class="b-wa" data-wa href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<a class="float-wa" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">✆</a>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+<script>
+/* ---- Personalisation: ?name= &phone= &address= &city= ---- */
+const DEFAULTS={name:"The Daily Grind",phone:"+353 1 555 0187",address:"8 South Great George's Street, Dublin 2",city:"Dublin"};
+const q=new URLSearchParams(location.search);
+const BIZ={
+  name:q.get("name")||DEFAULTS.name,
+  phone:q.get("phone")||DEFAULTS.phone,
+  address:q.get("address")||DEFAULTS.address,
+  city:q.get("city")||DEFAULTS.city
+};
+function digits(p){return (p||"").replace(/\D/g,"")}
+function waLink(msg){return "https://wa.me/"+digits(BIZ.phone)+"?text="+encodeURIComponent(msg)}
+function eur(n){return "€"+n.toFixed(2)}
+function applyBiz(){
+  document.title=BIZ.name+" — Café in "+BIZ.city;
+  document.querySelectorAll('[data-biz="name"]').forEach(e=>e.textContent=BIZ.name);
+  document.querySelectorAll('[data-biz="city"]').forEach(e=>e.textContent=BIZ.city);
+  document.querySelectorAll('[data-biz="address"]').forEach(e=>e.textContent=BIZ.address);
+  document.querySelectorAll('[data-biz="phone"]').forEach(e=>{e.textContent=BIZ.phone; if(e.hasAttribute("data-tel")) e.href="tel:+"+digits(BIZ.phone);});
+  document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink("Hi "+BIZ.name+"! I'd like to order ahead.");});
+  const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.city+" "+BIZ.address)+"&z=14&output=embed";
+}
+applyBiz();
+/* ---- Order-ahead flow ---- */
+const ORDER=[
+ {n:"Flat White",d:"Velvety microfoam, our signature",p:3.80},
+ {n:"Cappuccino",d:"Classic thirds, cocoa dust",p:3.60},
+ {n:"Latte",d:"Smooth, milky, gentle",p:4.00},
+ {n:"Espresso",d:"Double shot, single-origin",p:2.80},
+ {n:"Croissant",d:"Butter, baked in-house",p:3.20},
+ {n:"Avocado Toast",d:"Sourdough, chilli, lime, seeds",p:8.50},
+ {n:"Granola Bowl",d:"Yoghurt, berries, honey",p:7.00},
+ {n:"Cinnamon Bun",d:"Warm, with cream-cheese icing",p:3.80}];
+const TIMES=["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00"];
+const MODES=[{n:"Pickup",d:"Collect at the counter — ready in ~10 min"},{n:"Dine-in",d:"A table waiting for you at your time"}];
+let step=1, qty=ORDER.map(()=>0), sel={mode:MODES[0],date:"",time:"",ref:""};
+function orderTotal(){return ORDER.reduce((s,it,i)=>s+it.p*qty[i],0)}
+function orderLines(){return ORDER.map((it,i)=>qty[i]?`${qty[i]} × ${it.n}`:null).filter(Boolean)}
+function renderOrder(){
+  document.getElementById("orderItems").innerHTML=ORDER.map((it,i)=>`<div class="ord-row"><div><b>${it.n}</b><small>${it.d}</small></div><div class="qty"><button type="button" onclick="changeQty(${i},-1)" aria-label="Less">−</button><span id="qty-${i}">${qty[i]}</span><button type="button" onclick="changeQty(${i},1)" aria-label="More">+</button><span style="min-width:56px;text-align:right">${eur(it.p)}</span></div></div>`).join("");
+  document.getElementById("orderTotal").textContent=eur(orderTotal());
+}
+function changeQty(i,d){qty[i]=Math.max(0,qty[i]+d);document.getElementById("qty-"+i).textContent=qty[i];document.getElementById("orderTotal").textContent=eur(orderTotal());}
+function takenSlots(dateStr){
+  const day=parseInt((dateStr||"").slice(-2),10)||0;
+  const taken=["09:00","12:00"];
+  if(day%2===0) taken.push("08:30","11:00"); else taken.push("10:00","12:30");
+  return taken;
+}
+function renderSlots(){
+  const taken=takenSlots(sel.date);
+  document.getElementById("slots").innerHTML=TIMES.map(t=>{
+    const dis=taken.includes(t)?" disabled":"";
+    return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
+  }).join("");
+}
+function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function renderModes(){
+  document.getElementById("modeOpts").innerHTML=MODES.map((m,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickMode(${i},this)"><b>${m.n}</b><small>${m.d}</small></button>`).join("");
+}
+function pickMode(i,el){sel.mode=MODES[i];document.querySelectorAll("#modeOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function showStep(n){
+  step=n;
+  document.querySelectorAll(".bstep").forEach(p=>p.hidden=+p.dataset.bstep!==n);
+  document.querySelectorAll("#steps .step").forEach(s=>s.classList.toggle("on",+s.dataset.step<=n&&n<4));
+  document.getElementById("backBtn").disabled=n===1||n===4;
+  document.getElementById("nextBtn").style.display=n===4?"none":"";
+  document.getElementById("nextBtn").textContent=n===3?"Confirm order →":"Continue →";
+  if(n===2){renderModes();renderSlots();}
+  if(n===3) document.getElementById("summary").innerHTML=`<b>${orderLines().join(" · ")}</b><br>${sel.mode.n} — <b>${sel.date||"—"}</b> at <b>${sel.time||"—"}</b><br>Total to pay at the counter: <b>${eur(orderTotal())}</b>`;
+}
+function nextStep(){
+  if(step===1){if(orderTotal()<=0) return alert("Add at least one item to your order first.");}
+  if(step===2){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first."); if(!sel.time) return alert("Pick a time first.");}
+  if(step===3){
+    if(!document.getElementById("cname").value.trim()) return alert("Please add your name.");
+    if(!document.getElementById("cphone").value.trim()) return alert("Please add your phone number.");
+    sel.ref="DG-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+    const nm=document.getElementById("cname").value.trim();
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — your ${sel.mode.n.toLowerCase()} order (${orderLines().join(", ")}) is booked for ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}.`;
+    document.getElementById("bookRef").textContent="Order ref: "+sel.ref;
+    document.getElementById("confirmTotal").textContent="Total to pay at the counter: "+eur(orderTotal());
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just ordered ${orderLines().join(", ")} (${eur(orderTotal())}) for ${sel.mode.n.toLowerCase()} on ${sel.date} at ${sel.time}. My order ref is ${sel.ref}.`);});
+    showStep(4); return;
+  }
+  showStep(step+1);
+}
+function prevStep(){if(step>1) showStep(step-1);}
+function resetBooking(){qty=ORDER.map(()=>0);sel={mode:MODES[0],date:"",time:"",ref:""};document.getElementById("bdate").value="";renderOrder();showStep(1);}
+document.getElementById("contactForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("fname").value, msg=document.getElementById("fmsg").value;
+  const subject=encodeURIComponent("Enquiry — "+BIZ.name);
+  const body=encodeURIComponent(`Hi ${BIZ.name},\n\n${msg}\n\n— ${name}`);
+  location.href="mailto:hello@thedailygrind.example?subject="+subject+"&body="+body;
+  document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
+});
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; renderOrder(); showStep(1);})();
+</script>
+</body>
+</html>

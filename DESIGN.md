@@ -107,3 +107,11 @@ Every template personalises from URL query params `?name=&phone=&address=&city=`
 - No border radius above 16px except pill buttons.
 - No arbitrary spacing values, no fixed-height headers, no PDF-only menus, no video heroes, no load pop-ups.
 - Never invent a business's contact details — personalisation values come from verified lead data only.
+
+## Style variants (added 15 Nov 2026)
+
+The same five businesses restyled with popular component libraries, so a client can pick a look. These files intentionally do NOT use the warm palette above — that is the point. They still follow the header hard rule, the booking-flow pattern, the personalisation params, and the no-secrets / Unsplash-only rules.
+
+- **salon-shadcn.html, hotel-shadcn.html, resort-shadcn.html** — shadcn/ui look recreated in plain HTML (Tailwind via CDN, zinc/neutral palette, white cards, 1px `border-zinc-200`, `rounded-lg`, Inter only, black primary buttons, muted secondary text).
+- **restaurant-hyperui.html** — HyperUI-style Tailwind sections (announcement bar, stat strip, feature grid, set-menu pricing cards).
+- **cafe-flowbite.html** — real Flowbite 2.5.2 components via CDN (tabs, carousel, modal, accordion).

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ashford House — Boutique Hotel in Dublin</title>
+<meta name="description" content="The Ashford House — a boutique hotel in Dublin. Elegant rooms, restaurant, bar and garden. Book direct for the best rate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
+        secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+        muted: { DEFAULT: "hsl(var(--muted))", foreground: "hsl(var(--muted-foreground))" },
+        accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+        card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
+        whatsapp: "#25d366"
+      },
+      borderRadius: { lg: "var(--radius)", md: "calc(var(--radius) - 2px)", sm: "calc(var(--radius) - 4px)" },
+      fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] }
+    }
+  }
+}
+</script>
+<style>
+/* shadcn/ui design tokens (light theme) */
+:root{
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 5.9% 10%;
+  --radius: 0.5rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+section[id]{scroll-margin-top:80px}
+/* ---- Header (hard rule: .nav uses min-height, never a fixed height) ---- */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding-top:8px;padding-bottom:8px}
+header .btn{white-space:nowrap;flex-shrink:0}
+.nav-cta{flex-shrink:0}
+.burger{display:none;background:none;border:0;font-size:24px;cursor:pointer;line-height:1}
+/* ---- shadcn-style components ---- */
+.btn{display:inline-flex;height:2.5rem;align-items:center;justify-content:center;gap:8px;border-radius:calc(var(--radius) - 2px);padding:0 1rem;font-size:.875rem;font-weight:500;line-height:1;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:background-color .15s,color .15s,border-color .15s}
+.btn-sm{height:2.25rem;padding:0 .75rem}
+.btn-primary{background:hsl(var(--primary));color:hsl(var(--primary-foreground))}
+.btn-primary:hover{background:hsl(240 5.9% 16%)}
+.btn-outline{background:#fff;border-color:hsl(var(--input));color:hsl(var(--foreground))}
+.btn-outline:hover{background:hsl(var(--accent))}
+.btn-secondary{background:hsl(var(--secondary));color:hsl(var(--secondary-foreground))}
+.btn-secondary:hover{background:hsl(240 4.8% 92%)}
+.btn-wa{background:#25d366;color:#fff}
+.btn-wa:hover{background:#1eb856}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.badge{display:inline-flex;align-items:center;border-radius:9999px;border:1px solid hsl(var(--border));background:#fff;padding:.25rem .75rem;font-size:.75rem;font-weight:600;color:hsl(var(--foreground))}
+.badge-secondary{background:hsl(var(--secondary));border-color:transparent}
+.input{height:2.5rem;width:100%;border-radius:calc(var(--radius) - 2px);border:1px solid hsl(var(--input));background:#fff;padding:.5rem .75rem;font-size:.875rem;font-family:inherit}
+.input:focus{outline:2px solid hsl(var(--ring));outline-offset:0;border-color:hsl(var(--ring))}
+textarea.input{height:auto;min-height:5rem;resize:vertical}
+select.input{appearance:auto}
+.label{display:block;font-size:.875rem;font-weight:500;margin-bottom:.375rem}
+.card{border-radius:var(--radius);border:1px solid hsl(var(--border));background:#fff;box-shadow:0 1px 2px 0 rgb(0 0 0 / .05)}
+.opt{width:100%;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border:1px solid hsl(var(--border));border-radius:var(--radius);padding:14px 16px;background:#fff;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.opt:hover{border-color:hsl(240 5.9% 70%)}
+.opt.sel{border-color:hsl(var(--primary));background:hsl(240 4.8% 97%);box-shadow:0 0 0 1px hsl(var(--primary))}
+.extra{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid hsl(var(--border));border-radius:var(--radius);padding:14px 16px;background:#fff;cursor:pointer;font-size:.875rem}
+.extra.sel{border-color:hsl(var(--primary));background:hsl(240 4.8% 97%)}
+.extra input{width:auto;margin:0;accent-color:hsl(var(--primary))}
+.step{flex:1;min-width:100px;text-align:center;font-size:13px;font-weight:500;padding:10px;border-radius:calc(var(--radius) - 2px);background:hsl(var(--muted));color:hsl(var(--muted-foreground))}
+.step.on{background:hsl(var(--primary));color:#fff;font-weight:600}
+/* accordion (shadcn Accordion) */
+.faq{border-bottom:1px solid hsl(var(--border))}
+.faq:first-child{border-top:1px solid hsl(var(--border))}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 4px;background:none;border:0;cursor:pointer;font:inherit;font-weight:500;text-align:left}
+.faq-q .chev{transition:transform .2s;color:hsl(var(--muted-foreground))}
+.faq.open .faq-q .chev{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 4px 16px;font-size:.875rem;color:hsl(var(--muted-foreground))}
+.faq.open .faq-a{display:block}
+/* sticky mobile bar */
+.stickybar{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;display:none;gap:8px}
+.stickybar a{flex:1;text-align:center;padding:13px 8px;border-radius:calc(var(--radius) - 2px);font-weight:600;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.stickybar .b-book{background:hsl(var(--primary));color:#fff}
+.stickybar .b-call{background:#fff;color:hsl(var(--foreground));border:1px solid hsl(var(--border))}
+.stickybar .b-wa{background:#25d366;color:#fff}
+.float-wa{position:fixed;right:16px;bottom:84px;z-index:50;background:#25d366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+@media(max-width:900px){
+  nav.main{display:none}
+  .burger{display:block}
+  nav.main.open{display:flex;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:16px 20px;border-bottom:1px solid hsl(var(--border));gap:14px}
+  .tel-link{display:none}
+}
+@media(max-width:640px){
+  .stickybar{display:flex}
+  .wrap{padding-left:14px!important;padding-right:14px!important}
+  .nav{gap:8px;min-height:56px}
+  .logo{font-size:18px}
+  .logo small{font-size:8px;letter-spacing:.2em}
+  header .btn{height:2.25rem;padding:0 .75rem;font-size:13px}
+  .burger{font-size:22px;flex-shrink:0;width:36px}
+  footer{padding-bottom:130px}
+}
+</style>
+</head>
+<body class="bg-white text-zinc-900 antialiased">
+
+<header class="sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
+  <div class="wrap nav mx-auto flex max-w-6xl px-5">
+    <a class="logo leading-tight" href="#top"><span class="block text-xl font-bold tracking-tight" data-biz="name">The Ashford House</span><small class="block text-[9px] font-semibold uppercase tracking-[0.3em] text-zinc-500">Boutique Hotel · <span data-biz="city">Dublin</span></small></a>
+    <nav class="main flex items-center gap-6 text-sm font-medium" id="mainnav">
+      <a href="#rooms" class="hover:text-zinc-500">Rooms</a><a href="#dining" class="hover:text-zinc-500">Eat &amp; Drink</a><a href="#offers" class="hover:text-zinc-500">Offers</a><a href="#reviews" class="hover:text-zinc-500">Reviews</a><a href="#contact" class="hover:text-zinc-500">Contact</a>
+    </nav>
+    <div class="nav-cta flex items-center gap-3">
+      <a class="tel-link text-sm font-semibold" data-tel href="tel:+35312345678" data-biz="phone">+353 1 234 5678</a>
+      <a class="btn btn-primary btn-sm" href="#booking">Book</a>
+      <button class="burger" aria-label="Menu" onclick="document.getElementById('mainnav').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="top" class="relative">
+  <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=70" alt="Hotel pool and gardens" fetchpriority="high">
+  <div class="absolute inset-0 bg-black/55"></div>
+  <div class="relative mx-auto max-w-6xl px-5 pb-10 pt-20 text-white lg:pt-28">
+    <span class="badge">★★★★ · Boutique hotel — <span data-biz="city">Dublin</span></span>
+    <h1 class="mt-5 max-w-2xl text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl">Stay somewhere worth remembering.</h1>
+    <p class="mt-5 max-w-xl text-lg leading-relaxed text-zinc-200">A Georgian townhouse hotel in the heart of <span data-biz="city">Dublin</span> — quiet rooms, a proper restaurant, and a garden you will not want to leave.</p>
+    <div class="mt-6 flex flex-wrap gap-2">
+      <span class="badge !border-white/40 !bg-white/10 !text-white">✓ Best rate when you book direct</span>
+      <span class="badge !border-white/40 !bg-white/10 !text-white">✓ Free breakfast on direct bookings</span>
+      <span class="badge !border-white/40 !bg-white/10 !text-white">✓ Free cancellation up to 48h</span>
+    </div>
+    <form class="card mt-10 grid gap-4 p-5 text-zinc-900 md:grid-cols-4 lg:grid-cols-5" id="heroBar" onsubmit="return startBooking(event)">
+      <div><label class="label" for="in">Check-in</label><input type="date" id="in" class="input" required></div>
+      <div><label class="label" for="out">Check-out</label><input type="date" id="out" class="input" required></div>
+      <div><label class="label" for="guests">Guests</label><select id="guests" class="input"><option>1 guest</option><option selected>2 guests</option><option>3 guests</option><option>4 guests</option></select></div>
+      <div><label class="label" for="promo">Promo code</label><input id="promo" class="input" placeholder="e.g. DIRECT10"></div>
+      <div class="flex items-end"><button class="btn btn-primary w-full" type="submit">Check availability →</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- Rooms -->
+<section id="rooms" class="mx-auto max-w-6xl px-5 py-16">
+  <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Rooms &amp; suites</span>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Choose your room</h2>
+  <p class="mt-3 max-w-2xl text-zinc-500">Every room has free Wi-Fi, a king or super-king bed, rainfall shower and blackout curtains. Prices include taxes; breakfast is included on direct bookings.</p>
+  <div class="mt-8 grid gap-6 md:grid-cols-2">
+    <div class="card overflow-hidden"><img loading="lazy" class="h-64 w-full object-cover" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=70" alt="Deluxe Double room"><div class="p-5"><h3 class="text-xl font-semibold tracking-tight">Deluxe Double</h3><p class="mt-1 text-sm text-zinc-500">28 m² · Sleeps 2 · Garden view</p><p class="mt-2 text-sm text-zinc-500">King bed · Rainfall shower · Smart TV · Tea &amp; coffee · Free Wi-Fi</p><div class="mt-4 flex flex-wrap items-center justify-between gap-3"><p class="text-lg font-bold">from €189 <span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p><button class="btn btn-primary" onclick="bookRoom(0)">Book this room</button></div></div></div>
+    <div class="card overflow-hidden"><img loading="lazy" class="h-64 w-full object-cover" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=70" alt="Superior King room"><div class="p-5"><div class="flex items-center gap-2"><h3 class="text-xl font-semibold tracking-tight">Superior King</h3><span class="badge badge-secondary">Most popular</span></div><p class="mt-1 text-sm text-zinc-500">34 m² · Sleeps 2 · City view</p><p class="mt-2 text-sm text-zinc-500">Super-king bed · Bath + shower · Mini-bar · Desk · Free Wi-Fi</p><div class="mt-4 flex flex-wrap items-center justify-between gap-3"><p class="text-lg font-bold">from €239 <span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p><button class="btn btn-primary" onclick="bookRoom(1)">Book this room</button></div></div></div>
+    <div class="card overflow-hidden"><img loading="lazy" class="h-64 w-full object-cover" src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=70" alt="Family Suite"><div class="p-5"><h3 class="text-xl font-semibold tracking-tight">Family Suite</h3><p class="mt-1 text-sm text-zinc-500">52 m² · Sleeps 4 · Two rooms</p><p class="mt-2 text-sm text-zinc-500">King + two singles · Sofa bed · Bath · Kids stay free under 12</p><div class="mt-4 flex flex-wrap items-center justify-between gap-3"><p class="text-lg font-bold">from €329 <span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p><button class="btn btn-primary" onclick="bookRoom(2)">Book this room</button></div></div></div>
+    <div class="card overflow-hidden"><img loading="lazy" class="h-64 w-full object-cover" src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1200&q=70" alt="Penthouse Suite terrace"><div class="p-5"><div class="flex items-center gap-2"><h3 class="text-xl font-semibold tracking-tight">Penthouse Suite</h3><span class="badge badge-secondary">Terrace</span></div><p class="mt-1 text-sm text-zinc-500">78 m² · Sleeps 2 · Private terrace</p><p class="mt-2 text-sm text-zinc-500">Freestanding bath · Terrace · Lounge · Late check-out included</p><div class="mt-4 flex flex-wrap items-center justify-between gap-3"><p class="text-lg font-bold">from €549 <span class="block text-xs font-normal text-zinc-500">per night · breakfast included</span></p><button class="btn btn-primary" onclick="bookRoom(3)">Book this room</button></div></div></div>
+  </div>
+</section>
+
+<!-- Booking -->
+<section id="booking" class="border-y bg-zinc-50/60">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Book direct</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Your stay, in five steps</h2>
+    <p class="mt-3 max-w-2xl text-zinc-500">Dates → room &amp; rate → extras → your details → confirmation. No account needed, and the price you see is the price you pay.</p>
+    <div class="mt-8 flex flex-wrap gap-2" id="steps">
+      <div class="step on" data-step="1">1 · Dates</div><div class="step" data-step="2">2 · Room &amp; rate</div><div class="step" data-step="3">3 · Extras</div><div class="step" data-step="4">4 · Details</div><div class="step" data-step="5">5 · Done</div>
+    </div>
+    <div class="card mt-4 p-6 md:p-8" id="bookpanel">
+      <div class="bstep" data-bstep="1">
+        <h3 class="text-xl font-semibold tracking-tight">When are you coming?</h3>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <div><label class="label" for="bIn">Check-in</label><input type="date" id="bIn" class="input"></div>
+          <div><label class="label" for="bOut">Check-out</label><input type="date" id="bOut" class="input"></div>
+        </div>
+        <div class="mt-4 max-w-xs"><label class="label" for="bGuests">Guests</label><select id="bGuests" class="input"><option>1 guest</option><option selected>2 guests</option><option>3 guests</option><option>4 guests</option></select></div>
+        <p class="mt-3 text-sm text-zinc-500" id="nightsNote"></p>
+      </div>
+      <div class="bstep" data-bstep="2" hidden>
+        <h3 class="text-xl font-semibold tracking-tight">Choose a room &amp; rate</h3>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2" id="roomOpts"></div>
+        <h3 class="mt-6 text-xl font-semibold tracking-tight">Rate</h3>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <button type="button" class="opt sel" onclick="pickRate('flex',this)"><span><b class="block font-medium">Flexible — free cancellation</b><small class="text-sm text-zinc-500">Cancel free up to 48h before · pay at the hotel</small></span></button>
+          <button type="button" class="opt" onclick="pickRate('nonref',this)"><span><b class="block font-medium">Non-refundable — save 10%</b><small class="text-sm text-zinc-500">Prepaid, no changes · best price</small></span></button>
+        </div>
+      </div>
+      <div class="bstep" data-bstep="3" hidden>
+        <h3 class="text-xl font-semibold tracking-tight">Add extras</h3>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2" id="extraOpts"></div>
+        <div class="mt-4 rounded-md border bg-zinc-50 px-4 py-3 font-semibold" id="totalBox"></div>
+      </div>
+      <div class="bstep" data-bstep="4" hidden>
+        <h3 class="text-xl font-semibold tracking-tight">Your details</h3>
+        <div id="summary" class="mt-4 rounded-md border bg-zinc-50 px-4 py-3 text-sm"></div>
+        <div class="mt-5 space-y-4">
+          <div><label class="label" for="gname">Full name</label><input id="gname" class="input" placeholder="e.g. Anna de Vries" autocomplete="name"></div>
+          <div><label class="label" for="gemail">Email</label><input id="gemail" type="email" class="input" placeholder="you@example.com" autocomplete="email"></div>
+          <div><label class="label" for="gphone">Phone</label><input id="gphone" type="tel" class="input" placeholder="+353 87 123 4567" autocomplete="tel"></div>
+          <div><label class="label" for="gnotes">Requests (optional)</label><textarea id="gnotes" rows="2" class="input" placeholder="e.g. quiet room, cot for a baby, anniversary"></textarea></div>
+        </div>
+        <p class="mt-4 text-sm text-zinc-500">Check-in 15:00 · Check-out 11:00 · Deposit: nothing today on the flexible rate. We will email and WhatsApp your confirmation.</p>
+      </div>
+      <div class="bstep" data-bstep="5" hidden>
+        <div class="py-4 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-zinc-900 text-2xl text-white">✓</div>
+          <h3 class="mt-4 text-xl font-semibold tracking-tight">Your stay is confirmed!</h3>
+          <p id="confirmText" class="mx-auto mt-2 max-w-md text-sm text-zinc-500"></p>
+          <div class="mx-auto mt-4 max-w-xs rounded-md border border-dashed bg-zinc-50 px-4 py-3 font-mono text-sm font-semibold" id="bookRef"></div>
+          <p class="mt-3 text-sm text-zinc-500">Confirmation sent by email and WhatsApp, with directions and a manage-booking link. Need to change anything? Call us — free changes on the flexible rate.</p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <a class="btn btn-wa" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
+            <button class="btn btn-outline" onclick="resetBooking()">Make another booking</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex items-center justify-between gap-3">
+        <button class="btn btn-outline" id="backBtn" onclick="prevStep()" disabled>← Back</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dining -->
+<section id="dining" class="mx-auto max-w-6xl px-5 py-16">
+  <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Eat &amp; drink</span>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Three places to eat, one garden to linger in</h2>
+  <div class="mt-8 grid gap-6 md:grid-cols-3">
+    <div class="card overflow-hidden"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=70" alt="Restaurant dining room"><div class="p-5"><h3 class="text-lg font-semibold tracking-tight">The Garden Room</h3><p class="mt-1 text-sm text-zinc-500">Modern Irish cooking, seasonal menus. Breakfast 7:00–10:30, dinner 17:30–22:00.</p><a class="btn btn-outline btn-sm mt-4" href="#booking">Book a table</a></div></div>
+    <div class="card overflow-hidden"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=1000&q=70" alt="Cocktail bar"><div class="p-5"><h3 class="text-lg font-semibold tracking-tight">The Library Bar</h3><p class="mt-1 text-sm text-zinc-500">Whiskey, cocktails and afternoon tea by the fire. Open daily 12:00–23:00.</p><a class="btn btn-outline btn-sm mt-4" href="#booking">Book a table</a></div></div>
+    <div class="card overflow-hidden"><img loading="lazy" class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1000&q=70" alt="Spa treatment"><div class="p-5"><h3 class="text-lg font-semibold tracking-tight">Spa &amp; Garden</h3><p class="mt-1 text-sm text-zinc-500">Two treatment rooms, sauna and a walled garden. Treatments 9:00–19:00, book ahead.</p><a class="btn btn-outline btn-sm mt-4" href="#booking">Book a treatment</a></div></div>
+  </div>
+</section>
+
+<!-- Offers -->
+<section id="offers" class="border-y bg-zinc-50/60">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Offers</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Book direct, get more</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      <div class="card p-6"><h3 class="text-xl font-semibold tracking-tight">Stay 3, pay for 2</h3><p class="mt-2 text-sm text-zinc-500">Midweek stays, Sunday–Thursday. Third night free when you book direct.</p><button class="btn btn-outline mt-4" onclick="applyPromo('STAY3')">Use code STAY3</button></div>
+      <div class="rounded-lg bg-zinc-900 p-6 text-white shadow-sm"><span class="badge !border-white/20 !bg-white/10 !text-white">Best value</span><h3 class="mt-3 text-xl font-semibold tracking-tight">Winter escape — 20% off</h3><p class="mt-2 text-sm text-zinc-300">Two nights or more, November–March. Flexible rate, breakfast included.</p><button class="btn mt-4 !border-white/20 !bg-white !text-zinc-900 hover:!bg-zinc-100" onclick="applyPromo('WINTER20')">Use code WINTER20</button></div>
+      <div class="card p-6"><h3 class="text-xl font-semibold tracking-tight">Member rate — 10% off</h3><p class="mt-2 text-sm text-zinc-500">Join free at booking and save 10% on every stay, plus early check-in when available.</p><button class="btn btn-outline mt-4" onclick="applyPromo('DIRECT10')">Use code DIRECT10</button></div>
+    </div>
+    <p class="mt-4 text-sm text-zinc-500">Why book direct? No commission to booking sites, the best rate guaranteed, free breakfast and flexible cancellation — the same room, for less.</p>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section id="reviews" class="mx-auto max-w-6xl px-5 py-16">
+  <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Guest reviews</span>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">What guests say</h2>
+  <div class="mt-8 grid gap-6 md:grid-cols-3">
+    <div class="card p-6"><p class="text-amber-400 tracking-widest">★★★★★</p><p class="mt-3 font-medium leading-relaxed">“The quietest room I have ever slept in, in the middle of Dublin. Breakfast in the garden was the highlight of our trip.”</p><p class="mt-4 text-sm text-zinc-500">— Sarah M. · Tripadvisor</p></div>
+    <div class="card p-6"><p class="text-amber-400 tracking-widest">★★★★★</p><p class="mt-3 font-medium leading-relaxed">“Booked direct, got the member rate and a free upgrade. Staff remembered our names by the second morning.”</p><p class="mt-4 text-sm text-zinc-500">— James &amp; Aoife · Google review</p></div>
+    <div class="card p-6"><p class="text-amber-400 tracking-widest">★★★★★</p><p class="mt-3 font-medium leading-relaxed">“Perfect for a family weekend — the suite had room for all four of us, and the kids ate free at breakfast.”</p><p class="mt-4 text-sm text-zinc-500">— The O'Briens · Booking.com</p></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="border-t">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Find us</span>
+    <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Contact &amp; location</h2>
+    <div class="mt-8 grid gap-10 lg:grid-cols-2">
+      <div>
+        <p class="font-semibold" data-biz="name">The Ashford House</p>
+        <p class="text-zinc-500"><span data-biz="address">14 Merrion Square, Dublin 2, Ireland</span><br>
+        <a data-tel href="tel:+35312345678" class="font-medium text-zinc-900 underline underline-offset-4" data-biz="phone">+353 1 234 5678</a> · <a href="mailto:stay@ashfordhouse.example" class="text-zinc-900 underline underline-offset-4">stay@ashfordhouse.example</a></p>
+        <p class="mt-3 text-sm text-zinc-500">Check-in 15:00 · Check-out 11:00 · Reception 24h · 10 min walk from Trinity College, 25 min by bus from Dublin Airport.</p>
+        <h3 class="mt-8 text-lg font-semibold tracking-tight">Send us a message</h3>
+        <form id="contactForm" class="mt-3 space-y-4">
+          <div><label class="label" for="fname">Name</label><input id="fname" class="input" required placeholder="Your name"></div>
+          <div><label class="label" for="femail">Email</label><input id="femail" type="email" class="input" required placeholder="you@example.com"></div>
+          <div><label class="label" for="fmsg">Message</label><textarea id="fmsg" rows="3" class="input" required placeholder="Hi, I'd like to ask about…"></textarea></div>
+          <button class="btn btn-primary w-full" type="submit">Send via email</button>
+          <p class="text-sm text-zinc-500" id="contactDone"></p>
+          <a class="btn btn-outline w-full" data-wa href="#" target="_blank" rel="noopener">Or message us on WhatsApp</a>
+        </form>
+      </div>
+      <div>
+        <iframe class="map h-80 w-full rounded-lg border" title="Map" loading="lazy" src="https://maps.google.com/maps?q=Dublin&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <h3 class="mt-8 text-lg font-semibold tracking-tight">Good to know</h3>
+        <div class="mt-2">
+          <div class="faq"><button type="button" class="faq-q" onclick="toggleFaq(this)">What is the cancellation policy?<span class="chev">⌄</span></button><div class="faq-a">Flexible rate: free up to 48 hours before check-in. Non-refundable rate: prepaid, 10% cheaper, no changes.</div></div>
+          <div class="faq"><button type="button" class="faq-q" onclick="toggleFaq(this)">Do you have parking?<span class="chev">⌄</span></button><div class="faq-a">Yes — secure parking at €15 per night, bookable as an extra. Electric charging available.</div></div>
+          <div class="faq"><button type="button" class="faq-q" onclick="toggleFaq(this)">Are children and pets welcome?<span class="chev">⌄</span></button><div class="faq-a">Children of all ages are welcome; under-12s stay free. Dogs are welcome in ground-floor rooms on request.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t bg-zinc-50/60">
+  <div class="mx-auto grid max-w-6xl gap-8 px-5 py-12 md:grid-cols-3">
+    <div><h4 class="text-lg font-semibold tracking-tight" data-biz="name">The Ashford House</h4><p class="mt-2 text-sm text-zinc-500">A boutique hotel in <span data-biz="city">Dublin</span>. Book direct for the best rate, free breakfast and flexible cancellation.</p><p class="mt-3 text-xs text-zinc-500">Demo template — names, prices and photos are placeholders to swap for the real business.</p></div>
+    <div><h4 class="text-lg font-semibold tracking-tight">Visit</h4><p class="mt-2 text-sm text-zinc-500"><span data-biz="address">14 Merrion Square, Dublin 2, Ireland</span><br><a data-tel href="tel:+35312345678" class="text-zinc-900 underline underline-offset-4" data-biz="phone">+353 1 234 5678</a><br>Check-in 15:00 · Check-out 11:00</p></div>
+    <div><h4 class="text-lg font-semibold tracking-tight">Explore</h4><p class="mt-2 text-sm"><a href="#rooms" class="block py-0.5 text-zinc-500 hover:text-zinc-900">Rooms</a><a href="#dining" class="block py-0.5 text-zinc-500 hover:text-zinc-900">Eat &amp; Drink</a><a href="#offers" class="block py-0.5 text-zinc-500 hover:text-zinc-900">Offers</a><a href="#booking" class="block py-0.5 text-zinc-500 hover:text-zinc-900">Book now</a></p></div>
+  </div>
+</footer>
+
+<div class="stickybar">
+  <a class="b-book" href="#booking">Book now</a>
+  <a class="b-call" data-tel href="tel:+35312345678">Call</a>
+  <a class="b-wa" data-wa href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<a class="float-wa" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">✆</a>
+
+<script>
+/* ---- Personalisation: ?name= &phone= &address= &city= ---- */
+const DEFAULTS={name:"The Ashford House",phone:"+353 1 234 5678",address:"14 Merrion Square, Dublin 2, Ireland",city:"Dublin"};
+const q=new URLSearchParams(location.search);
+const BIZ={name:q.get("name")||DEFAULTS.name,phone:q.get("phone")||DEFAULTS.phone,address:q.get("address")||DEFAULTS.address,city:q.get("city")||DEFAULTS.city};
+function digits(p){return (p||"").replace(/\D/g,"")}
+function waLink(msg){return "https://wa.me/"+digits(BIZ.phone)+"?text="+encodeURIComponent(msg)}
+function applyBiz(){
+  document.title=BIZ.name+" — Boutique Hotel in "+BIZ.city;
+  document.querySelectorAll('[data-biz="name"]').forEach(e=>e.textContent=BIZ.name);
+  document.querySelectorAll('[data-biz="city"]').forEach(e=>e.textContent=BIZ.city);
+  document.querySelectorAll('[data-biz="address"]').forEach(e=>e.textContent=BIZ.address);
+  document.querySelectorAll('[data-biz="phone"]').forEach(e=>{e.textContent=BIZ.phone; if(e.hasAttribute("data-tel")) e.href="tel:+"+digits(BIZ.phone);});
+  document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink("Hi "+BIZ.name+"! I'd like to check availability.");});
+  const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.city+" "+BIZ.address)+"&z=14&output=embed";
+}
+applyBiz();
+/* ---- Booking ---- */
+const ROOMS=[
+ {n:"Deluxe Double",p:189,desc:"28 m² · Sleeps 2 · Garden view"},
+ {n:"Superior King",p:239,desc:"34 m² · Sleeps 2 · City view"},
+ {n:"Family Suite",p:329,desc:"52 m² · Sleeps 4 · Two rooms"},
+ {n:"Penthouse Suite",p:549,desc:"78 m² · Sleeps 2 · Private terrace"}];
+const EXTRAS=[
+ {n:"Breakfast for two",p:36,per:"stay"},{n:"Parking",p:15,per:"night"},{n:"Airport transfer",p:45,per:"stay"},
+ {n:"Spa access (2 people)",p:50,per:"stay"},{n:"Extra bed",p:30,per:"night"},{n:"Late check-out (14:00)",p:30,per:"stay"}];
+let step=1, room=ROOMS[0], rate="flex", promo="", extrasOn=new Set(), ref="";
+function nights(){const a=new Date(document.getElementById("bIn").value), b=new Date(document.getElementById("bOut").value);
+  if(!a||!b||isNaN(a)||isNaN(b)) return 0; return Math.round((b-a)/86400000);}
+function total(){
+  const n=Math.max(nights(),1); let t=room.p*n; if(rate==="nonref") t=Math.round(t*0.9);
+  EXTRAS.forEach((x,i)=>{if(extrasOn.has(i)) t+= x.per==="night"? x.p*n : x.p;});
+  if(promo==="DIRECT10"||promo==="WINTER20") t=Math.round(t*0.9); if(promo==="STAY3"&&n>=3) t-=room.p;
+  return Math.max(t,0);
+}
+function renderRooms(){
+  document.getElementById("roomOpts").innerHTML=ROOMS.map((r,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickRoom(${i},this)"><span><b class="block font-medium">${r.n} — from €${r.p}/night</b><small class="text-sm text-zinc-500">${r.desc}</small></span></button>`).join("");
+}
+function pickRoom(i,el){room=ROOMS[i];document.querySelectorAll("#roomOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");renderTotal();}
+function pickRate(r,el){rate=r;const wrap=el.parentElement;wrap.querySelectorAll(".opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");renderTotal();}
+function renderExtras(){
+  document.getElementById("extraOpts").innerHTML=EXTRAS.map((x,i)=>`<label class="extra"><span class="flex items-center gap-2"><input type="checkbox" onchange="toggleExtra(${i},this.checked)"> <b class="font-medium">${x.n}</b></span><span>€${x.p}${x.per==="night"?" / night":""}</span></label>`).join("");
+  renderTotal();
+}
+function toggleExtra(i,on){on?extrasOn.add(i):extrasOn.delete(i);const lab=document.querySelectorAll("#extraOpts .extra")[i]; if(lab) lab.classList.toggle("sel",on); renderTotal();}
+function renderTotal(){const el=document.getElementById("totalBox"); if(el) el.textContent=`Total: €${total()} for ${Math.max(nights(),1)} night${nights()===1?"":"s"} · ${room.n} · ${rate==="flex"?"Flexible rate":"Non-refundable (−10%)"}${promo?` · Promo ${promo} applied`:""}`;}
+function bookRoom(i){room=ROOMS[i];renderRooms();document.querySelectorAll("#roomOpts .opt").forEach((o,j)=>o.classList.toggle("sel",j===i));showStep(2);document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
+function applyPromo(code){promo=code;document.getElementById("promo").value=code;renderTotal();document.getElementById("booking").scrollIntoView({behavior:"smooth"});showStep(2);}
+function startBooking(e){e.preventDefault();
+  const a=document.getElementById("in").value,b=document.getElementById("out").value;
+  if(!a||!b) return alert("Choose your check-in and check-out dates first."),false;
+  if(new Date(b)<=new Date(a)) return alert("Check-out must be after check-in."),false;
+  document.getElementById("bIn").value=a; document.getElementById("bOut").value=b;
+  promo=document.getElementById("promo").value.trim().toUpperCase();
+  showStep(2); document.getElementById("booking").scrollIntoView({behavior:"smooth"}); return false;}
+function showStep(n){
+  step=n;
+  document.querySelectorAll(".bstep").forEach(p=>p.hidden=+p.dataset.bstep!==n);
+  document.querySelectorAll("#steps .step").forEach(s=>s.classList.toggle("on",+s.dataset.step<=n));
+  document.getElementById("backBtn").disabled=n===1||n===5;
+  document.getElementById("nextBtn").style.display=n===5?"none":"";
+  document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
+  const nn=nights(); document.getElementById("nightsNote").textContent=nn>0?`${nn} night${nn===1?"":"s"} selected.`:"";
+  if(n===3) renderTotal();
+  if(n===4) document.getElementById("summary").innerHTML=`<b>${room.n}</b> — €${room.p}/night<br>${document.getElementById("bIn").value} → ${document.getElementById("bOut").value} · ${Math.max(nights(),1)} night(s) · ${document.getElementById("bGuests").value}<br>Rate: <b>${rate==="flex"?"Flexible (free cancellation)":"Non-refundable (−10%)"}</b>${promo?`<br>Promo: <b>${promo}</b>`:""}<br><b>Total: €${total()}</b>`;
+}
+function nextStep(){
+  if(step===1){const a=document.getElementById("bIn").value,b=document.getElementById("bOut").value;
+    if(!a||!b) return alert("Choose your dates first."); if(new Date(b)<=new Date(a)) return alert("Check-out must be after check-in.");}
+  if(step===4){
+    if(!document.getElementById("gname").value.trim()) return alert("Please add your name.");
+    if(!document.getElementById("gemail").value.trim()) return alert("Please add your email.");
+    ref="AH-"+new Date().getFullYear()+"-"+Math.floor(1000+Math.random()*9000);
+    const nm=document.getElementById("gname").value.trim();
+    document.getElementById("confirmText").textContent=`Thanks ${nm} — ${room.n} at ${BIZ.name}, ${BIZ.city}, ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. Total €${total()}. Check-in 15:00.`;
+    document.getElementById("bookRef").textContent="Booking ref: "+ref;
+    document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked the ${room.n} from ${document.getElementById("bIn").value} to ${document.getElementById("bOut").value}. My booking ref is ${ref}.`);});
+    showStep(5); return;
+  }
+  showStep(step+1);
+}
+function prevStep(){if(step>1) showStep(step-1);}
+function resetBooking(){room=ROOMS[0];rate="flex";promo="";extrasOn=new Set();renderRooms();renderExtras();showStep(1);}
+function toggleFaq(btn){btn.closest(".faq").classList.toggle("open");}
+document.getElementById("contactForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("fname").value, msg=document.getElementById("fmsg").value;
+  location.href="mailto:stay@ashfordhouse.example?subject="+encodeURIComponent("Enquiry — "+BIZ.name)+"&body="+encodeURIComponent(`Hi ${BIZ.name},\n\n${msg}\n\n— ${name}`);
+  document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
+});
+(function init(){
+  const t=new Date(), tom=new Date(Date.now()+86400000), nxt=new Date(Date.now()+2*86400000);
+  const iso=d=>d.toISOString().split("T")[0];
+  ["in","bIn"].forEach(id=>document.getElementById(id).min=iso(t));
+  document.getElementById("in").value=iso(tom); document.getElementById("out").value=iso(nxt);
+  document.getElementById("bIn").value=iso(tom); document.getElementById("bOut").value=iso(nxt);
+  renderRooms(); renderExtras(); showStep(1);
+})();
+</script>
+</body>
+</html>
