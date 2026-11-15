@@ -26,7 +26,7 @@ section{padding:64px 0}
 .btn.light{background:#fff;color:var(--ink)}
 /* header */
 header{position:sticky;top:0;z-index:40;background:rgba(250,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding:8px 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding-top:8px;padding-bottom:8px}
 .logo{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:var(--ink);line-height:1.15}
 .logo small{display:block;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.3em;color:var(--tan);font-weight:700}
 nav.main{display:flex;gap:22px}
@@ -147,11 +147,12 @@ footer a{color:#f5efe6}
 }
 @media(max-width:640px){
   .stickybar{display:flex}
-  .nav{gap:10px;min-height:56px}
-  .logo{font-size:19px;letter-spacing:.06em}
+  .wrap{padding:0 14px}
+  .nav{gap:8px;min-height:56px}
+  .logo{font-size:18px;letter-spacing:.04em}
   .logo small{font-size:8px;letter-spacing:.2em}
-  header .btn{padding:8px 14px;font-size:13px}
-  .burger{font-size:22px}
+  header .btn{padding:8px 12px;font-size:13px}
+  .burger{font-size:22px;flex-shrink:0;width:36px}
   section{padding:48px 0}
   .opts{grid-template-columns:1fr}
   .svc-grid,.team,.reviews,.gal{grid-template-columns:1fr}
