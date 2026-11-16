@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hairquarters — Precision Cuts, Beards &amp; Braids in Rotterdam</title>
+<meta name="description" content="The Hairquarters — premium barbershop in Rotterdam for precision haircuts, beard work and braids. Book on Fresha. Stokviswater 14, 3011 DH Rotterdam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0d;
+    --bg2:#141414;
+    --card:#1a1a1a;
+    --ink:#f6f6f4;
+    --muted:#b9b9b4;
+    --lime:#75ff1a;
+    --lime-ink:#0d0d0d;
+    --line:#262626;
+    --wa:#25d366;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  section{padding:48px 0}
+  h1,h2,h3{line-height:1.15;font-weight:800;letter-spacing:-0.02em}
+  h2{font-size:32px;margin-bottom:8px}
+  h3{font-size:20px}
+  .kicker{
+    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--lime);margin-bottom:16px;
+  }
+  .sub{color:var(--muted);font-size:16px;max-width:640px}
+  .sec-head{margin-bottom:32px}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:48px;padding:12px 24px;border-radius:999px;border:0;
+    font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
+    text-decoration:none;white-space:nowrap;
+  }
+  .btn-lime{background:var(--lime);color:var(--lime-ink)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid #3a3a3a}
+  .btn-wa{background:var(--wa);color:#fff}
+  .btn-sm{min-height:40px;padding:8px 16px;font-size:14px}
+
+  /* ---------- Header (hard rule: min-height, never fixed) ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:var(--bg);border-bottom:1px solid var(--line);
+  }
+  .nav{
+    min-height:64px;
+    display:flex;align-items:center;gap:16px;
+    padding-top:8px;padding-bottom:8px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+  .monogram{
+    width:40px;height:40px;flex-shrink:0;border-radius:8px;
+    background:var(--lime);color:var(--lime-ink);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:16px;letter-spacing:-0.02em;
+  }
+  .brand-name{font-weight:800;font-size:18px;line-height:1.2;white-space:nowrap}
+  .brand-name span{color:var(--lime)}
+  .nav-links{display:flex;gap:24px;margin-left:auto}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{display:flex;align-items:center;gap:8px;margin-left:8px}
+  .nav-cta .btn{flex-shrink:0;white-space:nowrap}
+  .nav-phone{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap;
+  }
+  .burger{
+    display:none;width:36px;height:36px;flex-shrink:0;
+    background:transparent;border:1px solid var(--line);border-radius:8px;
+    color:var(--ink);font-size:18px;cursor:pointer;margin-left:auto;
+  }
+  .mobile-menu{display:none;border-top:1px solid var(--line);padding-top:16px;padding-bottom:16px}
+  .mobile-menu.open{display:block}
+  .mobile-menu a{
+    display:block;padding:8px 0;color:var(--muted);text-decoration:none;
+    font-size:16px;font-weight:600;
+  }
+  .mobile-menu a:hover{color:var(--ink)}
+  .mobile-menu .btn{margin-top:8px;width:100%}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:0;overflow:hidden}
+  .hero-media{
+    position:absolute;inset:0;
+    background:url("https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1800&q=70") center/cover no-repeat;
+  }
+  .hero-media::after{
+    content:"";position:absolute;inset:0;
+    background:rgba(13,13,13,.78);
+  }
+  .hero-inner{position:relative;padding-top:96px;padding-bottom:80px}
+  .hero h1{font-size:48px;font-weight:900;max-width:640px;margin-bottom:16px}
+  .hero h1 em{font-style:normal;color:var(--lime)}
+  .hero .sub{font-size:18px;color:#e8e8e4}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;margin:32px 0}
+  .hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(13,13,13,.72);border:1px solid #3a3a3a;border-radius:999px;
+    padding:8px 16px;font-size:14px;font-weight:600;text-decoration:none;color:var(--ink);
+  }
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);flex-shrink:0}
+  .chip b{color:var(--lime);font-weight:700}
+
+  /* ---------- Lime notice strip ---------- */
+  .notice{
+    background:var(--lime);color:var(--lime-ink);
+    font-weight:700;font-size:15px;text-align:center;
+    padding:16px 24px;
+  }
+  .notice a{color:var(--lime-ink)}
+
+  /* ---------- Services ---------- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:24px;display:flex;flex-direction:column;
+  }
+  .card .tag{
+    font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--lime);margin-bottom:16px;
+  }
+  .card h3{margin-bottom:8px}
+  .card p{color:var(--muted);font-size:15px;flex:1}
+  .card .meta{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin:24px 0 16px;
+  }
+  .price{font-size:24px;font-weight:800;color:var(--lime)}
+  .dur{font-size:14px;color:var(--muted);font-weight:600}
+  .card .btn{width:100%}
+  .card.featured{border-color:var(--lime)}
+
+  /* ---------- Memberships ---------- */
+  .memberships{background:var(--bg2)}
+  .mem-card{text-align:center}
+  .mem-card .price{font-size:32px}
+  .mem-card .per{font-size:14px;color:var(--muted);font-weight:600}
+  .mem-card .freq{font-size:14px;color:var(--muted);margin:8px 0 24px}
+  .mem-note{margin-top:24px;color:var(--muted);font-size:14px;text-align:center}
+
+  /* ---------- Barber ---------- */
+  .barber{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+  .barber img{border-radius:16px;width:100%;height:100%;object-fit:cover;min-height:320px}
+  .barber h2{margin-bottom:16px}
+  .barber p{color:var(--muted);margin-bottom:16px}
+  .barber .stat{
+    display:flex;gap:32px;margin-top:24px;
+  }
+  .barber .stat b{display:block;font-size:24px;color:var(--lime)}
+  .barber .stat span{font-size:14px;color:var(--muted)}
+
+  /* ---------- Gallery ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .g-item{position:relative;border-radius:16px;overflow:hidden;background:var(--card)}
+  .g-item img{width:100%;height:280px;object-fit:cover}
+  .g-item span{
+    position:absolute;left:16px;bottom:16px;
+    background:rgba(13,13,13,.85);border-radius:999px;padding:8px 16px;
+    font-size:14px;font-weight:700;
+  }
+
+  /* ---------- Reviews ---------- */
+  .reviews{background:var(--bg2)}
+  .rev-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .rev-score{font-size:48px;font-weight:900;color:var(--lime);line-height:1}
+  .stars{color:var(--lime);font-size:20px;letter-spacing:4px}
+  .rev-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:32px}
+  .rev-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .rev-card blockquote{font-size:16px;margin-bottom:16px}
+  .rev-card .who{font-weight:700;font-size:14px}
+  .rev-card .src{font-size:13px;color:var(--muted)}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:720px}
+  details{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 24px;margin-bottom:16px;
+  }
+  summary{font-weight:700;font-size:16px;cursor:pointer;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  details p{color:var(--muted);margin-top:8px;font-size:15px}
+  details p a{color:var(--lime)}
+
+  /* ---------- Visit ---------- */
+  .visit{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:stretch}
+  .visit-info h2{margin-bottom:16px}
+  .v-row{padding:16px 0;border-bottom:1px solid var(--line)}
+  .v-row:last-child{border-bottom:0}
+  .v-row .lbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-bottom:8px}
+  .v-row p{font-size:16px}
+  .v-row a{color:var(--ink);font-weight:600}
+  .v-row .muted{color:var(--muted);font-size:15px}
+  .map{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:320px}
+  .map iframe{width:100%;height:100%;min-height:320px;border:0;display:block}
+  .ig-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .ig-links a{
+    display:inline-block;border:1px solid #3a3a3a;border-radius:999px;
+    padding:8px 16px;font-size:14px;font-weight:600;text-decoration:none;
+  }
+  .ig-links a:hover{border-color:var(--lime);color:var(--lime)}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px;background:var(--bg2)}
+  .foot{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .foot .brand-name{font-size:20px}
+  .foot p{color:var(--muted);font-size:14px;max-width:400px;margin-top:8px}
+  .foot-links a{display:block;color:var(--muted);text-decoration:none;font-size:14px;padding:4px 0}
+  .foot-links a:hover{color:var(--lime)}
+  .foot small{display:block;color:#77776f;font-size:13px;margin-top:32px}
+
+  /* ---------- Sticky mobile bar ---------- */
+  .sticky-bar{
+    display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:var(--bg);border-top:1px solid var(--line);
+    padding:8px 16px calc(8px + env(safe-area-inset-bottom));
+    gap:8px;
+  }
+  .sticky-bar .btn{flex:1}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .cards{grid-template-columns:1fr 1fr}
+    .gallery{grid-template-columns:1fr 1fr}
+    .rev-cards{grid-template-columns:1fr}
+    .barber,.visit{grid-template-columns:1fr}
+  }
+  @media (max-width: 640px){
+    .wrap{padding:0 14px}
+    section{padding:32px 0}
+    h2{font-size:24px}
+    .hero-inner{padding-top:64px;padding-bottom:64px}
+    .hero h1{font-size:32px}
+    .hero .sub{font-size:16px}
+    .nav-links,.nav-cta .nav-phone{display:none}
+    .burger{display:block}
+    .brand-name{font-size:18px}
+    .cards{grid-template-columns:1fr}
+    .gallery{grid-template-columns:1fr}
+    .g-item img{height:240px}
+    .sticky-bar{display:flex}
+    body{padding-bottom:72px}
+    footer{padding-bottom:32px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="The Hairquarters — home">
+      <span class="monogram">HQ</span>
+      <span class="brand-name">The Hair<span>quarters</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#memberships">Memberships</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:+31622108410">+31 6 22108410</a>
+      <a class="btn btn-lime btn-sm" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+  <div class="wrap mobile-menu" id="mobileMenu">
+    <a href="#services">Services</a>
+    <a href="#memberships">Memberships</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Visit</a>
+    <a href="tel:+31622108410">Call +31 6 22108410</a>
+    <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-media" role="img" aria-label="Inside a modern barbershop"></div>
+    <div class="wrap hero-inner">
+      <p class="kicker">Rotterdam &middot; Est. 2025</p>
+      <h1>It&rsquo;s not just a Cut &mdash; it&rsquo;s <em>Full Hair Care.</em></h1>
+      <p class="sub">Cuts &middot; Beards &middot; Braids. Precision haircuts, beard work and braids in a modern space, with sharp execution.</p>
+      <div class="hero-cta">
+        <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+        <a class="btn btn-wa" href="https://wa.me/31622108410?text=Hi%20The%20Hairquarters!%20I%27d%20like%20to%20book%20an%20appointment.">WhatsApp us</a>
+      </div>
+      <div class="hero-chips">
+        <span class="chip"><span class="dot"></span><b>4.9</b>&nbsp;&middot; 76 reviews on Fresha</span>
+        <span class="chip">Stokviswater 14, Rotterdam</span>
+        <span class="chip">Mon&ndash;Fri 10:00&ndash;17:00</span>
+        <a class="chip" href="tel:+31622108410">Call +31 6 22108410</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="notice">Complimentary drink or snack with every visit &mdash; on the house.</div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Services &amp; Pricing</p>
+        <h2>The menu.</h2>
+        <p class="sub">Every service includes a complimentary drink or snack. Prices are fixed &mdash; no surprises at the chair.</p>
+      </div>
+      <div class="cards">
+        <article class="card featured">
+          <p class="tag">Most booked</p>
+          <h3>HQ Haircut</h3>
+          <p>Precision shape, clean fade, finish styling.</p>
+          <div class="meta"><span class="price">&euro;34.99</span><span class="dur">50 min</span></div>
+          <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book haircut</a>
+        </article>
+        <article class="card">
+          <p class="tag">Cut + Beard</p>
+          <h3>HQ Haircut + Beard</h3>
+          <p>Full cut paired with sharp beard contour for a complete refresh.</p>
+          <div class="meta"><span class="price">&euro;39.99</span><span class="dur">50 min</span></div>
+          <a class="btn btn-ghost" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book cut + beard</a>
+        </article>
+        <article class="card">
+          <p class="tag">Beard</p>
+          <h3>HQ Beard Trim + Contour</h3>
+          <p>Comprehensive beard service: shape, line-up and finish.</p>
+          <div class="meta"><span class="price">&euro;24.99</span><span class="dur">45 min</span></div>
+          <a class="btn btn-ghost" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book beard</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIPS -->
+  <section id="memberships" class="memberships">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Memberships</p>
+        <h2>Lock in your chair, monthly.</h2>
+        <p class="sub">Regular cuts at a fixed monthly price. Pick the rhythm that fits you.</p>
+      </div>
+      <div class="cards">
+        <article class="card mem-card">
+          <h3>Haircut &times;2 / month</h3>
+          <p class="freq">Two HQ Haircuts every month.</p>
+          <div><span class="price">&euro;59.99</span> <span class="per">/ month</span></div>
+          <div style="height:24px"></div>
+          <a class="btn btn-ghost" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+        </article>
+        <article class="card mem-card">
+          <h3>Haircut + Beard &times;2 / month</h3>
+          <p class="freq">Two cut + beard sessions every month.</p>
+          <div><span class="price">&euro;69.99</span> <span class="per">/ month</span></div>
+          <div style="height:24px"></div>
+          <a class="btn btn-ghost" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+        </article>
+        <article class="card mem-card featured">
+          <h3>Haircut &times;4 / month</h3>
+          <p class="freq">Four HQ Haircuts every month. Always sharp.</p>
+          <div><span class="price">&euro;119.99</span> <span class="per">/ month</span></div>
+          <div style="height:24px"></div>
+          <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+        </article>
+      </div>
+      <p class="mem-note">Memberships are booked through Fresha, just like single appointments. Ask in the shop or message us on <a href="https://wa.me/31622108410?text=Hi%20The%20Hairquarters!%20I%27d%20like%20to%20ask%20about%20memberships." style="color:var(--lime)">WhatsApp</a> for details.</p>
+    </div>
+  </section>
+
+  <!-- BARBER -->
+  <section id="barber">
+    <div class="wrap barber">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&amp;fit=crop&amp;w=900&amp;q=70" alt="Yandro cutting a client's hair" loading="lazy">
+      <div>
+        <p class="kicker">Your barber</p>
+        <h2>Meet Yandro.</h2>
+        <p>One chair, one standard: every cut finished sharp. Clients come back for the patience, the clean lines and the advice that comes with the cut.</p>
+        <p>Follow the work on Instagram: <a href="https://instagram.com/the_hair_quarters25" style="color:var(--lime)">@the_hair_quarters25</a> and <a href="https://instagram.com/yandro_faded_it" style="color:var(--lime)">@yandro_faded_it</a>.</p>
+        <div class="stat">
+          <div><b>4.9</b><span>on Fresha</span></div>
+          <div><b>76</b><span>reviews</span></div>
+          <div><b>Est. 2025</b><span>Rotterdam</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="work" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">The Work</p>
+        <h2>What you&rsquo;ll walk out with.</h2>
+        <p class="sub">Six signature styles, cut in the chair at Stokviswater 14.</p>
+      </div>
+      <div class="gallery">
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Curly Top + Taper" loading="lazy">
+          <span>Curly Top + Taper</span>
+        </figure>
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Afro + Burst Fade" loading="lazy">
+          <span>Afro + Burst Fade</span>
+        </figure>
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Textured Crop" loading="lazy">
+          <span>Textured Crop</span>
+        </figure>
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Wavy Top + Mid Fade" loading="lazy">
+          <span>Wavy Top + Mid Fade</span>
+        </figure>
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Afro + Sharp Lineup" loading="lazy">
+          <span>Afro + Sharp Lineup</span>
+        </figure>
+        <figure class="g-item">
+          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Buzz + Skin Fade" loading="lazy">
+          <span>Buzz + Skin Fade</span>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews" class="reviews">
+    <div class="wrap">
+      <div class="rev-head">
+        <span class="rev-score">4.9</span>
+        <div>
+          <div class="stars" aria-label="4.9 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="sub">76 reviews on Fresha</p>
+        </div>
+      </div>
+      <div class="sec-head" style="margin-top:16px;margin-bottom:0">
+        <h2>What clients say.</h2>
+      </div>
+      <div class="rev-cards">
+        <article class="rev-card">
+          <blockquote>&ldquo;Bij Lyandro staat klanttevredenheid hoog. Hij neemt z&rsquo;n tijd, denkt mee en geeft tips voor haarverzorging. Wij zijn DIK tevreden! Keep up the good work.&rdquo;</blockquote>
+          <p class="who">Zion Franshetty Brunken</p>
+          <p class="src">Verified Fresha review</p>
+        </article>
+        <article class="rev-card">
+          <blockquote>&ldquo;Het is altijd fijn in de zaak bij Yandro. Hij werkt zorgvuldig, netjes, luistert goed naar de wensen en geeft advies. Hij heeft veel kennis en dat is te merken.&rdquo;</blockquote>
+          <p class="who">Melissa Stoomrat</p>
+          <p class="src">Verified Fresha review</p>
+        </article>
+        <article class="rev-card">
+          <blockquote>&ldquo;Knip nu al vaak hier en het is heel gezellig. Kapper weet zeker wat hij doet. Prijs voor het knippen is Top! Je haren wordt gewoon gewassen en je krijgt drinken en een snack erbij.&rdquo;</blockquote>
+          <p class="who">Blob Djabi</p>
+          <p class="src">Verified Fresha review</p>
+        </article>
+        <article class="rev-card">
+          <blockquote>&ldquo;Good care and attention to detail.&rdquo;</blockquote>
+          <p class="who">Tunde Agbo</p>
+          <p class="src">Verified Fresha review</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Good to know</p>
+        <h2>Before you book.</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>What if I need to cancel?</summary>
+          <p>Please cancel at least 12 hours before your appointment.</p>
+        </details>
+        <details>
+          <summary>Do I pay in advance?</summary>
+          <p>You choose: pay in full online when you book, or pay in store later &mdash; no deposit is required for pay in store.</p>
+        </details>
+        <details>
+          <summary>Is anything included with my visit?</summary>
+          <p>Yes &mdash; a complimentary drink or snack with every grooming experience at The Hairquarters.</p>
+        </details>
+        <details>
+          <summary>How do I book?</summary>
+          <p>Tap any Book button on this page &mdash; it takes you to our Fresha booking page, where you pick your service, date and time. Or message us on <a href="https://wa.me/31622108410?text=Hi%20The%20Hairquarters!%20I%27d%20like%20to%20book%20an%20appointment.">WhatsApp</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit" style="padding-top:0">
+    <div class="wrap visit">
+      <div class="visit-info">
+        <p class="kicker">Visit us</p>
+        <h2>Find the chair.</h2>
+        <div class="v-row">
+          <p class="lbl">Address</p>
+          <p>Stokviswater 14, 3011 DH Rotterdam, Netherlands</p>
+          <p class="muted"><a href="https://www.google.com/maps/search/?api=1&amp;query=Stokviswater+14+3011+DH+Rotterdam">Open in Google Maps &rarr;</a></p>
+        </div>
+        <div class="v-row">
+          <p class="lbl">Hours</p>
+          <p>Monday &ndash; Friday: 10:00 &ndash; 17:00</p>
+          <p class="muted">Saturday &amp; Sunday: closed</p>
+        </div>
+        <div class="v-row">
+          <p class="lbl">Call or WhatsApp</p>
+          <p><a href="tel:+31622108410">+31 6 22108410</a></p>
+          <p class="muted">Tap to call, or message us on <a href="https://wa.me/31622108410?text=Hi%20The%20Hairquarters!%20I%27d%20like%20to%20book%20an%20appointment.">WhatsApp</a>.</p>
+        </div>
+        <div class="v-row">
+          <p class="lbl">Instagram</p>
+          <div class="ig-links">
+            <a href="https://instagram.com/the_hair_quarters25">@the_hair_quarters25</a>
+            <a href="https://instagram.com/yandro_faded_it">@yandro_faded_it</a>
+          </div>
+        </div>
+        <div style="margin-top:24px">
+          <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book your chair</a>
+        </div>
+      </div>
+      <div class="map">
+        <iframe title="Map — The Hairquarters, Stokviswater 14, Rotterdam" src="https://www.google.com/maps?q=Stokviswater+14,+3011+DH+Rotterdam,+Netherlands&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <span class="brand-name">The Hair<span style="color:var(--lime)">quarters</span></span>
+        <p>Premium barbershop for precision haircuts, beard work and braids. Modern space, sharp execution.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#services">Services</a>
+        <a href="#memberships">Memberships</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#visit">Visit</a>
+      </div>
+      <div class="foot-links">
+        <a href="tel:+31622108410">+31 6 22108410</a>
+        <a href="https://instagram.com/the_hair_quarters25">Instagram</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Stokviswater+14+3011+DH+Rotterdam">Google Maps</a>
+      </div>
+    </div>
+    <small>The Hairquarters &middot; Stokviswater 14, 3011 DH Rotterdam &middot; Est. 2025 &middot; Mon&ndash;Fri 10:00&ndash;17:00</small>
+  </div>
+</footer>
+
+<div class="sticky-bar">
+  <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book now</a>
+  <a class="btn btn-wa" href="https://wa.me/31622108410?text=Hi%20The%20Hairquarters!%20I%27d%20like%20to%20book%20an%20appointment.">WhatsApp</a>
+</div>
+
+<script>
+(function(){
+  var burger=document.getElementById('burger');
+  var menu=document.getElementById('mobileMenu');
+  burger.addEventListener('click',function(){
+    var open=menu.classList.toggle('open');
+    burger.setAttribute('aria-expanded',open?'true':'false');
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');});
+  });
+})();
+</script>
+
+</body>
+</html>
