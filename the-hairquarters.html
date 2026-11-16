@@ -73,6 +73,7 @@
     display:flex;align-items:center;justify-content:center;
     font-weight:900;font-size:16px;letter-spacing:-0.02em;
   }
+  .brand-logo{width:40px;height:40px;flex-shrink:0;border-radius:8px;display:block}
   .brand-name{font-weight:800;font-size:18px;line-height:1.2;white-space:nowrap}
   .brand-name span{color:var(--lime)}
   .nav-links{display:flex;gap:24px;margin-left:auto}
@@ -103,7 +104,7 @@
   .hero{position:relative;padding:0;overflow:hidden}
   .hero-media{
     position:absolute;inset:0;
-    background:url("https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1800&q=70") center/cover no-repeat;
+    background:url("assets/the-hairquarters/shop-interior.jpg") center/cover no-repeat;
   }
   .hero-media::after{
     content:"";position:absolute;inset:0;
@@ -136,6 +137,10 @@
   .card{
     background:var(--card);border:1px solid var(--line);border-radius:16px;
     padding:24px;display:flex;flex-direction:column;
+  }
+  .card-photo{
+    width:calc(100% + 48px);max-width:none;height:200px;object-fit:cover;object-position:center 30%;
+    margin:-24px -24px 16px;border-radius:16px 16px 0 0;
   }
   .card .tag{
     font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
@@ -244,7 +249,8 @@
     .cards{grid-template-columns:1fr 1fr}
     .gallery{grid-template-columns:1fr 1fr}
     .rev-cards{grid-template-columns:1fr}
-    .barber,.visit{grid-template-columns:1fr}
+    .barber,.visit{grid-template-columns:minmax(0,1fr)}
+    .barber img{height:320px;min-width:0}
   }
   @media (max-width: 640px){
     .wrap{padding:0 14px}
@@ -270,7 +276,8 @@
 <header>
   <div class="wrap nav">
     <a class="brand" href="#top" aria-label="The Hairquarters — home">
-      <span class="monogram">HQ</span>
+      <img class="brand-logo" src="assets/the-hairquarters/logo.png" alt="The Hairquarters logo" onerror="this.style.display='none';document.getElementById('brandMark').style.display='flex'">
+      <span class="monogram" id="brandMark" style="display:none">HQ</span>
       <span class="brand-name">The Hair<span>quarters</span></span>
     </a>
     <nav class="nav-links" aria-label="Main">
@@ -330,6 +337,7 @@
       </div>
       <div class="cards">
         <article class="card featured">
+          <img class="card-photo" src="assets/the-hairquarters/cut-textured-crop.jpg" alt="Textured Crop — the HQ Haircut" loading="lazy">
           <p class="tag">Most booked</p>
           <h3>HQ Haircut</h3>
           <p>Precision shape, clean fade, finish styling.</p>
@@ -337,6 +345,7 @@
           <a class="btn btn-lime" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book haircut</a>
         </article>
         <article class="card">
+          <img class="card-photo" src="assets/the-hairquarters/cut-wavy-fade.jpg" alt="Wavy Top + Mid Fade — the HQ Haircut + Beard" loading="lazy">
           <p class="tag">Cut + Beard</p>
           <h3>HQ Haircut + Beard</h3>
           <p>Full cut paired with sharp beard contour for a complete refresh.</p>
@@ -344,6 +353,7 @@
           <a class="btn btn-ghost" href="https://www.fresha.com/en-GB/a/the-hairquarters-rotterdam-stokviswater-14-hkas0cb9/booking?allOffer=true&amp;menu=true&amp;pId=2534115">Book cut + beard</a>
         </article>
         <article class="card">
+          <img class="card-photo" src="assets/the-hairquarters/cut-afro-shape.jpg" alt="Afro + Sharp Lineup — sharp line-up and contour work" loading="lazy">
           <p class="tag">Beard</p>
           <h3>HQ Beard Trim + Contour</h3>
           <p>Comprehensive beard service: shape, line-up and finish.</p>
@@ -392,7 +402,7 @@
   <!-- BARBER -->
   <section id="barber">
     <div class="wrap barber">
-      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&amp;fit=crop&amp;w=900&amp;q=70" alt="Yandro cutting a client's hair" loading="lazy">
+      <img src="assets/the-hairquarters/shop-interior.jpg" alt="Inside The Hairquarters barbershop" loading="lazy">
       <div>
         <p class="kicker">Your barber</p>
         <h2>Meet Yandro.</h2>
@@ -417,27 +427,27 @@
       </div>
       <div class="gallery">
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Curly Top + Taper" loading="lazy">
+          <img src="assets/the-hairquarters/cut-curly-fade.jpg" alt="Curly Top + Taper" loading="lazy">
           <span>Curly Top + Taper</span>
         </figure>
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Afro + Burst Fade" loading="lazy">
+          <img src="assets/the-hairquarters/cut-afro-taper.jpg" alt="Afro + Burst Fade" loading="lazy">
           <span>Afro + Burst Fade</span>
         </figure>
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Textured Crop" loading="lazy">
+          <img src="assets/the-hairquarters/cut-textured-crop.jpg" alt="Textured Crop" loading="lazy">
           <span>Textured Crop</span>
         </figure>
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Wavy Top + Mid Fade" loading="lazy">
+          <img src="assets/the-hairquarters/cut-wavy-fade.jpg" alt="Wavy Top + Mid Fade" loading="lazy">
           <span>Wavy Top + Mid Fade</span>
         </figure>
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Afro + Sharp Lineup" loading="lazy">
+          <img src="assets/the-hairquarters/cut-afro-shape.jpg" alt="Afro + Sharp Lineup" loading="lazy">
           <span>Afro + Sharp Lineup</span>
         </figure>
         <figure class="g-item">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=crop&amp;w=800&amp;q=70" alt="Buzz + Skin Fade" loading="lazy">
+          <img src="assets/the-hairquarters/cut-buzz-fade.jpg" alt="Buzz + Skin Fade" loading="lazy">
           <span>Buzz + Skin Fade</span>
         </figure>
       </div>
