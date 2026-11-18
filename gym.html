@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge Fitness Studio — Gym &amp; Fitness Studio in Copenhagen</title>
+<meta name="description" content="Forge Fitness Studio — a friendly gym and fitness studio in Copenhagen. Strength, HIIT, yoga, cycling and boxing classes, plus personal training. Book a free trial class in under a minute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf7f1;--card:#fff;--ink:#221d17;--muted:#6f655a;--line:#e8dfd2;--tan:#8a6d2f;--tan-d:#6d551f;--sage:#7a8b6f;--gold:#c9a86a;--radius:16px;--shadow:0 10px 30px rgba(34,29,23,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+h1,h2,h3,.serif{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.15}
+img{display:block;max-width:100%}
+a{color:var(--tan-d)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:11px;font-weight:700;color:var(--tan)}
+h2{font-size:clamp(28px,4vw,40px);margin:6px 0 10px}
+.lead{color:var(--muted);max-width:640px}
+section{padding:64px 0}
+.btn{display:inline-block;background:var(--tan);color:#fff;font-weight:600;border:0;border-radius:999px;padding:13px 26px;cursor:pointer;text-decoration:none;font-size:15px}
+.btn:hover{background:var(--tan-d)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.light{background:#fff;color:var(--ink)}
+/* header */
+header{position:sticky;top:0;z-index:40;background:rgba(250,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;padding-top:8px;padding-bottom:8px}
+.logo{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;letter-spacing:.14em;text-decoration:none;color:var(--ink);line-height:1.15}
+.logo small{display:block;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.3em;color:var(--tan);font-weight:700}
+nav.main{display:flex;gap:22px}
+nav.main a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
+nav.main a:hover{color:var(--tan-d)}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+header .btn{white-space:nowrap;flex-shrink:0}
+.nav-cta .btn{padding:9px 18px;font-size:14px}
+.tel-link{font-weight:600;color:var(--ink);text-decoration:none;font-size:14px}
+.burger{display:none;background:none;border:0;font-size:26px;cursor:pointer}
+/* hero */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;padding:0}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.62))}
+.hero-in{position:relative;z-index:2;padding:70px 20px 84px;max-width:1120px;margin:0 auto;width:100%}
+.hero h1{font-size:clamp(44px,7vw,76px);color:#fff}
+.hero p{max-width:560px;font-size:18px;opacity:.95;margin:14px 0 24px}
+.hero .btns{display:flex;gap:12px;flex-wrap:wrap}
+.hero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;font-size:14px}
+.hero .meta span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:999px}
+/* trust strip */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:26px 0}
+.trust div{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center}
+.trust b{font-size:22px;font-family:"Cormorant Garamond",serif}
+.trust span{display:block;font-size:13px;color:var(--muted)}
+/* classes */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.svc-cat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.svc-cat h3{font-size:24px;margin-bottom:4px}
+.svc-cat p{font-size:13px;color:var(--muted);margin-bottom:14px}
+.svc{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;border-radius:8px}
+.svc:hover{background:#fdfaf5}
+.svc.sel{background:#f6ead9;outline:2px solid var(--tan)}
+.svc b{font-size:15px}
+.svc small{display:block;color:var(--muted);font-size:13px}
+.svc .price{text-align:right;white-space:nowrap;font-weight:700}
+.svc .price small{display:block;color:var(--muted);font-weight:400}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+/* trainers */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+.person{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.person img{width:100%;height:220px;object-fit:cover}
+.person div{padding:16px}
+.person h3{font-size:21px}
+.person p{font-size:13px;color:var(--muted)}
+.person .btn{margin-top:12px;padding:9px 16px;font-size:13px;width:100%;text-align:center}
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.gal img{width:100%;height:240px;object-fit:cover;border-radius:14px}
+.gal img:nth-child(1){grid-row:span 2;height:492px}
+/* timetable */
+.tt{width:100%;border-collapse:collapse;margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.tt th,.tt td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px;text-align:left}
+.tt th{background:#221d17;color:#f5efe6;font-weight:600}
+.tt td:last-child{text-align:right;color:var(--muted)}
+/* memberships */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.plan.hot{outline:2px solid var(--tan);background:#fdf6e8}
+.plan h3{font-size:26px}
+.plan .price{font-size:32px;font-weight:700;margin:8px 0}
+.plan .price small{font-size:14px;color:var(--muted);font-weight:400}
+.plan ul{list-style:none;margin:14px 0}
+.plan li{padding:6px 0;font-size:14px;border-top:1px solid var(--line)}
+.plan li:first-child{border-top:0}
+.plan .btn{width:100%;text-align:center;margin-top:8px}
+/* reviews */
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.rev{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.rev .stars{color:#d99a2b;letter-spacing:2px}
+.rev p{font-family:"Cormorant Garamond",serif;font-size:20px;margin:10px 0}
+.rev small{color:var(--muted)}
+/* booking */
+#booking{background:#221d17;color:#f5efe6}
+#booking h2{color:#fff}
+#booking .lead{color:#cfc4b4}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.step{flex:1;min-width:120px;text-align:center;font-size:13px;padding:10px;border-radius:999px;background:#33291f;color:#cfc4b4}
+.step.on{background:var(--tan);color:#fff;font-weight:600}
+.panel{background:#fff;color:var(--ink);border-radius:var(--radius);padding:26px}
+.panel h3{font-size:26px;margin-bottom:14px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:#fff;text-align:left;width:100%;font:inherit}
+.opt:hover{border-color:var(--tan)}
+.opt.sel{border-color:var(--tan);background:#fdf3e3;outline:2px solid var(--tan)}
+.opt b{display:block}
+.opt small{color:var(--muted)}
+.slots{display:flex;gap:8px;flex-wrap:wrap}
+.slot{border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;background:#fff;cursor:pointer;font:inherit}
+.slot.sel{background:var(--tan);color:#fff;border-color:var(--tan)}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;margin:6px 0 12px;background:#fff}
+label{font-size:13px;font-weight:600;color:var(--muted)}
+.wizard-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.confirm{text-align:center;padding:10px}
+.confirm .tick{font-size:52px}
+.confirm .ref{font-size:20px;font-weight:700;background:#f6ead9;border:1px dashed var(--tan);border-radius:10px;padding:10px;margin:14px auto;max-width:340px}
+/* trial / friend boxes */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+/* contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px;align-items:start}
+.map{border:0;width:100%;height:320px;border-radius:var(--radius)}
+.hours{width:100%;border-collapse:collapse;margin-top:10px}
+.hours td{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hours td:last-child{text-align:right}
+details{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:8px 0;background:#fff}
+summary{cursor:pointer;font-weight:600}
+footer{background:#221d17;color:#cfc4b4;padding:44px 0 110px}
+footer a{color:#f5efe6}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}
+.foot-grid h4{color:#fff;font-family:"Cormorant Garamond",serif;font-size:20px;margin-bottom:10px}
+/* sticky mobile bar */
+.stickybar{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;display:none;gap:8px}
+.stickybar a{flex:1;text-align:center;padding:13px 8px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.stickybar .b-book{background:var(--tan);color:#fff}
+.stickybar .b-call{background:#fff;color:var(--ink)}
+.stickybar .b-wa{background:#25d366;color:#fff}
+.float-wa{position:fixed;right:16px;bottom:84px;z-index:50;background:#25d366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+@media(max-width:900px){
+  .svc-grid,.team,.reviews,.gal,.plans{grid-template-columns:repeat(2,1fr)}
+  .gal img:nth-child(1){grid-row:auto;height:240px}
+  .trust{grid-template-columns:repeat(2,1fr)}
+  .two,.contact-grid,.foot-grid{grid-template-columns:1fr}
+  nav.main{display:none}
+  .burger{display:block}
+  nav.main.open{display:flex;position:absolute;top:100%;left:0;right:0;background:var(--bg);flex-direction:column;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .tel-link{display:none}
+}
+@media(max-width:640px){
+  .stickybar{display:flex}
+  .wrap{padding:0 14px}
+  .nav{gap:8px;min-height:56px}
+  .logo{font-size:18px;letter-spacing:.04em}
+  .logo small{font-size:8px;letter-spacing:.2em}
+  header .btn{padding:8px 12px;font-size:13px}
+  .burger{font-size:22px;flex-shrink:0;width:36px}
+  section{padding:48px 0}
+  .opts{grid-template-columns:1fr}
+  .svc-grid,.team,.reviews,.gal,.plans{grid-template-columns:1fr}
+  footer{padding-bottom:130px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span data-biz="name">Forge Fitness Studio</span><small>GYM &nbsp;·&nbsp; CLASSES &nbsp;·&nbsp; <span data-biz="city">COPENHAGEN</span></small></a>
+    <nav class="main" id="mainnav">
+      <a href="#classes">Classes &amp; Prices</a><a href="#timetable">Timetable</a><a href="#membership">Membership</a><a href="#trainers">Trainers</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="tel-link" data-tel href="tel:+4533123456" data-biz="phone">+45 33 12 34 56</a>
+      <a class="btn" href="#booking">Free trial</a>
+      <button class="burger" aria-label="Menu" onclick="document.getElementById('mainnav').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <img class="bg" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=70" alt="Inside the gym" fetchpriority="high">
+  <div class="hero-in">
+    <p class="eyebrow" style="color:#f3d9b0">Gym &amp; fitness studio — <span data-biz="city">Copenhagen</span></p>
+    <h1>Stronger,<br>one class at a time.</h1>
+    <p>Strength, HIIT, yoga, cycling and boxing — with coaches who actually watch your form. First class is free, no card needed, at <span data-biz="name">Forge Fitness Studio</span>.</p>
+    <div class="btns">
+      <a class="btn" href="#booking">Book a free trial class</a>
+      <a class="btn light" href="#classes">See classes &amp; prices</a>
+    </div>
+    <div class="meta"><span>★ 4.9 · 350+ Google reviews</span><span>First class free</span><span>No joining fee · Cancel anytime</span></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="trust">
+    <div><b>8 yrs</b><span>serving <span data-biz="city">Copenhagen</span></span></div>
+    <div><b>4.9 ★</b><span>350+ Google reviews</span></div>
+    <div><b>40+ classes</b><span>every week, all levels</span></div>
+    <div><b>€29</b><span>memberships from — prices shown upfront</span></div>
+  </div>
+</div>
+
+<section id="classes"><div class="wrap">
+  <p class="eyebrow">Classes &amp; prices</p>
+  <h2>Pick a class, not a commitment</h2>
+  <p class="lead">Every class shows its duration and drop-in price before you book. Members train unlimited — the drop-in price is only for trying a class once.</p>
+  <div class="svc-grid">
+    <div class="svc-cat"><h3>Strength &amp; conditioning</h3><p>Coached sessions on the gym floor, small groups.</p>
+      <div class="svc" data-service="Strength Foundations" data-price="15" data-min="60"><div><b>Strength Foundations</b><small>Squat, hinge, push &amp; pull — beginners welcome</small></div><div class="price">from €15<small>60 min</small></div></div>
+      <div class="svc" data-service="Olympic Lifting" data-price="18" data-min="60"><div><b>Olympic Lifting</b><small>Snatch &amp; clean &amp; jerk technique, coached</small></div><div class="price">from €18<small>60 min</small></div></div>
+      <div class="svc" data-service="Personal Training" data-price="60" data-min="60"><div><b>Personal Training</b><small>One-to-one, your goals, your programme</small></div><div class="price">from €60<small>60 min</small></div></div>
+      <div class="svc" data-service="Open Gym Day Pass" data-price="12" data-min="120"><div><b>Open Gym Day Pass</b><small>Full gym floor, no class — train your own way</small></div><div class="price">from €12<small>all day</small></div></div>
+    </div>
+    <div class="svc-cat"><h3>Cardio &amp; HIIT</h3><p>High energy, all fitness levels, scaled to you.</p>
+      <div class="svc" data-service="HIIT Blast" data-price="15" data-min="45"><div><b>HIIT Blast</b><small>45 minutes of intervals — all levels</small></div><div class="price">from €15<small>45 min</small></div></div>
+      <div class="svc" data-service="Indoor Cycling" data-price="15" data-min="45"><div><b>Indoor Cycling</b><small>Rhythm rides with music, low impact</small></div><div class="price">from €15<small>45 min</small></div></div>
+      <div class="svc" data-service="Boxing Fundamentals" data-price="18" data-min="60"><div><b>Boxing Fundamentals</b><small>Pads, footwork &amp; bag work — gloves provided</small></div><div class="price">from €18<small>60 min</small></div></div>
+      <div class="svc" data-service="Sprint &amp; Conditioning" data-price="15" data-min="45"><div><b>Sprint &amp; Conditioning</b><small>Track-style speed work, outdoor in summer</small></div><div class="price">from €15<small>45 min</small></div></div>
+    </div>
+    <div class="svc-cat"><h3>Mind &amp; mobility</h3><p>Slower sessions that keep you moving well.</p>
+      <div class="svc" data-service="Power Yoga" data-price="15" data-min="60"><div><b>Power Yoga</b><small>Strong flow, breath-led, all levels</small></div><div class="price">from €15<small>60 min</small></div></div>
+      <div class="svc" data-service="Pilates Reformer" data-price="20" data-min="50"><div><b>Pilates Reformer</b><small>Small groups, max 8 — book early</small></div><div class="price">from €20<small>50 min</small></div></div>
+      <div class="svc" data-service="Mobility &amp; Recovery" data-price="15" data-min="45"><div><b>Mobility &amp; Recovery</b><small>Stretch, breathe, reset — great after heavy days</small></div><div class="price">from €15<small>45 min</small></div></div>
+      <div class="svc" data-service="Yin Yoga" data-price="15" data-min="60"><div><b>Yin Yoga</b><small>Slow, deep holds — Sunday evenings</small></div><div class="price">from €15<small>60 min</small></div></div>
+    </div>
+  </div>
+  <p class="note">Tap any class above to book it as your free trial. Your first class is free — if you join, the trial counts as your first session.</p>
+</div></section>
+
+<section id="timetable" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <p class="eyebrow">Weekly timetable</p>
+  <h2>This week's classes</h2>
+  <p class="lead">The full week, no login needed. Tap a class in the list above to book a spot — full classes show as booked in the booking flow.</p>
+  <table class="tt">
+    <tr><th>Monday</th><td>07:30 HIIT Blast · 12:15 Power Yoga · 17:30 Strength Foundations · 18:30 Indoor Cycling</td><td>06:30 – 21:00</td></tr>
+    <tr><th>Tuesday</th><td>07:30 Indoor Cycling · 12:15 Mobility &amp; Recovery · 17:30 Boxing Fundamentals · 19:00 Pilates Reformer</td><td>06:30 – 21:00</td></tr>
+    <tr><th>Wednesday</th><td>07:30 Strength Foundations · 12:15 HIIT Blast · 17:30 Power Yoga · 18:30 Sprint &amp; Conditioning</td><td>06:30 – 21:00</td></tr>
+    <tr><th>Thursday</th><td>07:30 Power Yoga · 12:15 Indoor Cycling · 17:30 Olympic Lifting · 18:30 HIIT Blast</td><td>06:30 – 21:00</td></tr>
+    <tr><th>Friday</th><td>07:30 HIIT Blast · 12:15 Strength Foundations · 17:30 Boxing Fundamentals · 18:30 Yin Yoga</td><td>06:30 – 21:00</td></tr>
+    <tr><th>Saturday</th><td>09:00 Strength Foundations · 10:00 Indoor Cycling · 11:00 Pilates Reformer · 12:00 Open Gym</td><td>08:00 – 18:00</td></tr>
+    <tr><th>Sunday</th><td>10:00 Power Yoga · 11:00 Mobility &amp; Recovery · 17:00 Yin Yoga</td><td>09:00 – 17:00</td></tr>
+  </table>
+  <p class="note">Personal training runs all week by appointment — pick a trainer below and choose any open slot.</p>
+</div></section>
+
+<section id="membership"><div class="wrap">
+  <p class="eyebrow">Membership</p>
+  <h2>Simple prices, no small print</h2>
+  <p class="lead">Three plans, no joining fee, cancel with one month's notice. Every plan starts with a free trial class — join only if you like it.</p>
+  <div class="plans">
+    <div class="plan"><h3>Basic</h3><div class="price">€29<small> / month</small></div>
+      <ul><li>Off-peak gym access (before 16:00)</li><li>1 group class per week</li><li>Locker &amp; showers</li><li>App with workout plans</li></ul>
+      <a class="btn ghost" href="#booking">Start with a free trial</a></div>
+    <div class="plan hot"><h3>Standard</h3><div class="price">€49<small> / month</small></div>
+      <p style="font-size:13px;font-weight:700;color:var(--tan)">MOST POPULAR</p>
+      <ul><li>Unlimited gym access, all hours</li><li>2 group classes per week</li><li>Sauna access</li><li>1 guest pass per month</li><li>App with workout plans</li></ul>
+      <a class="btn" href="#booking">Start with a free trial</a></div>
+    <div class="plan"><h3>Premium</h3><div class="price">€89<small> / month</small></div>
+      <ul><li>Everything in Standard</li><li>Unlimited group classes</li><li>1 personal training session / month</li><li>2 guest passes per month</li><li>Nutrition starter consult</li></ul>
+      <a class="btn ghost" href="#booking">Start with a free trial</a></div>
+  </div>
+  <p class="note">Prices include VAT. Students and under-25s get 20% off any plan — ask at the front desk.</p>
+</div></section>
+
+<section id="trainers" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <p class="eyebrow">Our trainers</p>
+  <h2>Coaches who watch your form</h2>
+  <p class="lead">Every trainer has their own specialty — and their own Book button.</p>
+  <div class="team">
+    <div class="person"><img loading="lazy" src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=800&q=70" alt="Jonas, head coach"><div><h3>Jonas</h3><p>Head coach · 10 yrs · Strength &amp; HIIT</p><button class="btn" onclick="bookWith('Jonas')">Book with Jonas</button></div></div>
+    <div class="person"><img loading="lazy" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=70" alt="Freya, yoga coach"><div><h3>Freya</h3><p>Yoga &amp; Pilates · 8 yrs · Mobility &amp; breath</p><button class="btn" onclick="bookWith('Freya')">Book with Freya</button></div></div>
+    <div class="person"><img loading="lazy" src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=70" alt="Magnus, boxing coach"><div><h3>Magnus</h3><p>Boxing coach · 9 yrs · Conditioning &amp; pads</p><button class="btn" onclick="bookWith('Magnus')">Book with Magnus</button></div></div>
+    <div class="person"><img loading="lazy" src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=70" alt="Sofie, cycling coach"><div><h3>Sofie</h3><p>Cycling &amp; endurance · 7 yrs · Rhythm rides</p><button class="btn" onclick="bookWith('Sofie')">Book with Sofie</button></div></div>
+  </div>
+  <p class="note">Not sure who to pick? Choose “First available” in the booking flow — we will match you with the earliest free trainer for your class.</p>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p>
+  <h2>The gym, as it is</h2>
+  <div class="gal">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=1200&q=70" alt="Coached training session">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=800&q=70" alt="Barbell training">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=800&q=70" alt="Indoor cycling class">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=70" alt="Training on the gym floor">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=70" alt="Deadlift training">
+  </div>
+  <p class="note">Come and look around any time during opening hours — no appointment needed for a tour.</p>
+</div></section>
+<section id="booking"><div class="wrap">
+  <p class="eyebrow" style="color:#f3d9b0">Book a free trial</p>
+  <h2>Book your free class in under a minute</h2>
+  <p class="lead">Class → trainer → date &amp; time → your details. Free, no card needed, and no obligation to join.</p>
+  <div class="steps" id="steps">
+    <div class="step on" data-step="1">1 · Class</div><div class="step" data-step="2">2 · Trainer</div><div class="step" data-step="3">3 · Date &amp; time</div><div class="step" data-step="4">4 · Your details</div>
+  </div>
+  <div class="panel" id="bookpanel">
+    <div class="bstep" data-bstep="1">
+      <h3>Choose a class</h3>
+      <div class="opts" id="serviceOpts"></div>
+    </div>
+    <div class="bstep" data-bstep="2" hidden>
+      <h3>Choose your trainer</h3>
+      <div class="opts" id="stylistOpts"></div>
+    </div>
+    <div class="bstep" data-bstep="3" hidden>
+      <h3>Pick a date &amp; time</h3>
+      <label for="bdate">Date</label><input type="date" id="bdate" onchange="sel.date=this.value;sel.time='';renderSlots();">
+      <label>Available times — crossed-out times are already booked</label>
+      <div class="slots" id="slots"></div>
+      <p class="note" id="slotStatus">Times load live from the studio's booking calendar.</p>
+    </div>
+    <div class="bstep" data-bstep="4" hidden>
+      <h3>Your details</h3>
+      <div id="summary" style="background:#faf7f1;border-radius:10px;padding:14px;margin-bottom:14px;font-size:14px"></div>
+      <label for="cname">Full name</label><input id="cname" placeholder="e.g. Anna Jensen" autocomplete="name">
+      <label for="cphone">Phone</label><input id="cphone" type="tel" placeholder="+45 12 34 56 78" autocomplete="tel">
+      <label for="cemail">Email</label><input id="cemail" type="email" placeholder="you@example.com" autocomplete="email">
+      <label for="cnotes">Notes (optional)</label><textarea id="cnotes" rows="2" placeholder="e.g. first time training, knee injury, prefer mornings"></textarea>
+      <p class="note">By confirming you agree to our cancellation policy: free up to 12h before, after that your free trial is used up. We will confirm by WhatsApp / SMS.</p>
+    </div>
+    <div class="bstep" data-bstep="5" hidden>
+      <div class="confirm"><div class="tick">✓</div><h3>You are booked in!</h3>
+      <p id="confirmText"></p><div class="ref" id="bookRef"></div>
+      <p class="note">Your trial class is saved with the studio. Tap WhatsApp below to send them a confirmation message, or just give your booking ref when you arrive. Bring water, indoor shoes and a towel — everything else is here.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+        <a class="btn" data-wa href="#" target="_blank" rel="noopener">Confirm on WhatsApp</a>
+        <button class="btn ghost" onclick="downloadICS()">Add to calendar (.ics)</button>
+        <button class="btn ghost" onclick="resetBooking()">Book another</button>
+      </div></div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn ghost" id="backBtn" onclick="prevStep()" disabled>← Back</button>
+      <button class="btn" id="nextBtn" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div></section>
+
+<section id="reviews"><div class="wrap">
+  <p class="eyebrow">Reviews</p>
+  <h2>Loved by <span data-biz="city">Copenhagen</span></h2>
+  <div class="reviews">
+    <div class="rev"><div class="stars">★★★★★</div><p>“Came for one free HIIT class and stayed two years. Jonas actually corrects your form instead of just counting reps.”</p><small>— Mette L. · Google review</small></div>
+    <div class="rev"><div class="stars">★★★★★</div><p>“The 07:30 cycling class is the best start to a workday. Small classes, good music, and the price is exactly what the site says.”</p><small>— Anders B. · Google review</small></div>
+    <div class="rev"><div class="stars">★★★★★</div><p>“As a complete beginner I was nervous, but Freya's yoga class was calm and welcoming. I have already booked my next four sessions.”</p><small>— Sara K. · Google review</small></div>
+  </div>
+</div></section>
+
+<section><div class="wrap"><div class="two">
+  <div class="box"><p class="eyebrow">Free trial</p><h3 class="serif" style="font-size:28px">Try us before you join</h3>
+    <p style="color:var(--muted);font-size:14px">One free class, any class on the timetable — plus a tour of the gym floor and a chat with a trainer about your goals.</p>
+    <a class="btn" href="#booking" style="margin-top:14px">Book my free class</a>
+  </div>
+  <div class="box"><p class="eyebrow">Bring a friend</p><h3 class="serif" style="font-size:28px">Train together, first class free</h3>
+    <p style="color:var(--muted);font-size:14px">Members can bring a friend to any class, free, once a month. Your friend books the same way — just add their name in the notes.</p>
+    <a class="btn ghost" data-wa href="#" target="_blank" rel="noopener" style="margin-top:14px">Ask on WhatsApp</a>
+  </div>
+</div></div></section>
+
+<section id="contact"><div class="wrap">
+  <p class="eyebrow">Visit us</p><h2>Contact &amp; hours</h2>
+  <div class="contact-grid">
+    <div>
+      <p><strong data-biz="name">Forge Fitness Studio</strong><br><span data-biz="address">Bredgade 24, 1260 Copenhagen K</span><br>
+      <a data-tel href="tel:+4533123456" data-biz="phone">+45 33 12 34 56</a> · <a href="mailto:hello@forgefitness.example">hello@forgefitness.example</a></p>
+      <table class="hours"><tr><td>Monday – Friday</td><td>6:30 – 21:00</td></tr><tr><td>Saturday</td><td>8:00 – 18:00</td></tr><tr><td>Sunday</td><td>9:00 – 17:00</td></tr></table>
+      <p class="note">Metro: Kongens Nytorv (5 min walk) · Bus 1A, 26 to Bredgade · Bike parking at the door.</p>
+      <h3 style="margin-top:22px">Send us a message</h3>
+      <form id="contactForm"><label for="fname">Name</label><input id="fname" required placeholder="Your name">
+      <label for="femail">Email</label><input id="femail" type="email" required placeholder="you@example.com">
+      <label for="fmsg">Message</label><textarea id="fmsg" rows="3" required placeholder="Hi, I'd like to ask about…"></textarea>
+      <button class="btn" type="submit" style="width:100%">Send via email</button>
+      <p class="note" id="contactDone"></p>
+      <a class="btn ghost" data-wa href="#" target="_blank" rel="noopener" style="width:100%;text-align:center;margin-top:8px">Or message us on WhatsApp</a></form>
+    </div>
+    <div>
+      <iframe class="map" title="Map" loading="lazy" src="https://maps.google.com/maps?q=Copenhagen&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+      <h3 style="margin-top:22px">Questions</h3>
+      <details><summary>Do I need to be fit already to join?</summary><p style="margin-top:8px;font-size:14px">No — most of our members started as beginners. Every class is scaled to your level, and your first class is free so you can try it without pressure.</p></details>
+      <details><summary>What should I bring to my first class?</summary><p style="margin-top:8px;font-size:14px">Water, indoor shoes and a towel. We provide mats, gloves for boxing, and lockers with showers.</p></details>
+      <details><summary>Can I freeze my membership?</summary><p style="margin-top:8px;font-size:14px">Yes — up to 4 weeks a year, free, for holidays or injury. Just tell us at the front desk or on WhatsApp.</p></details>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><div class="foot-grid">
+  <div><h4 data-biz="name">Forge Fitness Studio</h4><p style="font-size:14px">A friendly gym and fitness studio in <span data-biz="city">Copenhagen</span>. Strength, HIIT, yoga, cycling and boxing — with prices shown upfront and a free trial class.</p><p style="font-size:13px;margin-top:10px">Demo template — names, prices and photos are placeholders to swap for the real business.</p></div>
+  <div><h4>Visit</h4><p style="font-size:14px"><span data-biz="address">Bredgade 24, 1260 Copenhagen K</span><br><a data-tel href="tel:+4533123456" data-biz="phone">+45 33 12 34 56</a><br>Mon–Fri 6:30–21:00 · Sat 8:00–18:00 · Sun 9:00–17:00</p></div>
+  <div><h4>Follow</h4><p style="font-size:14px"><a href="#top">Instagram</a><br><a href="#top">Facebook</a><br><a href="#booking">Book a free trial</a><br><a href="#contact">Contact</a></p></div>
+</div></div></footer>
+
+<div class="stickybar">
+  <a class="b-book" href="#booking">Free trial</a>
+  <a class="b-call" data-tel href="tel:+4533123456">Call</a>
+  <a class="b-wa" data-wa href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<a class="float-wa" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">✆</a>
+
+<script>
+/* ---- Personalisation: ?name= &phone= &address= &city= ---- */
+const DEFAULTS={name:"Forge Fitness Studio",phone:"+45 33 12 34 56",address:"Bredgade 24, 1260 Copenhagen K",city:"Copenhagen"};
+const q=new URLSearchParams(location.search);
+const BIZ={
+  name:q.get("name")||DEFAULTS.name,
+  phone:q.get("phone")||DEFAULTS.phone,
+  address:q.get("address")||DEFAULTS.address,
+  city:q.get("city")||DEFAULTS.city
+};
+function digits(p){return (p||"").replace(/\D/g,"")}
+function waLink(msg){return "https://wa.me/"+digits(BIZ.phone)+"?text="+encodeURIComponent(msg)}
+function applyBiz(){
+  document.title=BIZ.name+" — Gym & Fitness Studio in "+BIZ.city;
+  document.querySelectorAll('[data-biz="name"]').forEach(e=>e.textContent=BIZ.name);
+  document.querySelectorAll('[data-biz="city"]').forEach(e=>e.textContent=BIZ.city);
+  document.querySelectorAll('[data-biz="address"]').forEach(e=>e.textContent=BIZ.address);
+  document.querySelectorAll('[data-biz="phone"]').forEach(e=>{e.textContent=BIZ.phone; if(e.hasAttribute("data-tel")) e.href="tel:+"+digits(BIZ.phone);});
+  document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink("Hi "+BIZ.name+"! I'd like to book a free trial class.");});
+  const map=document.querySelector(".map"); if(map) map.src="https://maps.google.com/maps?q="+encodeURIComponent(BIZ.city+" "+BIZ.address)+"&z=14&output=embed";
+}
+applyBiz();
+/* ---- Booking wizard ---- */
+const SERVICES=[
+ {n:"HIIT Blast",p:15,m:45},{n:"Strength Foundations",p:15,m:60},{n:"Power Yoga",p:15,m:60},
+ {n:"Indoor Cycling",p:15,m:45},{n:"Boxing Fundamentals",p:18,m:60},{n:"Pilates Reformer",p:20,m:50},
+ {n:"Olympic Lifting",p:18,m:60},{n:"Mobility & Recovery",p:15,m:45},{n:"Yin Yoga",p:15,m:60},
+ {n:"Sprint & Conditioning",p:15,m:45},{n:"Personal Training",p:60,m:60},{n:"Open Gym Day Pass",p:12,m:120}];
+const STYLISTS=[{n:"First available",d:"Earliest free trainer for your class"},{n:"Jonas",d:"Head coach · Strength & HIIT"},{n:"Freya",d:"Yoga & Pilates · Mobility"},{n:"Magnus",d:"Boxing coach · Conditioning"},{n:"Sofie",d:"Cycling & endurance"}];
+let step=1, sel={service:SERVICES[0],stylist:STYLISTS[0],date:"",time:"",ref:""};
+const TIMES=["06:30","07:30","09:00","12:15","16:30","17:30","18:30","19:30"];
+function renderServices(){
+  document.getElementById("serviceOpts").innerHTML=SERVICES.map((s,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickService(${i},this)"><b>${s.n}</b><small>from €${s.p} · ${s.m} min</small></button>`).join("");
+  document.querySelectorAll(".svc").forEach(el=>el.addEventListener("click",()=>{
+    const s=SERVICES.find(x=>x.n===el.dataset.service); if(s){sel.service=s;
+      document.querySelectorAll(".svc").forEach(x=>x.classList.remove("sel")); el.classList.add("sel");
+      document.querySelectorAll("#serviceOpts .opt").forEach(o=>o.classList.toggle("sel",o.textContent.includes(s.n)));
+      document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
+  }));
+}
+function pickService(i,el){sel.service=SERVICES[i];document.querySelectorAll("#serviceOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function renderStylists(){
+  document.getElementById("stylistOpts").innerHTML=STYLISTS.map((s,i)=>`<button type="button" class="opt${i===0?" sel":""}" onclick="pickStylist(${i},this)"><b>${s.n}</b><small>${s.d}</small></button>`).join("");
+}
+function pickStylist(i,el){sel.stylist=STYLISTS[i];document.querySelectorAll("#stylistOpts .opt").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function bookWith(name){const i=STYLISTS.findIndex(s=>s.n===name); if(i>=0){sel.stylist=STYLISTS[i];renderStylists();document.querySelectorAll("#stylistOpts .opt").forEach((o,j)=>o.classList.toggle("sel",j===i));} showStep(2); document.getElementById("booking").scrollIntoView({behavior:"smooth"});}
+/* ---- Live booking: real per-trainer availability from the booking service ---- */
+const API_BASE="https://booking-api-tan.vercel.app";
+function bizSlug(){return BIZ.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"gym";}
+function stylistSlug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+/* One trainer's free times on a date, or null when the service can't be reached. */
+async function fetchStylistAvailability(dateStr, stylist){
+  try{
+    const r=await fetch(API_BASE+"/api/availability?business="+encodeURIComponent(bizSlug())+"&type=appointment&date="+encodeURIComponent(dateStr)+"&resource="+encodeURIComponent(stylistSlug(stylist)));
+    if(!r.ok) return null;
+    const d=await r.json();
+    const map={}; (d.slots||[]).forEach(s=>{map[s.time]=s.available;});
+    return map;
+  }catch(e){ return null; }
+}
+async function renderSlots(){
+  const box=document.getElementById("slots"), status=document.getElementById("slotStatus");
+  if(!sel.date){box.innerHTML=""; status.textContent="Pick a date first — times load live from the studio's booking calendar."; return;}
+  box.innerHTML=""; status.textContent="Checking live availability…";
+  const named = sel.stylist.n !== "First available";
+  let map=null, who=sel.stylist.n;
+  if(named){
+    map=await fetchStylistAvailability(sel.date, sel.stylist.n);
+  }else{
+    // First available: a time is free if ANY trainer is free at that time.
+    const names=STYLISTS.slice(1).map(s=>s.n);
+    const maps=await Promise.all(names.map(n=>fetchStylistAvailability(sel.date,n)));
+    if(maps.some(m=>m===null)){map=null;}
+    else{
+      map={}; TIMES.forEach(t=>{map[t]=maps.some(m=>m[t]!==false);});
+      who="any trainer";
+    }
+  }
+  if(!map){
+    // Service unreachable: show every time. The confirm step still checks
+    // the booking against the live calendar before saving it.
+    box.innerHTML=TIMES.map(t=>`<button type="button" class="slot" onclick="pickTime('${t}',this)">${t}</button>`).join("");
+    status.textContent="Live availability is unreachable right now — your time will still be checked when you confirm.";
+    return;
+  }
+  const free=TIMES.filter(t=>map[t]!==false).length;
+  box.innerHTML=TIMES.map(t=>{
+    const dis=map[t]===false?" disabled":"";
+    return `<button type="button" class="slot"${dis} onclick="pickTime('${t}',this)">${t}</button>`;
+  }).join("");
+  status.textContent=free===0?"Fully booked on this date — please pick another day.":free+" of "+TIMES.length+" times still free with "+who+" on this date.";
+}
+function pickTime(t,el){sel.time=t;document.querySelectorAll(".slot").forEach(o=>o.classList.remove("sel"));el.classList.add("sel");}
+function showStep(n){
+  step=n;
+  document.querySelectorAll(".bstep").forEach(p=>p.hidden=+p.dataset.bstep!==n);
+  document.querySelectorAll("#steps .step").forEach(s=>s.classList.toggle("on",+s.dataset.step<=n&&n<5));
+  document.getElementById("backBtn").disabled=n===1||n===5;
+  document.getElementById("nextBtn").style.display=n===5?"none":"";
+  document.getElementById("nextBtn").textContent=n===4?"Confirm booking →":"Continue →";
+  if(n===3) renderSlots();
+  if(n===4) document.getElementById("summary").innerHTML=`<b>${sel.service.n}</b> — from €${sel.service.p} · ${sel.service.m} min<br>Trainer: <b>${sel.stylist.n}</b><br>Date: <b>${sel.date||"—"}</b> at <b>${sel.time||"—"}</b><br><span style="color:var(--muted)">First class free — no card needed.</span>`;
+}
+function nextStep(){
+  if(step===1&&!sel.service) return alert("Choose a class first.");
+  if(step===3){sel.date=document.getElementById("bdate").value; if(!sel.date) return alert("Pick a date first."); if(!sel.time) return alert("Pick a time first.");}
+  if(step===4){
+    const nm=document.getElementById("cname").value.trim();
+    const ph=document.getElementById("cphone").value.trim();
+    if(!nm) return alert("Please add your name.");
+    if(!ph) return alert("Please add your phone number.");
+    confirmBooking(nm,ph); return;
+  }
+  showStep(step+1);
+}
+/* Save the booking with the booking service. A named trainer books their
+   own slot; "First available" tries each trainer in turn and takes the
+   first free one. If the time was just taken, the service answers 409 and
+   we send the customer back to pick another time — a trainer can never be
+   double-booked. */
+async function confirmBooking(nm,ph){
+  const btn=document.getElementById("nextBtn");
+  btn.disabled=true; btn.textContent="Saving your booking…";
+  const tryStylists = sel.stylist.n==="First available" ? STYLISTS.slice(1).map(s=>s.n) : [sel.stylist.n];
+  try{
+    for(const stylist of tryStylists){
+      const r=await fetch(API_BASE+"/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business:bizSlug(),type:"appointment",date:sel.date,time:sel.time,resource:stylistSlug(stylist),party:1,name:nm,phone:ph,details:{service:sel.service.n,duration_min:sel.service.m,from_price:sel.service.p,stylist:stylist,email:document.getElementById("cemail").value.trim(),notes:document.getElementById("cnotes").value.trim()}})});
+      const d=await r.json().catch(()=>({}));
+      if(r.status===409||d.error==="slot_full") continue;
+      if(!r.ok||!d.ref) throw new Error("booking failed");
+      sel.ref=d.ref;
+      sel.stylist=STYLISTS.find(s=>s.n===stylist)||sel.stylist;
+      document.getElementById("confirmText").textContent=`Thanks ${nm} — ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time} at ${BIZ.name}, ${BIZ.city}. Your first class is free.`;
+      document.getElementById("bookRef").textContent="Booking ref: "+sel.ref;
+      document.querySelectorAll('[data-wa]').forEach(e=>{e.href=waLink(`Hi ${BIZ.name}! I just booked a free trial of ${sel.service.n} with ${sel.stylist.n} on ${sel.date} at ${sel.time}. My booking ref is ${sel.ref}.`);});
+      showStep(5);
+      return;
+    }
+    alert("Sorry — that time was just booked. Please pick another time.");
+    sel.time=""; showStep(3);
+  }catch(e){
+    alert("We couldn't save your booking just now — please check your connection and try again, or call us.");
+  }finally{
+    btn.disabled=false; btn.textContent="Confirm booking →";
+  }
+}
+function prevStep(){if(step>1) showStep(step-1);}
+function resetBooking(){sel={service:SERVICES[0],stylist:STYLISTS[0],date:"",time:"",ref:""};document.getElementById("bdate").value="";renderServices();renderStylists();showStep(1);}
+function downloadICS(){
+  if(!sel.date||!sel.time) return;
+  const dt=sel.date.replace(/-/g,"")+ "T"+sel.time.replace(":","")+"00";
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","BEGIN:VEVENT","UID:"+sel.ref+"@"+location.host,"DTSTART:"+dt,"SUMMARY:"+sel.service.n+" at "+BIZ.name,"LOCATION:"+BIZ.address+", "+BIZ.city,"END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"})); a.download="trial-class.ics"; a.click();
+}
+document.getElementById("contactForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("fname").value, msg=document.getElementById("fmsg").value;
+  const subject=encodeURIComponent("Enquiry — "+BIZ.name);
+  const body=encodeURIComponent(`Hi ${BIZ.name},\n\n${msg}\n\n— ${name}`);
+  location.href="mailto:hello@forgefitness.example?subject="+subject+"&body="+body;
+  document.getElementById("contactDone").textContent="Opening your email app… you can also reach us on WhatsApp below.";
+});
+(function init(){const d=document.getElementById("bdate"); d.min=new Date().toISOString().split("T")[0]; d.max=new Date(Date.now()+30*86400000).toISOString().split("T")[0]; renderServices(); renderStylists(); showStep(1);})();
+</script>
+</body>
+</html>

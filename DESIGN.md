@@ -1,7 +1,7 @@
 ---
 name: EU Leads Demo Templates
 version: "alpha"
-description: "Visual identity for the five GitHub Pages demo templates (salon, hotel, resort, restaurant, café) used to show EU small businesses what their website could look like. One shared system, one palette per template."
+description: "Visual identity for the six GitHub Pages demo templates (salon, hotel, resort, restaurant, café, gym) used to show EU small businesses what their website could look like. One shared system, one palette per template."
 colors:
   primary: "#221d17"
   ink: "#221d17"
@@ -70,7 +70,7 @@ Warm, editorial, premium — the demo must feel like a website worth paying for,
 - **Card (#f5efe6):** panels, menus, booking steps.
 - **Gold (#d99a2b):** the sole accent for prices, stars, and calls to action that are not the primary button.
 - **WhatsApp (#25d366):** only for WhatsApp buttons and the sticky mobile bar. Note: white text on this green measures 1.98:1, below WCAG AA — a deliberate brand exception, matching WhatsApp's own button; body text never uses this combination.
-- **Per-template palettes:** salon — cream, tan, sage; hotel — green and gold; resort — teal and sand; restaurant — deep green (#1e2b25) and brass; café — cream and terracotta/coffee (#3a2c22). A template never borrows another template's palette.
+- **Per-template palettes:** salon — cream, tan, sage; hotel — green and gold; resort — teal and sand; restaurant — deep green (#1e2b25) and brass; café — cream and terracotta/coffee (#3a2c22); gym — warm paper with brass/tan (#8a6d2f) and charcoal. A template never borrows another template's palette.
 
 ## Typography
 
